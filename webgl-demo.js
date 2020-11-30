@@ -1,28 +1,7 @@
 main();
 
 function main()
-{
-	// placeholder shader code
-	// vertex
-	const vertexSource = `
-		attribute vec4 aVertexPosition;
-		uniform mat4 uModelViewMatrix;
-		uniform mat4 uProjectionMatrix;
-		
-		void main()
-		{
-			gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-		}
-		`;
-	
-	// fragment
-	const fragmentSource = `
-		void main()
-		{
-			gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-		}
-		`;
-	
+{	
 	// <br> for newline when printing to html
 	document.write("<br>Hello World!");
 	// select canvas and get gl context
