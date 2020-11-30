@@ -1,4 +1,6 @@
+main();
+
 function main()
 {
-	alert("Hello World!");
+	document.write("Hello World!");
 }
