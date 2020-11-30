@@ -20,6 +20,7 @@ function main()
 	const programInfo = {program: shaderProgram,
 						 attribLocations: {
 							 vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+							 vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
 						 },
 						 uniformLocations: {
 							 projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -77,8 +78,7 @@ function initShaderProgram(gl, vertexSource, fragSource)
 function initBuffers(gl)
 {
 	const positionBuffer = gl.createBuffer();
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+	const colorBuffer = gl.createBuffer();
 	
 	// positions for a 2D square
 	const positions = 
@@ -89,9 +89,22 @@ function initBuffers(gl)
 		 1.0,  -1.0,
 	];
 	
+	// colours for vertices
+	const colors = 
+	[
+		1.0,  1.0,  1.0,  1.0,    // white
+		1.0,  0.0,  0.0,  1.0,    // red
+		0.0,  1.0,  0.0,  1.0,    // green
+		0.0,  0.0,  1.0,  1.0,    // blue
+	];
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-	return {position: positionBuffer,};
+	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+	
+	return {position: positionBuffer,
+			color: colorBuffer,};
 }
 
 function drawScene(gl, programInfo, buffers)
@@ -120,6 +133,7 @@ function drawScene(gl, programInfo, buffers)
 	// translate second arg and put into first arg, by the amount in third arg
 	mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
 	
+	// positions
 	{
 		const numComponents = 2;
 		const type = gl.FLOAT;
@@ -135,6 +149,24 @@ function drawScene(gl, programInfo, buffers)
 			stride,
 			offset);
 		gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+	}
+	
+	// colors
+	{
+		const numComponents = 4;
+		const type = gl.FLOAT;
+		const normalize = false;
+		const stride = 0;
+		const offset = 0;
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+		gl.vertexAttribPointer(
+			programInfo.attribLocations.vertexColor,
+			numComponents,
+			type,
+			normalize,
+			stride,
+			offset);
+		gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
 	}
 	
 	gl.useProgram(programInfo.program);
