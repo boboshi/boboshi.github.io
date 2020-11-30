@@ -1,5 +1,26 @@
 main();
 
+// placeholder shader code
+// vertex
+const vertexSource = `
+	attribute vec4 aVertexPosition;
+	uniform mat4 uModelViewMatrix;
+	uniform mat4 uProjectionMatrix;
+	
+	void main()
+	{
+		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertextPosition;
+	}
+	`;
+
+// fragment
+const fragmentSource = `
+	void main()
+	{
+		gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+	}
+	`;
+
 function main()
 {
 	document.write("Hello World!");
@@ -19,4 +40,10 @@ function main()
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	// clearrrrr
 	gl.clear(gl.COLOR_BUFFER_BIT);
+}
+
+// initialise shader program
+function initShaderProgram(gl, vertexSource, fragSource)
+{
+	
 }
