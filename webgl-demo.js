@@ -1,3 +1,5 @@
+var rot = 0.0; // placeholder for rotating square
+
 main();
 
 function main()
