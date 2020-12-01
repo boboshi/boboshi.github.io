@@ -4,12 +4,14 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 
+camera.position.y = 2;
 camera.position.z = 5;
 
 // add renderer to HTML
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// modify three.js' orbitcontrols to be more intuitive
 THREE.MapControls = function ( object, domElement ) {
 
 	THREE.OrbitControls.call( this, object, domElement );
@@ -19,7 +21,6 @@ THREE.MapControls = function ( object, domElement ) {
 
 	this.touches.ONE = THREE.TOUCH.PAN;
 	this.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
-
 };
 
 THREE.MapControls.prototype = Object.create( THREE.EventDispatcher.prototype );
@@ -38,15 +39,14 @@ controls.maxPolarAngle = Math.PI / 2;
 const boxgeometry = new THREE.BoxGeometry();
 const boxmaterial = new THREE.MeshBasicMaterial({color:0x00ff00});
 const cube = new THREE.Mesh(boxgeometry, boxmaterial);
+cube.translateY(1);
 scene.add(cube);
 	
-// add plane
-const planegeometry = new THREE.PlaneGeometry(8, 8, 32, 1);
-const planematerial = new THREE.MeshBasicMaterial({color:0xffff00, side: THREE.DoubleSide});
-const plane = new THREE.Mesh(planegeometry, planematerial);
-plane.rotation.x = 90 * Math.PI / 180;
-plane.translateZ(2);
-scene.add(plane);
+// draw grid
+const size = 10;
+const divisions = 10;
+const gridHelper = new THREE.GridHelper(size, divisions);
+scene.add(gridHelper);
 	
 function main()
 {
@@ -60,8 +60,8 @@ function drawScene()
 	
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	//cube.rotation.x += 0.01;
-	//cube.rotation.y += 0.01;
+	cube.rotation.x += 0.01;
+	cube.rotation.y += 0.01;
 	
 	// camera controls update
 	controls.update();
