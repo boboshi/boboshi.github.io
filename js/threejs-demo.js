@@ -11,8 +11,24 @@ camera.position.z = 5;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// fbx model loader
+const loader = new THREE.GLTFLoader();
+
+loader.load
+(
+	"http://10.1.11.197:8080/resources/ResidentialBuildings001.gltf", function (GLTF) 
+		{
+			scene.add(GLTF.scene);
+		}, 
+		undefined, 
+		function (error ) 
+		{
+			console.error(error);
+		} 
+);
+
 // modify three.js' orbitcontrols to be more intuitive
-THREE.MapControls = function ( object, domElement ) {
+THREE.MapControls = function (object, domElement) {
 
 	THREE.OrbitControls.call( this, object, domElement );
 
@@ -43,8 +59,8 @@ cube.translateY(1);
 scene.add(cube);
 	
 // draw grid
-const size = 10;
-const divisions = 10;
+const size = 100;
+const divisions = 100;
 const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 	
