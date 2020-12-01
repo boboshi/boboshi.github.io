@@ -1,52 +1,100 @@
-// init scene, camera and renderer
-const scene = new THREE.Scene();
-// args: fov, aspect ratio, near plane, far plane
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
+			import * as THREE from 'three.js';
 
-camera.position.z = 5
+			import { OrbitControls } from 'OrbitControls.js';
 
-// add renderer to HTML
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+			let camera, controls, scene, renderer;
 
-// camera controls
-//const controls = new OrbitControls(camera, renderer.domElement);
-//controls.update();
+			init();
+			//render(); // remove when using next line for animation loop (requestAnimationFrame)
+			animate();
 
-// add basic green cube to scene
-const boxgeometry = new THREE.BoxGeometry();
-const boxmaterial = new THREE.MeshBasicMaterial({color:0x00ff00});
-const cube = new THREE.Mesh(boxgeometry, boxmaterial);
-scene.add(cube);
-	
-// add plane
-const planegeometry = new THREE.PlaneGeometry(8, 8, 32, 1);
-const planematerial = new THREE.MeshBasicMaterial({color:0xffff00, side: THREE.DoubleSide});
-const plane = new THREE.Mesh(planegeometry, planematerial);
-plane.rotation.x = 90;
-plane.translateZ(2);
-scene.add(plane);
-	
-function main()
-{
-	drawScene();
-}
+			function init() {
 
-// render loop
-function drawScene()
-{
-	requestAnimationFrame(drawScene);
-	
-	// stuff to do inside the loop
-	// i.e. updating stuff like animation
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
-	
-	// camera controls update
-	//controls.update();
-	
-	renderer.render(scene, camera);
-}
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xcccccc );
+				scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
 
-main();
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( 400, 200, 0 );
+
+				// controls
+
+				controls = new OrbitControls( camera, renderer.domElement );
+
+				//controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+
+				controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+				controls.dampingFactor = 0.05;
+
+				controls.screenSpacePanning = false;
+
+				controls.minDistance = 100;
+				controls.maxDistance = 500;
+
+				controls.maxPolarAngle = Math.PI / 2;
+
+				// world
+
+				const geometry = new THREE.CylinderBufferGeometry( 0, 10, 30, 4, 1 );
+				const material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+
+				for ( let i = 0; i < 500; i ++ ) {
+
+					const mesh = new THREE.Mesh( geometry, material );
+					mesh.position.x = Math.random() * 1600 - 800;
+					mesh.position.y = 0;
+					mesh.position.z = Math.random() * 1600 - 800;
+					mesh.updateMatrix();
+					mesh.matrixAutoUpdate = false;
+					scene.add( mesh );
+
+				}
+
+				// lights
+
+				const dirLight1 = new THREE.DirectionalLight( 0xffffff );
+				dirLight1.position.set( 1, 1, 1 );
+				scene.add( dirLight1 );
+
+				const dirLight2 = new THREE.DirectionalLight( 0x002288 );
+				dirLight2.position.set( - 1, - 1, - 1 );
+				scene.add( dirLight2 );
+
+				const ambientLight = new THREE.AmbientLight( 0x222222 );
+				scene.add( ambientLight );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
+				render();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
