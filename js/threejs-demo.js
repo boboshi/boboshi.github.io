@@ -5,13 +5,29 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer();
 
 camera.position.y = 2;
-camera.position.z = 5;
+camera.position.z = 10;
 
 // add renderer to HTML
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// fbx model loader
+// fbx model loader (not working for now)
+//const loader = new THREE.FBXLoader();
+//
+//loader.load
+//(
+//	"http://10.1.11.197:8080/resources/ResidentialBuildings001.fbx", function (fbx) 
+//		{
+//			scene.add(fbx.scene);
+//		}, 
+//		undefined, 
+//		function (error ) 
+//		{
+//			console.error(error);
+//		} 
+//);
+
+// GLTF model loader
 const loader = new THREE.GLTFLoader();
 
 loader.load
@@ -63,7 +79,11 @@ const size = 100;
 const divisions = 100;
 const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
-	
+
+// ambient light
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
+scene.add(ambientLight);
+
 function main()
 {
 	drawScene();
