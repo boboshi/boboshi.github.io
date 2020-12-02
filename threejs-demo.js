@@ -46,7 +46,7 @@ const loader = new FBXLoader();
 
 loader.load
 (
-	"http://10.1.11.197:8080/resources/room.fbx", function (fbx) 
+	"http://10.1.11.197:8080/resources/house.fbx", function (fbx) 
 		{
 			scene.add(fbx);
 		}, 
