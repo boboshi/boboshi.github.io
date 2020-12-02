@@ -8,6 +8,8 @@ const scene = new THREE.Scene();
 // args: fov, aspect ratio, near plane, far plane
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize( window.innerWidth, window.innerHeight );
 
 camera.position.y = 2;
 camera.position.z = 10;
@@ -49,10 +51,10 @@ const yellowMat = new THREE.MeshBasicMaterial ({color:0xF8FF33});
 // geometry shapes
 
 // cube (green)
-const boxgeometry = new THREE.BoxGeometry();
+const boxgeometry = new THREE.BoxBufferGeometry();
 
 // sphere (light blue)
-const spheregeometry = new THREE.SphereGeometry();
+const spheregeometry = new THREE.SphereBufferGeometry();
 
 // fbx model loader
 const loader = new FBXLoader();
@@ -64,8 +66,8 @@ const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 
 // ambient light
-const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
-scene.add(ambientLight);
+//const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
+//scene.add(ambientLight);
 
 // directional light
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -82,8 +84,8 @@ document.addEventListener("mousemove", onDocumentMouseMove, false);
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
-				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	mouse.x =  (event.clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
 // houselight class
@@ -148,31 +150,33 @@ function drawScene()
 	//cube.rotation.x += 0.01;
 	//cube.rotation.y += 0.01;
 	
+	camera.updateMatrixWorld();
+	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	const intersects = raycaster.intersectObjects(scene.children);
 	
-	if(intersects.length >0)
+	if(intersects.length > 0)
 	{
 		if(INTERSECTED != intersects[0].object)
 		{
 			if(INTERSECTED)
 			{
-				INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-				
-				INTERSECTED = intersects[0].object;
-				INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-				INTERSECTED.material.emissive.setHex(0xff0000);
+				INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 			}
+			
+			INTERSECTED = intersects[0].object;
+			INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+			INTERSECTED.material.color.setHex(0xF8FF33);
 		}
 	}
 	else
 	{
 		if(INTERSECTED)
 		{
-			INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-			INTERSECTED = null;
+			INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 		}
+		INTERSECTED = null;
 	}
 	
 	// camera controls update
