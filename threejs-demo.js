@@ -129,7 +129,7 @@ function main()
 {
 	// add light objects (AddLight will add to scene on its own)
 	var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
-	var light1 = AddLight("light1", 26.5, new THREE.Vector3(3.5, 4, 0));
+	var light1 = AddLight("light1", 26.7, new THREE.Vector3(3.5, 4, 0));
 	
 	// position cube and add to scene
 	const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
@@ -191,6 +191,18 @@ function drawScene()
 	
 	camera.updateMatrixWorld();
 	
+	// randomly modify properties for testing
+	if(Math.floor(Math.random() * 2) == 0)
+	{
+		LightArray[0].userData.testproperty += 0.005;
+		LightArray[1].userData.testproperty += 0.005;
+	}
+	else
+	{
+		LightArray[0].userData.testproperty -= 0.005;
+		LightArray[1].userData.testproperty -= 0.005;
+	}
+	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	const intersects = raycaster.intersectObjects(LightArray);
@@ -213,8 +225,9 @@ function drawScene()
 		else
 		{
 			// onstay
+			// set to 1 decimal place
 			text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
-							  "TestProperty: " + intersects[0].object.userData.testproperty;
+							  "TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
 			//text2.style.top = window.innerHeight - 100 + "px";
 			//text2.style.left = 500 + "px";
 		}
