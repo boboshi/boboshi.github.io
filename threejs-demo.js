@@ -39,14 +39,10 @@ const translucentMat = new THREE.MeshPhongMaterial(
 	side: THREE.DoubleSide,
 });
 
-// green
-const greenMat = new THREE.MeshBasicMaterial ({color:0x00ff00});
-
-// light blue
-const lightblueMat = new THREE.MeshBasicMaterial ({color:0x7EC0EE});
-
-// yellow
-const yellowMat = new THREE.MeshBasicMaterial ({color:0xF8FF33});
+// colour codes for quick access
+const GREEN = 0x00FF00;
+const LIGHTBLUE = 0x7EC0EE;
+const YELLOW = 0xF8FF33;
 
 // geometry shapes
 
@@ -55,6 +51,7 @@ const boxgeometry = new THREE.BoxBufferGeometry();
 
 // sphere (light blue)
 const spheregeometry = new THREE.SphereBufferGeometry();
+spheregeometry.scale(0.5, 0.5, 0.5);
 
 // fbx model loader
 const loader = new FBXLoader();
@@ -88,54 +85,71 @@ function onDocumentMouseMove(event)
 	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
-// houselight class
-class HouseLight
+const LightArray = [];
+
+// userData currently has 2 properties
+// - name
+// - testproperty
+// further properties can be added to and accessed from userData
+
+function AddLight(name, testproperty, pos)
 {
-	constructor(id, mesh)
-	{
-		this.id = id;
-		this.collider = collider;
-	}
+	// init mesh and data
+	const lightmesh = new THREE.Mesh(spheregeometry, new THREE.MeshBasicMaterial ({color:LIGHTBLUE}));
+	
+	// not sure why position.set doesn't work, this is okay though
+	lightmesh.position.x = pos.x;
+	lightmesh.position.y = pos.y;
+	lightmesh.position.z = pos.z;
+	
+	// add lightdata into the three.js mesh
+	lightmesh.userData = {name: name, testproperty: testproperty};
+	
+	// add mesh to array (for raycasting/picking)
+	LightArray.push(lightmesh);
+	
+	// add mesh to scene (for rendering)
+	scene.add(lightmesh);
+	
+	return lightmesh;
 }
 
 function main()
 {
+	// add light objects (AddLight will add to scene on its own)
+	var light0 = AddLight("light0", 26.7, new THREE.Vector3(3.5, 4, 0));
+	var light1 = AddLight("light1", 26.5, new THREE.Vector3(-3.5, 4, 0));
+	
 	// position cube and add to scene
-	const cube = new THREE.Mesh(boxgeometry, greenMat);
+const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
 	cube.translateX(3);
 	cube.translateY(1);
 	scene.add(cube);
 	
-	// position sphere and add to scene
-	spheregeometry.scale(0.5, 0.5, 0.5);
-	const sphere = new THREE.Mesh(spheregeometry, lightblueMat);
-	sphere.translateY(4);
-	scene.add(sphere);
-	
 	// add test model to scene
-	//loader.load
-	//(
-	//	"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
-	//		{
-	//			fbx.scale.set(0.005, 0.005, 0.005);
-	//			
-	//			// apply transparent material to model
-	//			fbx.traverse(function(child)
-	//			{
-	//				if (child instanceof THREE.Mesh)
-	//				{
-	//					child.material = translucentMat;
-	//				}
-	//			});
-	//			
-	//			scene.add(fbx);
-	//		}, 
-	//		undefined, 
-	//		function (error ) 
-	//		{
-	//			console.error(error);
-	//		}
-	//);
+	loader.load
+	(
+		"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
+			{
+				fbx.scale.set(0.005, 0.005, 0.005);
+				
+				// apply transparent material to model
+				fbx.traverse(function(child)
+				{
+					if (child instanceof THREE.Mesh)
+					{
+						child.material = translucentMat;
+					}
+				});
+				
+				scene.add(fbx);
+			}, 
+			undefined, 
+			function (error ) 
+			{
+				console.error(error);
+			}
+	);
 	
 	drawScene();
 }
@@ -154,7 +168,7 @@ function drawScene()
 	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
-	const intersects = raycaster.intersectObjects(scene.children);
+	const intersects = raycaster.intersectObjects(LightArray);
 	
 	if(intersects.length > 0)
 	{
@@ -165,15 +179,24 @@ function drawScene()
 				INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 			}
 			
+			// select the intersected object
 			INTERSECTED = intersects[0].object;
+			// onenter
 			INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
 			INTERSECTED.material.color.setHex(0xF8FF33);
+		}
+		else
+		{
+			// onstay
+			console.log(intersects[0].object.userData.name,
+						intersects[0].object.userData.testproperty);
 		}
 	}
 	else
 	{
 		if(INTERSECTED)
 		{
+			// onexit
 			INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 		}
 		INTERSECTED = null;
