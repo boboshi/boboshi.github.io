@@ -72,6 +72,19 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
 scene.add(directionalLight);
 
 // picking
+const mouse = new THREE.Vector2();
+const radius = 100;
+let INTERSECTED;
+
+const raycaster = new THREE.Raycaster();
+document.addEventListener("mousemove", onDocumentMouseMove, false);
+
+function onDocumentMouseMove(event)
+{
+	event.preventDefault();
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
 
 // houselight class
 class HouseLight
@@ -98,29 +111,29 @@ function main()
 	scene.add(sphere);
 	
 	// add test model to scene
-	loader.load
-	(
-		"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
-			{
-				fbx.scale.set(0.005, 0.005, 0.005);
-				
-				// apply transparent material to model
-				fbx.traverse(function(child)
-				{
-					if (child instanceof THREE.Mesh)
-					{
-						child.material = translucentMat;
-					}
-				});
-				
-				scene.add(fbx);
-			}, 
-			undefined, 
-			function (error ) 
-			{
-				console.error(error);
-			}
-	);
+	//loader.load
+	//(
+	//	"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
+	//		{
+	//			fbx.scale.set(0.005, 0.005, 0.005);
+	//			
+	//			// apply transparent material to model
+	//			fbx.traverse(function(child)
+	//			{
+	//				if (child instanceof THREE.Mesh)
+	//				{
+	//					child.material = translucentMat;
+	//				}
+	//			});
+	//			
+	//			scene.add(fbx);
+	//		}, 
+	//		undefined, 
+	//		function (error ) 
+	//		{
+	//			console.error(error);
+	//		}
+	//);
 	
 	drawScene();
 }
@@ -134,6 +147,33 @@ function drawScene()
 	// i.e. updating stuff like animation
 	//cube.rotation.x += 0.01;
 	//cube.rotation.y += 0.01;
+	
+	// intersection checks for picking
+	raycaster.setFromCamera(mouse, camera);
+	const intersects = raycaster.intersectObjects(scene.children);
+	
+	if(intersects.length >0)
+	{
+		if(INTERSECTED != intersects[0].object)
+		{
+			if(INTERSECTED)
+			{
+				INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+				
+				INTERSECTED = intersects[0].object;
+				INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+				INTERSECTED.material.emissive.setHex(0xff0000);
+			}
+		}
+	}
+	else
+	{
+		if(INTERSECTED)
+		{
+			INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+			INTERSECTED = null;
+		}
+	}
 	
 	// camera controls update
 	controls.update();
