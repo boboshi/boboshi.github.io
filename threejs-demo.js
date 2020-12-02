@@ -46,8 +46,18 @@ const loader = new FBXLoader();
 
 loader.load
 (
-	"http://10.1.11.197:8080/resources/house.fbx", function (fbx) 
+	"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
 		{
+			fbx.scale.set(0.005, 0.005, 0.005);
+			
+			fbx.traverse(function(child)
+			{
+				if (child instanceof THREE.Mesh)
+				{
+					child.material = transparentmaterial;
+				}
+			});
+			
 			scene.add(fbx);
 		}, 
 		undefined, 
@@ -64,8 +74,8 @@ const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 
 // ambient light
-//const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
-//scene.add(ambientLight);
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
+scene.add(ambientLight);
 
 // directional light
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
