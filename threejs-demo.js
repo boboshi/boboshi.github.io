@@ -1,3 +1,7 @@
+// imports
+import * as THREE from "http://10.1.11.197:8080/node_modules/three/build/three.module.js";
+import {OrbitControls} from "http://10.1.11.197:8080/node_modules/three/examples/jsm/controls/OrbitControls.js"
+
 // init scene, camera and renderer
 const scene = new THREE.Scene();
 // args: fov, aspect ratio, near plane, far plane
@@ -12,28 +16,30 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // modify three.js' orbitcontrols to be more intuitive
-THREE.MapControls = function (object, domElement) {
+//THREE.MapControls = function (object, domElement) {
+//
+//	THREE.OrbitControls.call( this, object, domElement );
+//
+//	this.mouseButtons.LEFT = THREE.MOUSE.PAN;
+//	this.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+//
+//	this.touches.ONE = THREE.TOUCH.PAN;
+//	this.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
+//};
+//
+//THREE.MapControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+//THREE.MapControls.prototype.constructor = THREE.MapControls;
+//
+//// camera controls
+//const controls = new THREE.MapControls(camera, renderer.domElement);
+//
+//controls.enableDamping = true;
+//controls.dampingFactor = 0.05;
+//controls.screenSpacePanning = false;
+//
+//controls.maxPolarAngle = Math.PI / 2;
 
-	THREE.OrbitControls.call( this, object, domElement );
-
-	this.mouseButtons.LEFT = THREE.MOUSE.PAN;
-	this.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
-
-	this.touches.ONE = THREE.TOUCH.PAN;
-	this.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
-};
-
-THREE.MapControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-THREE.MapControls.prototype.constructor = THREE.MapControls;
-
-// camera controls
-const controls = new THREE.MapControls(camera, renderer.domElement);
-
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.screenSpacePanning = false;
-
-controls.maxPolarAngle = Math.PI / 2;
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // add basic green cube to scene
 const boxgeometry = new THREE.BoxGeometry();
