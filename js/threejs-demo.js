@@ -11,38 +11,6 @@ camera.position.z = 10;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// fbx model loader (not working for now)
-//const loader = new THREE.FBXLoader();
-//
-//loader.load
-//(
-//	"http://10.1.11.197:8080/resources/ResidentialBuildings001.fbx", function (fbx) 
-//		{
-//			scene.add(fbx.scene);
-//		}, 
-//		undefined, 
-//		function (error ) 
-//		{
-//			console.error(error);
-//		} 
-//);
-
-// GLTF model loader
-const loader = new THREE.GLTFLoader();
-
-loader.load
-(
-	"http://10.1.11.197:8080/resources/ResidentialBuildings001.gltf", function (GLTF) 
-		{
-			scene.add(GLTF.scene);
-		}, 
-		undefined, 
-		function (error ) 
-		{
-			console.error(error);
-		} 
-);
-
 // modify three.js' orbitcontrols to be more intuitive
 THREE.MapControls = function (object, domElement) {
 
@@ -73,7 +41,47 @@ const boxmaterial = new THREE.MeshBasicMaterial({color:0x00ff00});
 const cube = new THREE.Mesh(boxgeometry, boxmaterial);
 cube.translateY(1);
 scene.add(cube);
-	
+
+// transparent material
+const transparentmaterial = new THREE.MeshPhongMaterial(
+{
+	color: 0xFFFFFF,
+	opacity: 0.5,
+	transparent: true,
+	side: THREE.DoubleSide,
+});
+
+// GLTF model loader
+//const loader = new THREE.GLTFLoader();
+//loader.load
+//(
+//	"http://10.1.11.197:8080/resources/ResidentialBuildings001.gltf", function (GLTF) 
+//		{
+//			scene.add(GLTF.scene);
+//		}, 
+//		undefined, 
+//		function (error ) 
+//		{
+//			console.error(error);
+//		} 
+//);
+
+// fbx model loader (not working for now)
+//const loader = new THREE.FBXLoader();
+//
+//loader.load
+//(
+//	"http://10.1.11.197:8080/resources/room.fbx", function (fbx) 
+//		{
+//			scene.add(fbx.scene);
+//		}, 
+//		undefined, 
+//		function (error ) 
+//		{
+//			console.error(error);
+//		} 
+//);
+
 // draw grid
 const size = 100;
 const divisions = 100;
@@ -81,8 +89,12 @@ const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 
 // ambient light
-const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
-scene.add(ambientLight);
+//const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
+//scene.add(ambientLight);
+
+// directional light
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+scene.add(directionalLight);
 
 function main()
 {
