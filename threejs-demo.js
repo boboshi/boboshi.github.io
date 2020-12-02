@@ -85,6 +85,17 @@ function onDocumentMouseMove(event)
 	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
+// resize handling
+window.addEventListener("resize", onWindowResize, false);
+
+function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 const LightArray = [];
 
 // userData currently has 2 properties
@@ -117,11 +128,11 @@ function AddLight(name, testproperty, pos)
 function main()
 {
 	// add light objects (AddLight will add to scene on its own)
-	var light0 = AddLight("light0", 26.7, new THREE.Vector3(3.5, 4, 0));
-	var light1 = AddLight("light1", 26.5, new THREE.Vector3(-3.5, 4, 0));
+	var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
+	var light1 = AddLight("light1", 26.5, new THREE.Vector3(3.5, 4, 0));
 	
 	// position cube and add to scene
-const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
+	const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
 	cube.translateX(3);
 	cube.translateY(1);
 	scene.add(cube);
@@ -153,6 +164,20 @@ const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREE
 	
 	drawScene();
 }
+
+// light data display
+var text2 = document.createElement("div");
+text2.style.position = "absolute";
+text2.style.width = 100;
+text2.style.height = 100;
+text2.style.backgroundColor = "black";
+text2.style.color = "white";
+text2.innerHTML = "";
+text2.style.top = 0 + "px";
+text2.style.left = 0 + "px";
+text2.style.fontSize = 30 + "px";
+text2.style.fontFamily = "Calibri";
+document.body.appendChild(text2);
 
 // render loop
 function drawScene()
@@ -188,8 +213,10 @@ function drawScene()
 		else
 		{
 			// onstay
-			console.log(intersects[0].object.userData.name,
-						intersects[0].object.userData.testproperty);
+			text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
+							  "TestProperty: " + intersects[0].object.userData.testproperty;
+			//text2.style.top = window.innerHeight - 100 + "px";
+			//text2.style.left = 500 + "px";
 		}
 	}
 	else
@@ -198,6 +225,7 @@ function drawScene()
 		{
 			// onexit
 			INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+			text2.innerHTML = "";
 		}
 		INTERSECTED = null;
 	}
