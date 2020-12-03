@@ -141,22 +141,40 @@ function Rad(deg)
 	return deg * Math.PI / 180;
 }
 
+// key events
+var Lmouseup = false;
+var Rmouseup = false;
+var spaceUp = false;
+
 // mouseup event (use pointer because of orbitcontrols)
-document.addEventListener("pointerup", onDocumentMouseUp, true);
+document.addEventListener("pointerup", onDocumentMouseUp, false);
 function onDocumentMouseUp(event)
 {
 	event.preventDefault();
 	
 	switch(event.which)
 	{
+		// lmb
 		case 1:
-			console.log("case 1");
+			Lmouseup = true;
 			break;
+		// rmb
 		case 3:
-			console.log("case 3");
+			Rmouseup = true
 			break;
 	}
 }
+
+document.addEventListener("keyup", onKeyUp, false);
+function onKeyUp(event)
+{
+	if(event.code == "Space")
+	{
+		console.log("SPACE");
+	}
+}
+// bool for add/view mode
+var addMode = false;
 
 function main()
 {
@@ -251,45 +269,67 @@ function drawScene()
 		LightArray[1].userData.testproperty -= 0.005;
 	}
 	
+	// check key up event for add/view mode
+	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
-	const intersects = raycaster.intersectObjects(LightArray);
 	
-	if(intersects.length > 0)
+	// view mode
+	if(!addMode)
 	{
-		if(INTERSECTED != intersects[0].object)
+		const intersects = raycaster.intersectObjects(LightArray);
+	
+		if(intersects.length > 0)
 		{
-			if(INTERSECTED)
+			if(INTERSECTED != intersects[0].object)
 			{
-				INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+				if(INTERSECTED)
+				{
+					INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+				}
+				
+				// select the intersected object
+				INTERSECTED = intersects[0].object;
+				// onenter
+				INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+				INTERSECTED.material.color.setHex(0xF8FF33);
 			}
-			
-			// select the intersected object
-			INTERSECTED = intersects[0].object;
-			// onenter
-			INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-			INTERSECTED.material.color.setHex(0xF8FF33);
+			else
+			{
+				// onstay
+				// set to 1 decimal place
+				text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
+								"TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
+				//text2.style.top = window.innerHeight - 100 + "px";
+				//text2.style.left = 500 + "px";
+				
+				if(Lmouseup)
+				{
+					console.log("clicked on light");
+					// don't have to set lmouseup to false, done at end of loop
+				}
+			}
 		}
 		else
 		{
-			// onstay
-			// set to 1 decimal place
-			text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
-							  "TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
-			//text2.style.top = window.innerHeight - 100 + "px";
-			//text2.style.left = 500 + "px";
+			if(INTERSECTED)
+			{
+				// onexit
+				INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+				text2.innerHTML = "";
+			}
+			INTERSECTED = null;
 		}
 	}
+	// add mode
 	else
 	{
-		if(INTERSECTED)
-		{
-			// onexit
-			INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-			text2.innerHTML = "";
-		}
-		INTERSECTED = null;
+		
 	}
+
+	// reset mouse event bools
+	Lmouseup = false;
+	Rmouseup = false;
 	
 	// camera controls update
 	controls.update();
