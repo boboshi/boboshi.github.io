@@ -143,8 +143,11 @@ function Rad(deg)
 function main()
 {
 	// add plane for testing
+	planegeometry.scale(50, 50, 50);
 	const plane = new THREE.Mesh(planegeometry, new THREE.MeshBasicMaterial({color: WHITE, side: THREE.DoubleSide}));
-	plane.rotateX(Rad(90));
+	plane.rotateX(Rad(-90));
+	// translate by z to move up because it is rotated
+	plane.translateZ(10);
 	scene.add(plane);
 	
 	// add grid
