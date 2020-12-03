@@ -10,10 +10,14 @@ scene.background = new THREE.Color(0xC0C0C0);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
+
+// define width and height (window.innerWidth/Height for default)
+var innerWidth = window.innerWidth;
+var innerHeight = window.innerHeight;
+
+renderer.setSize(innerWidth, innerHeight);
 
 // add renderer to HTML
-renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // camera
@@ -89,18 +93,18 @@ document.addEventListener("mousemove", onDocumentMouseMove, false);
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
-	mouse.x =  (event.clientX / window.innerWidth) * 2 - 1;
-	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+	mouse.x =  (event.clientX / innerWidth) * 2 - 1;
+	mouse.y = -(event.clientY / innerHeight) * 2 + 1;
 }
 
 // resize handling
 window.addEventListener("resize", onWindowResize, false);
 function onWindowResize() 
 {
-	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.aspect = innerWidth / innerHeight;
 	camera.updateProjectionMatrix();
 
-	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setSize(innerWidth, innerHeight);
 }
 
 // array for raycasting/picking
@@ -221,8 +225,8 @@ function main()
 	scene.add(gridHelper);
 	
 	// add light (NOT three.js lights) objects (AddLight will add to scene on its own)
-	var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
-	var light1 = AddLight("light1", 26.7, new THREE.Vector3(3.5, 4, 0));
+	//var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
+	//var light1 = AddLight("light1", 26.7, new THREE.Vector3(3.5, 4, 0));
 	
 	// position cube and add to scene
 	const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
