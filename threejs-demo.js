@@ -277,6 +277,9 @@ function drawScene()
 	// view mode
 	if(!addMode)
 	{
+		// enable orbitcontrols
+		controls.enabled = true;
+		
 		const intersects = raycaster.intersectObjects(LightArray);
 	
 		if(intersects.length > 0)
@@ -324,6 +327,9 @@ function drawScene()
 	// add mode
 	else
 	{
+		// disable orbit controls
+		controls.enabled = false;
+		
 		// turn off any selected light's rollover effect
 		if(LIGHTINTERSECTED)
 		{
