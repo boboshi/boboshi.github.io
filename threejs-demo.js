@@ -170,7 +170,7 @@ function onKeyUp(event)
 {
 	if(event.code == "Space")
 	{
-		console.log("SPACE");
+		spaceUp = true;
 	}
 }
 // bool for add/view mode
@@ -270,6 +270,7 @@ function drawScene()
 	}
 	
 	// check key up event for add/view mode
+	addMode = spaceUp;
 	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
@@ -324,7 +325,8 @@ function drawScene()
 	// add mode
 	else
 	{
-		
+		if(Lmouseup)
+			console.log("add mode lmouseup");
 	}
 
 	// reset mouse event bools
