@@ -5,6 +5,7 @@ import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js
 
 // init scene, camera and renderer
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xC0C0C0);
 // args: fov, aspect ratio, near plane, far plane
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
