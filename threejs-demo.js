@@ -285,9 +285,6 @@ function drawScene()
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
 	
-	// update the global transform of the camera object
-	camera.updateMatrixWorld();
-	
 	// randomly modify userData properties for testing
 	if(Math.floor(Math.random() * 2) == 0)
 	{
@@ -345,12 +342,20 @@ function drawScene()
 				if(!addMode)
 				{
 					console.log("clicked on light in view mode");
+					
+					//controls.enabled = false;
+					
+					//controls.target.set(10, 10, 10);
+					//camera.position.set();
+					
+					//controls.enabled = true;
 				}
 			}
 			
 			// removing
 			if(Rmouseup)
 			{
+				// check if in add mode
 				if(addMode)
 				{
 					console.log("remove light");
@@ -406,9 +411,13 @@ function drawScene()
 	Lmouseup = false;
 	Rmouseup = false;
 	
+	// update the global transform of the camera object
+	camera.updateMatrixWorld();
+	
 	// camera controls update
 	controls.update();
 	
+	// render
 	renderer.render(scene, camera);
 }
 
