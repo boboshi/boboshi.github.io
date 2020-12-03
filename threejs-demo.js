@@ -28,22 +28,22 @@ controls.dampingFactor = 0.05;
 controls.screenSpacePanning = false;
 controls.maxPolarAngle = Math.PI / 2;
 
-// materials
-
-// translucent material
-const translucentMat = new THREE.MeshPhongMaterial(
-{
-	color: 0xFFFFFF,
-	opacity: 0.5,
-	transparent: true,
-	side: THREE.DoubleSide,
-});
-
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 const YELLOW = 0xF8FF33;
+
+// materials
+
+// translucent material
+const translucentMat = new THREE.MeshPhongMaterial(
+{
+	color: WHITE,
+	opacity: 0.5,
+	transparent: true,
+	side: THREE.DoubleSide,
+});
 
 // geometry shapes
 
@@ -144,7 +144,11 @@ function main()
 {
 	// add plane for testing
 	planegeometry.scale(50, 50, 50);
-	const plane = new THREE.Mesh(planegeometry, new THREE.MeshBasicMaterial({color: WHITE, side: THREE.DoubleSide}));
+	// load test image as material
+	var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/c1basement1.jpg");
+	var planeMat = new THREE.MeshLambertMaterial({map: texture});
+	const plane = new THREE.Mesh(planegeometry, planeMat);
+	plane.receiveShadow = true;
 	plane.rotateX(Rad(-90));
 	// translate by z to move up because it is rotated
 	plane.translateZ(10);
