@@ -11,21 +11,21 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 
-camera.position.y = 2;
-camera.position.z = 10;
-
 // add renderer to HTML
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// camera
+
+// initial settings
+camera.position.y = 2;
+camera.position.z = 10;
 // camera controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
-
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.screenSpacePanning = false;
-
 controls.maxPolarAngle = Math.PI / 2;
 
 // materials
@@ -40,6 +40,7 @@ const translucentMat = new THREE.MeshPhongMaterial(
 });
 
 // colour codes for quick access
+const WHITE = 0xFFFFFF;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 const YELLOW = 0xF8FF33;
@@ -53,14 +54,18 @@ const boxgeometry = new THREE.BoxBufferGeometry();
 const spheregeometry = new THREE.SphereBufferGeometry();
 spheregeometry.scale(0.5, 0.5, 0.5);
 
-// fbx model loader
-const loader = new FBXLoader();
-
-// draw grid
+// grid
 const size = 100;
 const divisions = 100;
 const gridHelper = new THREE.GridHelper(size, divisions);
-scene.add(gridHelper);
+
+// plane
+const planegeometry = new THREE.PlaneBufferGeometry();
+
+// fbx model loader
+const loader = new FBXLoader();
+
+// lights
 
 // ambient light
 //const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
@@ -96,6 +101,7 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// array for raycasting/picking
 const LightArray = [];
 
 // userData currently has 2 properties
@@ -103,6 +109,7 @@ const LightArray = [];
 // - testproperty
 // further properties can be added to and accessed from userData
 
+// helper for adding new light objects to the scene
 function AddLight(name, testproperty, pos)
 {
 	// init mesh and data
@@ -125,9 +132,25 @@ function AddLight(name, testproperty, pos)
 	return lightmesh;
 }
 
+// helper functions
+
+// convert degrees to radians
+function Rad(deg)
+{
+	return deg * Math.PI / 180;
+}
+
 function main()
 {
-	// add light objects (AddLight will add to scene on its own)
+	// add plane for testing
+	const plane = new THREE.Mesh(planegeometry, new THREE.MeshBasicMaterial({color: WHITE, side: THREE.DoubleSide}));
+	plane.rotateX(Rad(90));
+	scene.add(plane);
+	
+	// add grid
+	scene.add(gridHelper);
+	
+	// add light (NOT three.js lights) objects (AddLight will add to scene on its own)
 	var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
 	var light1 = AddLight("light1", 26.7, new THREE.Vector3(3.5, 4, 0));
 	
@@ -137,7 +160,7 @@ function main()
 	cube.translateY(1);
 	scene.add(cube);
 	
-	// add test model to scene
+	// load and add test model to scene
 	loader.load
 	(
 		"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
@@ -162,6 +185,7 @@ function main()
 			}
 	);
 	
+	// call the render loop
 	drawScene();
 }
 
@@ -186,12 +210,11 @@ function drawScene()
 	
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	//cube.rotation.x += 0.01;
-	//cube.rotation.y += 0.01;
 	
+	// update the global transform of the camera object
 	camera.updateMatrixWorld();
 	
-	// randomly modify properties for testing
+	// randomly modify userData properties for testing
 	if(Math.floor(Math.random() * 2) == 0)
 	{
 		LightArray[0].userData.testproperty += 0.005;
