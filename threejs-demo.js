@@ -345,7 +345,10 @@ function drawScene()
 			{
 				// onstay
 				if(Lmouseup)
-					console.log("clicked on plane");
+				{
+					// intersects[0].point returns vector3 of collision point
+					AddLight("lighttest", 0.0, intersects[0].point);
+				}
 			}
 		}
 		else
