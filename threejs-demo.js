@@ -53,7 +53,7 @@ const boxgeometry = new THREE.BoxBufferGeometry();
 
 // sphere (light blue)
 const spheregeometry = new THREE.SphereBufferGeometry();
-spheregeometry.scale(0.5, 0.5, 0.5);
+spheregeometry.scale(0.35, 0.35, 0.35);
 
 // grid
 const size = 100;
@@ -105,7 +105,9 @@ function onWindowResize()
 
 // array for raycasting/picking
 const LightArray = [];
-const planeArray = [];
+const PlaneArray = [];
+
+// helper functions
 
 // userData currently has 2 properties
 // - name
@@ -135,7 +137,18 @@ function AddLight(name, testproperty, pos)
 	return lightmesh;
 }
 
-// helper functions
+// helper for removing light objects from the scene
+function RemoveLight(light)
+{
+	// find and remove light from LightArray
+	var index = LightArray.findIndex(obj => {return obj.name === light.name});
+	
+	if(index != -1)
+		LightArray.splice(index, 1);
+		
+	// find and remove object from scene
+	light.parent.remove(light);
+}
 
 // convert degrees to radians
 function Rad(deg)
@@ -166,6 +179,7 @@ function onDocumentMouseUp(event)
 	}
 }
 
+// spacebar event
 document.addEventListener("keyup", onKeyUp, false);
 function onKeyUp(event)
 {
@@ -175,7 +189,7 @@ function onKeyUp(event)
 	}
 }
 
-// disable right click context menu
+// disable right click context menu (for view mode especially)
 document.addEventListener("contextmenu", onContextMenu, false);
 function onContextMenu(event)
 {
@@ -185,6 +199,8 @@ function onContextMenu(event)
 
 // bool for add/view mode
 var addMode = false;
+// int for keeping track of lights added
+var lightsAdded = 0;
 
 function main()
 {
@@ -198,7 +214,7 @@ function main()
 	plane.rotateX(Rad(-90));
 	// translate by z to move up because it is rotated
 	plane.translateZ(10);
-	planeArray.push(plane);
+	PlaneArray.push(plane);
 	scene.add(plane);
 	
 	// add grid
@@ -271,89 +287,94 @@ function drawScene()
 	// randomly modify userData properties for testing
 	if(Math.floor(Math.random() * 2) == 0)
 	{
-		LightArray[0].userData.testproperty += 0.005;
-		LightArray[1].userData.testproperty += 0.005;
+		if(LightArray[0])
+			LightArray[0].userData.testproperty += 0.005;
+		if(LightArray[1])
+			LightArray[1].userData.testproperty += 0.005;
 	}
 	else
 	{
-		LightArray[0].userData.testproperty -= 0.005;
-		LightArray[1].userData.testproperty -= 0.005;
+		if(LightArray[0])
+			LightArray[0].userData.testproperty -= 0.005;
+		if(LightArray[1])
+			LightArray[1].userData.testproperty -= 0.005;
 	}
 	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	
-	// view mode
-	if(!addMode)
-	{
-		// enable orbitcontrols
-		controls.enabled = true;
-		
-		const intersects = raycaster.intersectObjects(LightArray);
+	// disable orbitcontrols if viewing
+	controls.enabled = !addMode;
 	
-		if(intersects.length > 0)
-		{
-			if(LIGHTINTERSECTED != intersects[0].object)
-			{
-				if(LIGHTINTERSECTED)
-				{
-					LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
-				}
-				
-				// select the intersected object
-				LIGHTINTERSECTED = intersects[0].object;
-				// onenter
-				LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
-				LIGHTINTERSECTED.material.color.setHex(0xF8FF33);
-			}
-			else
-			{
-				// onstay
-				// set to 1 decimal place
-				text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
-								"TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
-				//text2.style.top = window.innerHeight - 100 + "px";
-				//text2.style.left = 500 + "px";
-				
-				if(Lmouseup)
-				{					
-					// don't have to set lmouseup to false, done at end of loop
-					console.log("clicked on light");
-				}
-			}
-		}
-		else
+	const intersects = raycaster.intersectObjects(LightArray);
+	const planeintersects = raycaster.intersectObjects(PlaneArray);
+	
+	// light
+	if(intersects.length > 0)
+	{
+		if(LIGHTINTERSECTED != intersects[0].object)
 		{
 			if(LIGHTINTERSECTED)
 			{
-				// onexit
 				LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
-				text2.innerHTML = "";
 			}
-			LIGHTINTERSECTED = null;
+			
+			// select the intersected object
+			LIGHTINTERSECTED = intersects[0].object;
+			// onenter
+			LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
+			LIGHTINTERSECTED.material.color.setHex(0xF8FF33);
+		}
+		else
+		{
+			// onstay
+			// set to 1 decimal place
+			text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
+							"TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
+			//text2.style.top = window.innerHeight - 100 + "px";
+			//text2.style.left = 500 + "px";
+			
+			if(Lmouseup)
+			{	
+				// don't have to set lmouseup to false, done at end of loop
+				// check if in view mode
+				if(!addMode)
+				{
+					console.log("clicked on light in view mode");
+				}
+			}
+			
+			// removing
+			if(Rmouseup)
+			{
+				if(addMode)
+				{
+					console.log("remove light");
+					RemoveLight(LIGHTINTERSECTED);
+				}
+			}
 		}
 	}
-	// add mode
 	else
 	{
-		// disable orbit controls
-		controls.enabled = false;
-		
-		// turn off any selected light's rollover effect
 		if(LIGHTINTERSECTED)
 		{
+			// onexit
 			LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
 			text2.innerHTML = "";
 		}
-		
-		const intersects = raycaster.intersectObjects(planeArray);
+		LIGHTINTERSECTED = null;
+	}
 	
-		if(intersects.length > 0)
+	// plane
+	if(addMode)
+	{
+		if(planeintersects.length > 0)
 		{
-			if(PLANEINTERSECTED != intersects[0].object)
+			if (PLANEINTERSECTED != planeintersects[0].object)
 			{
 				// select the intersected object
-				PLANEINTERSECTED = intersects[0].object;
+				PLANEINTERSECTED = planeintersects[0].object;
 				// onenter
 			}
 			else
@@ -362,7 +383,8 @@ function drawScene()
 				if(Lmouseup)
 				{
 					// intersects[0].point returns vector3 of collision point
-					AddLight("lighttest", 0.0, intersects[0].point);
+					AddLight("lighttest" + lightsAdded.toString(), 0.0, planeintersects[0].point);
+					lightsAdded += 1;
 				}
 			}
 		}
