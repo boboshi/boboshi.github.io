@@ -174,6 +174,15 @@ function onKeyUp(event)
 		addMode = !addMode;
 	}
 }
+
+// disable right click context menu
+document.addEventListener("contextmenu", onContextMenu, false);
+function onContextMenu(event)
+{
+	event.preventDefault();
+	return false;
+}
+
 // bool for add/view mode
 var addMode = false;
 
