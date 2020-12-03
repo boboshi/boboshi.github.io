@@ -72,7 +72,7 @@ const loader = new FBXLoader();
 //scene.add(ambientLight);
 
 // directional light
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(directionalLight);
 
 // picking
@@ -81,8 +81,9 @@ const radius = 100;
 let INTERSECTED;
 
 const raycaster = new THREE.Raycaster();
-document.addEventListener("mousemove", onDocumentMouseMove, false);
 
+// mouse position tracking
+document.addEventListener("mousemove", onDocumentMouseMove, false);
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
@@ -92,9 +93,8 @@ function onDocumentMouseMove(event)
 
 // resize handling
 window.addEventListener("resize", onWindowResize, false);
-
-function onWindowResize() {
-
+function onWindowResize() 
+{
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 
@@ -140,10 +140,27 @@ function Rad(deg)
 	return deg * Math.PI / 180;
 }
 
+// mouseup event (use pointer because of orbitcontrols)
+document.addEventListener("pointerup", onDocumentMouseUp, true);
+function onDocumentMouseUp(event)
+{
+	event.preventDefault();
+	
+	switch(event.which)
+	{
+		case 1:
+			console.log("case 1");
+			break;
+		case 3:
+			console.log("case 3");
+			break;
+	}
+}
+
 function main()
 {
 	// add plane for testing
-	planegeometry.scale(50, 50, 50);
+	planegeometry.scale(75, 75, 75);
 	// load test image as material
 	var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/c1basement1.jpg");
 	var planeMat = new THREE.MeshLambertMaterial({map: texture});
