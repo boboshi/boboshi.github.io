@@ -1,19 +1,19 @@
 // imports
 import * as THREE from "../node_modules/three/build/three.module.js";
-import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js"
-import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js"
+import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
+import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
+
+// define width and height (window.innerWidth/Height for default)
+var innerWidth = window.innerWidth;
+var innerHeight = window.innerHeight;
 
 // init scene, camera and renderer
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xC0C0C0);
 // args: fov, aspect ratio, near plane, far plane
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio( window.devicePixelRatio );
-
-// define width and height (window.innerWidth/Height for default)
-var innerWidth = window.innerWidth;
-var innerHeight = window.innerHeight;
 
 renderer.setSize(innerWidth, innerHeight);
 
@@ -166,6 +166,7 @@ function MoveToLight(name)
 {
 	find = FindLight(name);
 
+	find.userData.selected = true;
 	controls.target.set(find.position.x, find.position.y, find.position.z);
 	camera.position.set(find.position.x, find.position.y + 5, find.position.z);
 	
@@ -256,13 +257,20 @@ function onDocumentMouseUp(event)
 	}
 }
 
-// spacebar event
+// key events
 document.addEventListener("keyup", onKeyUp, false);
 function onKeyUp(event)
 {
+	// spacebar
 	if(event.code == "Space")
 	{
 		addMode = !addMode;
+	}
+	
+	// b
+	if(event.code == "KeyB")
+	{
+		MoveToLight("lighttest0");
 	}
 }
 
@@ -273,6 +281,11 @@ function onContextMenu(event)
 	event.preventDefault();
 	return false;
 }
+
+// outline effect (kinda cheating with edgesgeometry)
+const edges = new THREE.EdgesGeometry(spheregeometry);
+const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:YELLOW}));
+scene.add(line);
 
 // bool for add/view mode
 var addMode = false;
@@ -384,7 +397,7 @@ function drawScene()
 			LIGHTINTERSECTED = intersects[0].object;
 			// onenter
 			LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
-			LIGHTINTERSECTED.material.color.setHex(0xF8FF33);
+			LIGHTINTERSECTED.material.color.setHex(YELLOW);
 		}
 		else
 		{
@@ -420,6 +433,8 @@ function drawScene()
 		if(LIGHTINTERSECTED)
 		{
 			// onexit
+			ClearDisplayLightData();
+			
 			LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
 			LIGHTINTERSECTED.userData.selected = false;
 		}
