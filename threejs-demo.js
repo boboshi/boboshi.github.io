@@ -124,7 +124,7 @@ const params = {
 
 function Configuration()
 {
-	this.visibleEdgeColor = "#0xF8FF33";
+	this.visibleEdgeColor = "#ffffff";
 	this.hiddenEdgeColor = "#190a05";
 }
 
@@ -133,6 +133,8 @@ let composer = new EffectComposer(renderer);
 let renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
 let outlinePass = new OutlinePass(new THREE.Vector2(innerWidth, innerHeight), scene, camera);
+outlinePass.visibleEdgeColor.set(conf.visibleEdgeColor);
+outlinePass.hiddenEdgeColor.set(conf.hiddenEdgeColor);
 composer.addPass(outlinePass);
 let effectFXAA = new ShaderPass(FXAAShader);
 effectFXAA.uniforms["resolution"].value.set(1/innerWidth, 1/innerHeight);
@@ -432,6 +434,10 @@ function drawScene()
 				LightArray[i].userData.selected = false;
 			}
 			
+			var select = [];
+			select.push(intersects[0].object);
+			outlinePass.selectedObjects = select;
+			
 			LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
 			LIGHTINTERSECTED.material.color.setHex(YELLOW);
 		}
@@ -519,8 +525,9 @@ function drawScene()
 	// camera controls update
 	controls.update();
 	
-	// render
-	renderer.render(scene, camera);
+	// render (use composer.render if postprocessing is used
+	composer.render();
+	//renderer.render(scene, camera);
 }
 
 main();
