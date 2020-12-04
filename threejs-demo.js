@@ -2,6 +2,11 @@
 import * as THREE from "../node_modules/three/build/three.module.js";
 import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
 import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
+import { EffectComposer } from '../node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from "../node_modules/three/examples/jsm/postprocessing/RenderPass.js";
+import { ShaderPass } from "../node_modules/three/examples/jsm/postprocessing/ShaderPass.js";
+import { OutlinePass } from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
+import { FXAAShader } from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
 
 // define width and height (window.innerWidth/Height for default)
 var innerWidth = window.innerWidth;
@@ -107,6 +112,32 @@ function onWindowResize()
 	renderer.setSize(innerWidth, innerHeight);
 }
 
+// outline effect
+const params = {
+	edgeStrength: 3.0,
+	edgeGlow: 0.0,
+	edgeThickness: 1.0,
+	pulsePeriod: 0,
+	rotate: false,
+	usePatternTexture: false
+};
+
+function Configuration()
+{
+	this.visibleEdgeColor = "#0xF8FF33";
+	this.hiddenEdgeColor = "#190a05";
+}
+
+const conf = new Configuration();
+let composer = new EffectComposer(renderer);
+let renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+let outlinePass = new OutlinePass(new THREE.Vector2(innerWidth, innerHeight), scene, camera);
+composer.addPass(outlinePass);
+let effectFXAA = new ShaderPass(FXAAShader);
+effectFXAA.uniforms["resolution"].value.set(1/innerWidth, 1/innerHeight);
+composer.addPass(effectFXAA);
+
 // array for raycasting/picking
 const LightArray = [];
 const PlaneArray = [];
@@ -166,11 +197,14 @@ function MoveToLight(name)
 {
 	find = FindLight(name);
 
-	find.userData.selected = true;
-	controls.target.set(find.position.x, find.position.y, find.position.z);
-	camera.position.set(find.position.x, find.position.y + 5, find.position.z);
+	if (find)
+	{
+		find.userData.selected = true;
+		controls.target.set(find.position.x, find.position.y, find.position.z);
+		camera.position.set(find.position.x, find.position.y + 5, find.position.z);
 	
-	controls.update();
+		controls.update();
+	}
 }
 
 // light data update
@@ -282,11 +316,6 @@ function onContextMenu(event)
 	return false;
 }
 
-// outline effect (kinda cheating with edgesgeometry)
-const edges = new THREE.EdgesGeometry(spheregeometry);
-const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:YELLOW}));
-scene.add(line);
-
 // bool for add/view mode
 var addMode = false;
 // int for keeping track of lights added
@@ -396,6 +425,13 @@ function drawScene()
 			// select the intersected object
 			LIGHTINTERSECTED = intersects[0].object;
 			// onenter
+			
+			// clear display first
+			for (var i = 0; i < LightArray.length; ++i)
+			{
+				LightArray[i].userData.selected = false;
+			}
+			
 			LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
 			LIGHTINTERSECTED.material.color.setHex(YELLOW);
 		}
