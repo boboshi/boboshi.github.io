@@ -116,7 +116,7 @@ function onWindowResize()
 const params = {
 	edgeStrength: 3.0,
 	edgeGlow: 0.0,
-	edgeThickness: 1.0,
+	edgeThickness: 3.0,
 	pulsePeriod: 0,
 	rotate: false,
 	usePatternTexture: false
@@ -124,10 +124,10 @@ const params = {
 
 function Configuration()
 {
-	this.visibleEdgeColor = "#ffffff";
-	this.hiddenEdgeColor = "#190a05";
+	this.visibleEdgeColor = "#F8FF33";
+	this.hiddenEdgeColor = "#F8FF33";
 }
-
+ 
 const conf = new Configuration();
 let composer = new EffectComposer(renderer);
 let renderPass = new RenderPass(scene, camera);
@@ -204,7 +204,7 @@ function MoveToLight(name)
 		find.userData.selected = true;
 		controls.target.set(find.position.x, find.position.y, find.position.z);
 		camera.position.set(find.position.x, find.position.y + 5, find.position.z);
-	
+		outlinePass.selectedObjects = [find];
 		controls.update();
 	}
 }
@@ -238,6 +238,7 @@ function LightArrayUpdate()
 		{
 			foundselected = true;
 			DisplayLightData(LightArray[i].userData.name);
+			outlinePass.selectedObjects = [LightArray[i]];
 		}
 	}
 	
@@ -419,11 +420,6 @@ function drawScene()
 	{
 		if(LIGHTINTERSECTED != intersects[0].object)
 		{
-			if(LIGHTINTERSECTED)
-			{
-				LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
-			}
-			
 			// select the intersected object
 			LIGHTINTERSECTED = intersects[0].object;
 			// onenter
@@ -433,18 +429,10 @@ function drawScene()
 			{
 				LightArray[i].userData.selected = false;
 			}
-			
-			var select = [];
-			select.push(intersects[0].object);
-			outlinePass.selectedObjects = select;
-			
-			LIGHTINTERSECTED.currentHex = LIGHTINTERSECTED.material.color.getHex();
-			LIGHTINTERSECTED.material.color.setHex(YELLOW);
 		}
 		else
 		{
 			// onstay
-			
 			intersects[0].object.userData.selected = true;
 			
 			if(Lmouseup)
@@ -475,9 +463,10 @@ function drawScene()
 		if(LIGHTINTERSECTED)
 		{
 			// onexit
+			// clear display and outline
 			ClearDisplayLightData();
+			outlinePass.selectedObjects = [];
 			
-			LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
 			LIGHTINTERSECTED.userData.selected = false;
 		}
 		LIGHTINTERSECTED = null;
