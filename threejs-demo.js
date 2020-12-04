@@ -2,11 +2,11 @@
 import * as THREE from "../node_modules/three/build/three.module.js";
 import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
 import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
-import { EffectComposer } from '../node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from "../node_modules/three/examples/jsm/postprocessing/RenderPass.js";
-import { ShaderPass } from "../node_modules/three/examples/jsm/postprocessing/ShaderPass.js";
-import { OutlinePass } from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
-import { FXAAShader } from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
+import {EffectComposer} from "../node_modules/three/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "../node_modules/three/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "../node_modules/three/examples/jsm/postprocessing/ShaderPass.js";
+import {OutlinePass} from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
+import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
 
 // define width and height (window.innerWidth/Height for default)
 var innerWidth = window.innerWidth;
@@ -253,9 +253,10 @@ function DisplayLightData(name)
 {
 	find = FindLight(name);
 	
-	// parseFloat sets it to 1 decimal place
+	// <br/> is a newline, parseFloat sets it to 1 decimal place
 	text.innerHTML = "Name: " + find.userData.name + "<br/>" +
 					"TestProperty: " + parseFloat(find.userData.testproperty).toFixed(1);
+	// top and left specifies the position of the data
 	//text.style.top = window.innerHeight - 100 + "px";
 	//text.style.left = 500 + "px";
 }
@@ -264,6 +265,24 @@ function DisplayLightData(name)
 function ClearDisplayLightData()
 {
 	text.innerHTML = "";
+}
+
+// file saving and loading fuck this do it next week
+
+// save data testing
+function download(data, filename, type)
+{
+	var file = new Blob([data], {type: type});
+}
+
+var LoadedData = [];
+
+function LoadData(LoadedData)
+{
+	for (var i = 0; i < LoadedData; ++i)
+	{
+		// do something
+	}
 }
 
 // convert degrees to radians
