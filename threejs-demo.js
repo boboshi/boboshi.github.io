@@ -115,6 +115,7 @@ const PlaneArray = [];
 
 // userData currently has 2 properties
 // - name
+// - selected (bool)
 // - testproperty
 // further properties can be added to and accessed from userData
 
@@ -130,7 +131,7 @@ function AddLight(name, testproperty, pos)
 	lightmesh.position.z = pos.z;
 	
 	// add lightdata into the three.js mesh
-	lightmesh.userData = {name: name, testproperty: testproperty};
+	lightmesh.userData = {name: name, selected: false, testproperty: testproperty};
 	
 	// add mesh to array (for raycasting/picking)
 	LightArray.push(lightmesh);
@@ -139,6 +140,12 @@ function AddLight(name, testproperty, pos)
 	scene.add(lightmesh);
 	
 	return lightmesh;
+}
+
+// helper for finding light in lightarray
+function FindLight(name)
+{
+	return LightArray.find(light => light.userData.name === name);
 }
 
 // helper for removing light objects from the scene
@@ -157,12 +164,50 @@ function RemoveLight(light)
 // move camera to selected light
 function MoveToLight(name)
 {
-	find = LightArray.find(light => light.userData.name === name);
+	find = FindLight(name);
 
 	controls.target.set(find.position.x, find.position.y, find.position.z);
 	camera.position.set(find.position.x, find.position.y + 5, find.position.z);
 	
 	controls.update();
+}
+
+// light data update
+function LightArrayUpdate()
+{
+	// randomly modify userData properties for testing
+	if(Math.floor(Math.random() * 2) == 0)
+	{
+		if(LightArray[0])
+			LightArray[0].userData.testproperty += 0.005;
+		if(LightArray[1])
+			LightArray[1].userData.testproperty += 0.005;
+	}
+	else
+	{
+		if(LightArray[0])
+			LightArray[0].userData.testproperty -= 0.005;
+		if(LightArray[1])
+			LightArray[1].userData.testproperty -= 0.005;
+	}
+}
+
+// display data of light given name/ids
+function DisplayLightData(name)
+{
+	find = FindLight(name);
+	
+	// parseFloat sets it to 1 decimal place
+	text2.innerHTML = "Name: " + find.userData.name + "<br/>" +
+					"TestProperty: " + parseFloat(find.userData.testproperty).toFixed(1);
+	//text2.style.top = window.innerHeight - 100 + "px";
+	//text2.style.left = 500 + "px";
+}
+
+// clear display
+function ClearDisplayLightData()
+{
+	text2.innerHTML = "";
 }
 
 // convert degrees to radians
@@ -217,6 +262,20 @@ var addMode = false;
 // int for keeping track of lights added
 var lightsAdded = 0;
 
+// light data display setup
+var text2 = document.createElement("div");
+text2.style.position = "absolute";
+text2.style.width = 100;
+text2.style.height = 100;
+text2.style.backgroundColor = "black";
+text2.style.color = "white";
+text2.innerHTML = "";
+text2.style.top = 0 + "px";
+text2.style.left = 0 + "px";
+text2.style.fontSize = 30 + "px";
+text2.style.fontFamily = "Calibri";
+document.body.appendChild(text2);
+
 function main()
 {
 	// add plane for testing
@@ -227,7 +286,7 @@ function main()
 	const plane = new THREE.Mesh(planegeometry, planeMat);
 	plane.receiveShadow = true;
 	plane.rotateX(Rad(-90));
-	// translate by z to move up because it is rotated
+	// translate by z instead of y to move up because it is rotated
 	plane.translateZ(10);
 	PlaneArray.push(plane);
 	scene.add(plane);
@@ -274,20 +333,6 @@ function main()
 	drawScene();
 }
 
-// light data display
-var text2 = document.createElement("div");
-text2.style.position = "absolute";
-text2.style.width = 100;
-text2.style.height = 100;
-text2.style.backgroundColor = "black";
-text2.style.color = "white";
-text2.innerHTML = "";
-text2.style.top = 0 + "px";
-text2.style.left = 0 + "px";
-text2.style.fontSize = 30 + "px";
-text2.style.fontFamily = "Calibri";
-document.body.appendChild(text2);
-
 // render loop
 function drawScene()
 {
@@ -296,21 +341,8 @@ function drawScene()
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
 	
-	// randomly modify userData properties for testing
-	if(Math.floor(Math.random() * 2) == 0)
-	{
-		if(LightArray[0])
-			LightArray[0].userData.testproperty += 0.005;
-		if(LightArray[1])
-			LightArray[1].userData.testproperty += 0.005;
-	}
-	else
-	{
-		if(LightArray[0])
-			LightArray[0].userData.testproperty -= 0.005;
-		if(LightArray[1])
-			LightArray[1].userData.testproperty -= 0.005;
-	}
+	// update light data
+	LightArrayUpdate();
 	
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
@@ -340,11 +372,9 @@ function drawScene()
 		else
 		{
 			// onstay
-			// set to 1 decimal place
-			text2.innerHTML = "Name: " + intersects[0].object.userData.name + "<br/>" +
-							"TestProperty: " + parseFloat(intersects[0].object.userData.testproperty).toFixed(1);
-			//text2.style.top = window.innerHeight - 100 + "px";
-			//text2.style.left = 500 + "px";
+			
+			// display light data
+			DisplayLightData(intersects[0].object.userData.name);
 			
 			if(Lmouseup)
 			{	
@@ -376,7 +406,7 @@ function drawScene()
 		{
 			// onexit
 			LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
-			text2.innerHTML = "";
+			ClearDisplayLightData();
 		}
 		LIGHTINTERSECTED = null;
 	}
