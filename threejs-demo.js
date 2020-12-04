@@ -149,16 +149,16 @@ function FindLight(name)
 }
 
 // helper for removing light objects from the scene
-function RemoveLight(light)
+function RemoveLight(name)
 {
 	// find and remove light from LightArray
-	var index = LightArray.findIndex(obj => {return obj.name === light.name});
-	
-	if(index != -1)
-		LightArray.splice(index, 1);
+	var index = LightArray.findIndex(light => light.userData.name === name);
 		
 	// find and remove object from scene
-	light.parent.remove(light);
+	LightArray[index].parent.remove(LightArray[index]);
+		
+	if(index != -1)
+		LightArray.splice(index, 1);
 }
 
 // move camera to selected light
@@ -175,7 +175,7 @@ function MoveToLight(name)
 // light data update
 function LightArrayUpdate()
 {
-	// randomly modify userData properties for testing
+	// randomly modify userData properties of first two lights for testing
 	if(Math.floor(Math.random() * 2) == 0)
 	{
 		if(LightArray[0])
@@ -190,6 +190,23 @@ function LightArrayUpdate()
 		if(LightArray[1])
 			LightArray[1].userData.testproperty -= 0.005;
 	}
+	
+	// only display data of first selected light on screen
+	var foundselected = false;
+	// loop through all lights and update accordingly
+	for (var i = 0; i < LightArray.length; ++i)
+	{
+		// selected check
+		if(!foundselected && LightArray[i].userData.selected === true)
+		{
+			foundselected = true;
+			DisplayLightData(LightArray[i].userData.name);
+		}
+	}
+	
+	// if none are selected, turn off display
+	if (!foundselected)
+		ClearDisplayLightData();
 }
 
 // display data of light given name/ids
@@ -198,16 +215,16 @@ function DisplayLightData(name)
 	find = FindLight(name);
 	
 	// parseFloat sets it to 1 decimal place
-	text2.innerHTML = "Name: " + find.userData.name + "<br/>" +
+	text.innerHTML = "Name: " + find.userData.name + "<br/>" +
 					"TestProperty: " + parseFloat(find.userData.testproperty).toFixed(1);
-	//text2.style.top = window.innerHeight - 100 + "px";
-	//text2.style.left = 500 + "px";
+	//text.style.top = window.innerHeight - 100 + "px";
+	//text.style.left = 500 + "px";
 }
 
 // clear display
 function ClearDisplayLightData()
 {
-	text2.innerHTML = "";
+	text.innerHTML = "";
 }
 
 // convert degrees to radians
@@ -263,18 +280,18 @@ var addMode = false;
 var lightsAdded = 0;
 
 // light data display setup
-var text2 = document.createElement("div");
-text2.style.position = "absolute";
-text2.style.width = 100;
-text2.style.height = 100;
-text2.style.backgroundColor = "black";
-text2.style.color = "white";
-text2.innerHTML = "";
-text2.style.top = 0 + "px";
-text2.style.left = 0 + "px";
-text2.style.fontSize = 30 + "px";
-text2.style.fontFamily = "Calibri";
-document.body.appendChild(text2);
+var text = document.createElement("div");
+text.style.position = "absolute";
+text.style.width = 100;
+text.style.height = 100;
+text.style.backgroundColor = "black";
+text.style.color = "white";
+text.innerHTML = "";
+text.style.top = 0 + "px";
+text.style.left = 0 + "px";
+text.style.fontSize = 30 + "px";
+text.style.fontFamily = "Calibri";
+document.body.appendChild(text);
 
 function main()
 {
@@ -373,8 +390,7 @@ function drawScene()
 		{
 			// onstay
 			
-			// display light data
-			DisplayLightData(intersects[0].object.userData.name);
+			intersects[0].object.userData.selected = true;
 			
 			if(Lmouseup)
 			{	
@@ -383,7 +399,6 @@ function drawScene()
 				if(!addMode)
 				{
 					console.log("clicked on light in view mode");
-					
 					MoveToLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
@@ -406,7 +421,7 @@ function drawScene()
 		{
 			// onexit
 			LIGHTINTERSECTED.material.color.setHex(LIGHTINTERSECTED.currentHex);
-			ClearDisplayLightData();
+			LIGHTINTERSECTED.userData.selected = false;
 		}
 		LIGHTINTERSECTED = null;
 	}
