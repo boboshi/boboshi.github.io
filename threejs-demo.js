@@ -33,8 +33,9 @@ camera.position.z = 10;
 // camera controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
+controls.enableDamping = false;
+//controls.dampingFactor = 0.05;
+controls.rotateSpeed = 0.5;
 controls.screenSpacePanning = false;
 controls.maxPolarAngle = Math.PI / 2;
 
@@ -305,10 +306,11 @@ function onKeyUp(event)
 	}
 	
 	// b
-	if(event.code == "KeyB")
-	{
-		MoveToLight("lighttest0");
-	}
+	//if(event.code == "KeyB")
+	//{
+	//	if(LightArray.find(light => light.userData.name == "lighttest0"))
+	//		MoveToLight("lighttest0");
+	//}
 }
 
 // disable right click context menu (for view mode especially)
