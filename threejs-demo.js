@@ -154,6 +154,17 @@ function RemoveLight(light)
 	light.parent.remove(light);
 }
 
+// move camera to selected light
+function MoveToLight(name)
+{
+	find = LightArray.find(light => light.userData.name === name);
+
+	controls.target.set(find.position.x, find.position.y, find.position.z);
+	camera.position.set(find.position.x, find.position.y + 5, find.position.z);
+	
+	controls.update();
+}
+
 // convert degrees to radians
 function Rad(deg)
 {
@@ -343,12 +354,7 @@ function drawScene()
 				{
 					console.log("clicked on light in view mode");
 					
-					//controls.enabled = false;
-					
-					//controls.target.set(10, 10, 10);
-					//camera.position.set();
-					
-					//controls.enabled = true;
+					MoveToLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
 			
@@ -359,7 +365,7 @@ function drawScene()
 				if(addMode)
 				{
 					console.log("remove light");
-					RemoveLight(LIGHTINTERSECTED);
+					RemoveLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
 		}
