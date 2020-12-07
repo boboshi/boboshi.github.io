@@ -446,7 +446,7 @@ function SaveLightData()
 }
 
 // fetch helper function
-async function fetchData(j = "default")
+async function FetchData(j = "default")
 {
 	let url = serverAddress + "resources/" + j + ".json";
 	const response = await fetch(url);
@@ -462,7 +462,7 @@ async function fetchData(j = "default")
 async function LoadData(j = "default")
 {
 	//const response = await fetch(url);
-	const out = await fetchData(j);
+	const out = await FetchData(j);
 
 	if(out)
 	{
