@@ -11,6 +11,8 @@ import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.
 // define width and height (window.innerWidth/Height for default)
 var innerWidth = window.innerWidth;
 var innerHeight = window.innerHeight;
+// server address
+var serverAddress = "http://10.1.11.197:8080/";
 
 // init scene, camera and renderer
 const scene = new THREE.Scene();
@@ -147,7 +149,7 @@ var PlaneArray = [];
 
 // helper functions
 
-// userData currently has 2 properties
+// userData currently has 3 properties
 // - name
 // - selected (bool)
 // - testproperty
@@ -274,7 +276,7 @@ var DisplayFloorPlan = "";
 // array of lights to be saved/loaded
 var LightData = [];
 // plane to display floorplan on
-var displayplane;
+var displayPlane;
 
 // class for holding light object properties
 class Light
@@ -301,9 +303,10 @@ function SaveLightData()
 	}
 }
 
+// fetch helper function
 async function fetchData(j = "default")
 {
-	let url = "http://10.1.11.197:8080/resources/" + j + ".json";
+	let url = serverAddress + "resources/" + j + ".json";
 	const response = await fetch(url);
 	const data = await response.json();
 
@@ -333,15 +336,15 @@ async function LoadData(j = "default")
 	}
 	
 	// add plane
-	var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/" + DisplayFloorPlan);
+	var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
 	var planeMat = new THREE.MeshLambertMaterial({map: texture});
-	displayplane = new THREE.Mesh(planegeometry, planeMat);
-	displayplane.receiveShadow = true;
-	displayplane.rotateX(Rad(-90));
+	displayPlane = new THREE.Mesh(planegeometry, planeMat);
+	displayPlane.receiveShadow = true;
+	displayPlane.rotateX(Rad(-90));
 	// translate by z instead of y to move up because it is rotated
-	displayplane.translateZ(10);
-	PlaneArray.push(displayplane);
-	scene.add(displayplane);
+	displayPlane.translateZ(10);
+	PlaneArray.push(displayPlane);
+	scene.add(displayPlane);
 }
 
 // save data to json
@@ -371,6 +374,35 @@ function DownloadData()
 	}
 
 	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
+}
+
+// load model into scene
+function LoadModel(model, xscale, yscale, zscale)
+{
+	// load and add test model to scene
+	loader.load
+	(
+		serverAddress + "/resources/" + model + ".fbx", function (fbx) 
+			{
+				fbx.scale.set(xscale, yscale, zscale);
+				
+				// apply transparent material to model
+				fbx.traverse(function(child)
+				{
+					if (child instanceof THREE.Mesh)
+					{
+						child.material = translucentMat;
+					}
+				});
+				
+				scene.add(fbx);
+			}, 
+			undefined, 
+			function (error ) 
+			{
+				console.error(error);
+			}
+	);
 }
 
 // convert degrees to radians
@@ -463,46 +495,23 @@ document.body.appendChild(text);
 
 function main()
 {
-	// load data
+	// specify server address
+	serverAddress = "http://10.1.11.197:8080/";
+
+	// load data (includes floorplan and light data)
 	LoadData();
 	
 	// add grid
 	scene.add(gridHelper);
 	
-	// add light (NOT three.js lights) objects (AddLight will add to scene on its own)
-	//var light0 = AddLight("light0", 26.7, new THREE.Vector3(-3.5, 4, 0));
-	//var light1 = AddLight("light1", 26.7, new THREE.Vector3(3.5, 4, 0));
-	
-	// position cube and add to scene
+	// add test cube
 	const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
 	cube.translateX(3);
 	cube.translateY(1);
 	scene.add(cube);
-	
-	// load and add test model to scene
-	loader.load
-	(
-		"http://10.1.11.197:8080/resources/cottage.fbx", function (fbx) 
-			{
-				fbx.scale.set(0.005, 0.005, 0.005);
-				
-				// apply transparent material to model
-				fbx.traverse(function(child)
-				{
-					if (child instanceof THREE.Mesh)
-					{
-						child.material = translucentMat;
-					}
-				});
-				
-				scene.add(fbx);
-			}, 
-			undefined, 
-			function (error ) 
-			{
-				console.error(error);
-			}
-	);
+
+	// load test model
+	LoadModel("cottage", 0.005, 0.005, 0.005);
 	
 	// call the render loop
 	drawScene();
@@ -521,9 +530,9 @@ function drawScene()
 	{
 		Dkeyup = false;
 		LoadData("c1basement1");
-		var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/" + DisplayFloorPlan);
+		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
 		var planeMat = new THREE.MeshLambertMaterial({map: texture});
-		displayplane.material = planeMat;
+		displayPlane.material = planeMat;
 	}
 	
 	// update light data
