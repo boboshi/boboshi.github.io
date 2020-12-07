@@ -142,8 +142,8 @@ effectFXAA.uniforms["resolution"].value.set(1/innerWidth, 1/innerHeight);
 composer.addPass(effectFXAA);
 
 // array for raycasting/picking
-const LightArray = [];
-const PlaneArray = [];
+var LightArray = [];
+var PlaneArray = [];
 
 // helper functions
 
@@ -268,17 +268,78 @@ function ClearDisplayLightData()
 }
 
 // file saving and loading
-var vec = new THREE.Vector3(10, 10, 10);
-var vecdata = [];
-vecdata.push(vec);
+var floorplan = "";
 
-var save = 
+// class for holding light object properties
+class Light
 {
-	test0: "testing testing one two three",
-	savevec: vecdata
+	constructor(name, pos)
+	{
+		this.name = name;
+		this.pos = pos;
+	}
 }
 
-var savegame = JSON.parse(localStorage.getItem("save"));
+// array of lights to be saved/loaded
+var LightData = [];
+
+// function to save current light data
+function SaveLightData()
+{
+	for (var i = 0; i < LightArray.length; ++i)
+	{
+		var ld = new Light
+		(
+			LightArray[i].userData.name,
+			new THREE.Vector3(LightArray[i].position.x, LightArray[i].position.y, LightArray[i].position.z)
+		)
+		
+		LightData.push(ld);
+	}
+}
+
+function SaveCurrent()
+{
+	SaveLightData();
+	
+	var save = 
+	{
+		floorplan: "c1basement1.jpg",
+		lightdata: LightData
+	}
+	
+	localStorage.setItem("save", JSON.stringify(save));
+}
+
+function LoadData()
+{
+	var load = JSON.parse(localStorage.getItem("save"));
+	
+	if(load)
+	{
+		floorplan = load.floorplan;
+	
+		// clear existing data
+		for (var i = 0; i < LightArray.length; ++i)
+		{
+			// find and remove object from scene
+			LightArray[i].parent.remove(LightArray[i]);
+		}
+		LightArray = [];
+		
+		for (var i = 0; i < load.lightdata.length; ++i)
+		{
+			AddLight(load.lightdata[i].name, 0, load.lightdata[i].pos);
+			console.log(LightArray[i].position.x,
+						LightArray[i].position.y,
+						LightArray[i].position.z);
+		}
+	}
+	else
+	{
+		console.log("load failed");
+	}
+}
 
 //var saveData = (function () {
 //    var a = document.createElement("a");
@@ -342,14 +403,22 @@ function onKeyUp(event)
 	// s
 	if (event.code == "KeyS")
 	{
-		localStorage.setItem("save", JSON.stringify(save));
+		SaveCurrent();
 		console.log("save");
 	}
 	
 	// d
 	if (event.code == "KeyD")
 	{
-		console.log(savegame.savevec[0]);
+		LoadData();
+		console.log("load");
+	}
+	
+	// f
+	if (event.code == "KeyF")
+	{
+		localStorage.removeItem("save");
+		console.log("clear");
 	}
 	
 	// b
