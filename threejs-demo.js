@@ -8,38 +8,49 @@ import {ShaderPass} from "../node_modules/three/examples/jsm/postprocessing/Shad
 import {OutlinePass} from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
 import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
 
-// define width and height (window.innerWidth/Height for default)
-var innerWidth = window.innerWidth;
-var innerHeight = window.innerHeight;
+// global variable declarations
+
+// width and height of window
+var innerWidth, innerHeight;
 // server address
-var serverAddress = "http://10.1.11.197:8080/";
+var serverAddress;
+// three.js basic functionality
+let scene, camera, controls, renderer;
+// model loader
+let loader;
+// outline effect use
+let composer, renderPass, outlinePass, effectFXAA;
+// basic geometry shapes
+let box, sphere, grid, plane;
+// raycasting and picking
+let mouse, mouseradius, raycaster, LIGHTINTERSECTED, PLANEINTERSECTED;
+var Lmouseup = false;
+var Rmouseup = false;
+// arrays used for raycasting and picking
+var LightArray = [];
+var PlaneArray = [];
+// floorplan name
+var DisplayFloorPlan = "";
+// array of lights to be saved/loaded
+var LightData = [];
+// plane to display floorplan on
+var displayPlane;
+// bool for add/view mode
+var addMode = false;
+// int for keeping track of lights added
+var lightsAdded = 0;
+// text display
+var text;
 
-// init scene, camera and renderer
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xC0C0C0);
-// args: fov, aspect ratio, near plane, far plane
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio( window.devicePixelRatio );
-
-renderer.setSize(innerWidth, innerHeight);
-
-// add renderer to HTML
-document.body.appendChild(renderer.domElement);
-
-// camera
-
-// initial settings
-camera.position.y = 2;
-camera.position.z = 10;
-// camera controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
-controls.enableDamping = false;
-//controls.dampingFactor = 0.05;
-controls.rotateSpeed = 0.5;
-controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2;
+// class for holding light object properties
+class Light
+{
+	constructor(name, pos)
+	{
+		this.name = name;
+		this.pos = pos;
+	}
+}
 
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
@@ -47,57 +58,215 @@ const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 const YELLOW = 0xF8FF33;
 
-// materials
-
-// translucent material
-const translucentMat = new THREE.MeshPhongMaterial(
+// initialise basic functionality
+function InitThreeJs()
 {
-	color: WHITE,
-	opacity: 0.5,
-	transparent: true,
-	side: THREE.DoubleSide,
-});
+	// define dimensions
+	innerWidth = window.innerWidth;
+	innerHeight = window.innerHeight;
+	// init scene to grey/silver colour
+	scene = new THREE.Scene();
+	scene.background = new THREE.Color(0xC0C0C0);
+	// args: fov, aspect ratio, near plane, far plane
+	camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+	// initial settings
+	camera.position.y = 2;
+	camera.position.z = 10;
+	// init renderer
+	renderer = new THREE.WebGLRenderer();
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.setSize(innerWidth, innerHeight);
+	// event listener to track window resize
+	window.addEventListener("resize", onWindowResize, false);
+	// add renderer to HTML
+	document.body.appendChild(renderer.domElement);
+}
 
-// geometry shapes
+// initialise orbitcontrols camera controls
+function InitCameraControls()
+{
+	// camera controls
+	controls = new OrbitControls(camera, renderer.domElement);
+	controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
+	controls.enableDamping = false;
+	//controls.dampingFactor = 0.05;
+	controls.rotateSpeed = 0.5;
+	controls.screenSpacePanning = false;
+	controls.maxPolarAngle = Math.PI / 2;
 
-// cube (green)
-const boxgeometry = new THREE.BoxBufferGeometry();
+	// event listener to disable right click context menu
+	document.addEventListener("contextmenu", onContextMenu, false);
+	// event listener to track mouse clicks (pointerup because of orbicontrols)
+	document.addEventListener("pointerup", onDocumentMouseUp, false);
+	// event listener to track key presses
+	document.addEventListener("keyup", onKeyUp, false);
+}
 
-// sphere (light blue)
-const spheregeometry = new THREE.SphereBufferGeometry();
-spheregeometry.scale(0.35, 0.35, 0.35);
+// initialise default scene lights
+function InitSceneLights()
+{
+	// ambient light
+	//const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
+	//scene.add(ambientLight);
 
-// grid
-const size = 100;
-const divisions = 100;
-const gridHelper = new THREE.GridHelper(size, divisions);
+	// directional light
+	const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+	scene.add(directionalLight);
+}
 
-// plane
-const planegeometry = new THREE.PlaneBufferGeometry();
-planegeometry.scale(75, 75, 75);
-// fbx model loader
-const loader = new FBXLoader();
+// initialise outline effects
+function InitOutline()
+{
+	// outline effect parameters
+	const params = {
+		edgeStrength: 3.0,
+		edgeGlow: 0.0,
+		edgeThickness: 3.0,
+		pulsePeriod: 0,
+		rotate: false,
+		usePatternTexture: false
+	};
 
-// lights
+	function Configuration()
+	{
+		this.visibleEdgeColor = "#F8FF33";
+		this.hiddenEdgeColor = "#F8FF33";
+	}
+	
+	const conf = new Configuration();
 
-// ambient light
-//const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.2);
-//scene.add(ambientLight);
+	// init postprocessing layers
+	composer = new EffectComposer(renderer);
+	renderPass = new RenderPass(scene, camera);
+	outlinePass = new OutlinePass(new THREE.Vector2(innerWidth, innerHeight), scene, camera);
+	effectFXAA = new ShaderPass(FXAAShader);
 
-// directional light
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-scene.add(directionalLight);
+	// configure edge colours
+	outlinePass.visibleEdgeColor.set(conf.visibleEdgeColor);
+	outlinePass.hiddenEdgeColor.set(conf.hiddenEdgeColor);
+	effectFXAA.uniforms["resolution"].value.set(1/innerWidth, 1/innerHeight);
 
-// picking
-const mouse = new THREE.Vector2();
-const radius = 100;
-let LIGHTINTERSECTED;
-let PLANEINTERSECTED;
+	// add postprocessing effects
+	composer.addPass(renderPass);
+	composer.addPass(outlinePass);
+	composer.addPass(effectFXAA);
+}
 
-const raycaster = new THREE.Raycaster();
+// initialise basic geometry shapes for use with meshes
+function InitGeometry()
+{
+	// cube
+	box = new THREE.BoxBufferGeometry();
+
+	// sphere
+	sphere = new THREE.SphereBufferGeometry();
+	sphere.scale(0.35, 0.35, 0.35);
+
+	// grid
+	const size = 100;
+	const divisions = 100;
+	grid = new THREE.GridHelper(size, divisions);
+
+	// plane
+	plane = new THREE.PlaneBufferGeometry();
+	plane.scale(75, 75, 75);
+}
+
+// initialise model loader
+function InitFBXLoader()
+{
+	loader = new FBXLoader();
+}
+
+// initialise raycasting and picking
+function InitPicking()
+{
+	mouse = new THREE.Vector2();
+	mouseradius = 100;
+	raycaster = new THREE.Raycaster();
+
+	// event listener to track mouse movement
+	document.addEventListener("mousemove", onDocumentMouseMove, false);
+}
+
+// initialise light data text display
+function InitTextDisplay()
+{
+	// light data display setup
+	text = document.createElement("div");
+	text.style.position = "absolute";
+	text.style.width = 100;
+	text.style.height = 100;
+	text.style.backgroundColor = "black";
+	text.style.color = "white";
+	text.innerHTML = "";
+	text.style.top = 0 + "px";
+	text.style.left = 0 + "px";
+	text.style.fontSize = 30 + "px";
+	text.style.fontFamily = "Calibri";
+	document.body.appendChild(text);
+}
+
+// event handlers
+
+// mouseup event
+function onDocumentMouseUp(event)
+{
+	event.preventDefault();
+	
+	switch(event.which)
+	{
+		// lmb
+		case 1:
+			Lmouseup = true;
+			break;
+		// rmb
+		case 3:
+			Rmouseup = true;
+			break;
+		default:
+			break;
+	}
+}
+
+// key events
+function onKeyUp(event)
+{
+	switch(event.code)
+	{
+		case "Space":
+			// toggle add/view mode
+			addMode = !addMode;
+			break;
+		case "KeyS":
+			// save into json and download
+			DownloadData();
+			break;
+		case "KeyD":
+			// load c1basement1
+			LoadData("c1basement1");
+			break;
+		case "KeyF":
+			// load c1basement2
+			LoadData("c1basement2");
+			break;
+		case "KeyB":
+			//if(LightArray.find(light => light.userData.name == "lighttest0"))
+			//	MoveToLight("lighttest0");
+			break;
+		default:
+			break;
+	}
+}
+
+// disable context menu
+function onContextMenu(event)
+{
+	event.preventDefault();
+	return false;
+}
 
 // mouse position tracking
-document.addEventListener("mousemove", onDocumentMouseMove, false);
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
@@ -106,7 +275,6 @@ function onDocumentMouseMove(event)
 }
 
 // resize handling
-window.addEventListener("resize", onWindowResize, false);
 function onWindowResize() 
 {
 	camera.aspect = innerWidth / innerHeight;
@@ -115,39 +283,46 @@ function onWindowResize()
 	renderer.setSize(innerWidth, innerHeight);
 }
 
-// outline effect
-const params = {
-	edgeStrength: 3.0,
-	edgeGlow: 0.0,
-	edgeThickness: 3.0,
-	pulsePeriod: 0,
-	rotate: false,
-	usePatternTexture: false
-};
-
-function Configuration()
-{
-	this.visibleEdgeColor = "#F8FF33";
-	this.hiddenEdgeColor = "#F8FF33";
-}
- 
-const conf = new Configuration();
-let composer = new EffectComposer(renderer);
-let renderPass = new RenderPass(scene, camera);
-composer.addPass(renderPass);
-let outlinePass = new OutlinePass(new THREE.Vector2(innerWidth, innerHeight), scene, camera);
-outlinePass.visibleEdgeColor.set(conf.visibleEdgeColor);
-outlinePass.hiddenEdgeColor.set(conf.hiddenEdgeColor);
-composer.addPass(outlinePass);
-let effectFXAA = new ShaderPass(FXAAShader);
-effectFXAA.uniforms["resolution"].value.set(1/innerWidth, 1/innerHeight);
-composer.addPass(effectFXAA);
-
-// array for raycasting/picking
-var LightArray = [];
-var PlaneArray = [];
-
 // helper functions
+
+// translucent material
+const translucentMat = new THREE.MeshPhongMaterial(
+	{
+		color: WHITE,
+		opacity: 0.5,
+		transparent: true,
+		side: THREE.DoubleSide,
+	});
+
+// load model into scene (default material is translucent)
+function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
+{
+	// load and add test model to scene
+	loader.load
+	(
+		serverAddress + "/resources/" + model + ".fbx", function (fbx) 
+			{
+				fbx.scale.set(xscale, yscale, zscale);
+				
+				// apply transparent material to model
+				fbx.traverse(function(child)
+				{
+					if (child instanceof THREE.Mesh)
+					{
+						// use predefined translucent material
+						child.material = material;
+					}
+				});
+				
+				scene.add(fbx);
+			}, 
+			undefined, 
+			function (error ) 
+			{
+				console.error(error);
+			}
+	);
+}
 
 // userData currently has 3 properties
 // - name
@@ -159,7 +334,7 @@ var PlaneArray = [];
 function AddLight(name, testproperty, pos)
 {
 	// init mesh and data
-	const lightmesh = new THREE.Mesh(spheregeometry, new THREE.MeshBasicMaterial ({color:LIGHTBLUE}));
+	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:LIGHTBLUE}));
 	
 	// not sure why position.set doesn't work, this is okay though
 	lightmesh.position.x = pos.x;
@@ -215,22 +390,6 @@ function MoveToLight(name)
 // light data update
 function LightArrayUpdate()
 {
-	// randomly modify userData properties of first two lights for testing
-	if(Math.floor(Math.random() * 2) == 0)
-	{
-		if(LightArray[0])
-			LightArray[0].userData.testproperty += 0.005;
-		if(LightArray[1])
-			LightArray[1].userData.testproperty += 0.005;
-	}
-	else
-	{
-		if(LightArray[0])
-			LightArray[0].userData.testproperty -= 0.005;
-		if(LightArray[1])
-			LightArray[1].userData.testproperty -= 0.005;
-	}
-	
 	// only display data of first selected light on screen
 	var foundselected = false;
 	// loop through all lights and update accordingly
@@ -271,23 +430,6 @@ function ClearDisplayLightData()
 
 // file saving and loading
 
-// floorplan name
-var DisplayFloorPlan = "";
-// array of lights to be saved/loaded
-var LightData = [];
-// plane to display floorplan on
-var displayPlane;
-
-// class for holding light object properties
-class Light
-{
-	constructor(name, pos)
-	{
-		this.name = name;
-		this.pos = pos;
-	}
-}
-
 // function to save current light data
 function SaveLightData()
 {
@@ -308,9 +450,12 @@ async function fetchData(j = "default")
 {
 	let url = serverAddress + "resources/" + j + ".json";
 	const response = await fetch(url);
-	const data = await response.json();
+	if(response.ok)
+	{
+		const data = await response.json();
 
-	return data;
+		return data;
+	}
 }
 
 // load data from json
@@ -319,38 +464,46 @@ async function LoadData(j = "default")
 	//const response = await fetch(url);
 	const out = await fetchData(j);
 
-	// get floorplan file name
-	DisplayFloorPlan = out.floorplan;
-	// clear existing data
-	for (var i = 0; i < LightArray.length; ++i)
+	if(out)
 	{
-		// find and remove object from scene
-		LightArray[i].parent.remove(LightArray[i]);
+		// get floorplan file name
+		DisplayFloorPlan = out.floorplan;
+		// clear existing data
+		for (var i = 0; i < LightArray.length; ++i)
+		{
+			// find and remove object from scene
+			LightArray[i].parent.remove(LightArray[i]);
+		}
+		LightArray = [];
+
+		// add lights to scene
+		for (var i = 0; i < out.lightdata.length; ++i)
+		{
+			AddLight(out.lightdata[i].name, 0, out.lightdata[i].pos);
+		}
+
+		// add plane
+		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
+		var planeMat = new THREE.MeshLambertMaterial({map: texture});
+		displayPlane = new THREE.Mesh(plane, planeMat);
+		displayPlane.receiveShadow = true;
+		displayPlane.rotateX(Rad(-90));
+		// translate by z instead of y to move up because it is rotated
+		displayPlane.translateZ(10);
+		PlaneArray.push(displayPlane);
+		scene.add(displayPlane);
 	}
-	LightArray = [];
-	
-	// add lights to scene
-	for (var i = 0; i < out.lightdata.length; ++i)
+	else
 	{
-		AddLight(out.lightdata[i].name, 0, out.lightdata[i].pos);
+		console.log("failed to load data");
 	}
-	
-	// add plane
-	var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
-	var planeMat = new THREE.MeshLambertMaterial({map: texture});
-	displayPlane = new THREE.Mesh(planegeometry, planeMat);
-	displayPlane.receiveShadow = true;
-	displayPlane.rotateX(Rad(-90));
-	// translate by z instead of y to move up because it is rotated
-	displayPlane.translateZ(10);
-	PlaneArray.push(displayPlane);
-	scene.add(displayPlane);
 }
 
 // save data to json
 function DownloadData()
 {
-	var saveData = (function () {
+	var saveData = (function () 
+	{
 		var a = document.createElement("a");
 		document.body.appendChild(a);
 		a.style = "display: none";
@@ -376,141 +529,40 @@ function DownloadData()
 	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
 }
 
-// load model into scene
-function LoadModel(model, xscale, yscale, zscale)
-{
-	// load and add test model to scene
-	loader.load
-	(
-		serverAddress + "/resources/" + model + ".fbx", function (fbx) 
-			{
-				fbx.scale.set(xscale, yscale, zscale);
-				
-				// apply transparent material to model
-				fbx.traverse(function(child)
-				{
-					if (child instanceof THREE.Mesh)
-					{
-						child.material = translucentMat;
-					}
-				});
-				
-				scene.add(fbx);
-			}, 
-			undefined, 
-			function (error ) 
-			{
-				console.error(error);
-			}
-	);
-}
-
 // convert degrees to radians
 function Rad(deg)
 {
 	return deg * Math.PI / 180;
 }
 
-// key events
-var Lmouseup = false;
-var Rmouseup = false;
-var Dkeyup = false;
-
-// mouseup event (use pointer because of orbitcontrols)
-document.addEventListener("pointerup", onDocumentMouseUp, false);
-function onDocumentMouseUp(event)
-{
-	event.preventDefault();
-	
-	switch(event.which)
-	{
-		// lmb
-		case 1:
-			Lmouseup = true;
-			break;
-		// rmb
-		case 3:
-			Rmouseup = true;
-			break;
-	}
-}
-
-// key events
-document.addEventListener("keyup", onKeyUp, false);
-function onKeyUp(event)
-{
-	// spacebar
-	if(event.code == "Space")
-	{
-		addMode = !addMode;
-	}
-	
-	// s
-	if (event.code == "KeyS")
-	{
-		DownloadData();
-		console.log("save");
-	}
-	
-	// d
-	if (event.code == "KeyD")
-	{
-		Dkeyup = true;
-	}
-	
-	// b
-	//if(event.code == "KeyB")
-	//{
-	//	if(LightArray.find(light => light.userData.name == "lighttest0"))
-	//		MoveToLight("lighttest0");
-	//}
-}
-
-// disable right click context menu (for view mode especially)
-document.addEventListener("contextmenu", onContextMenu, false);
-function onContextMenu(event)
-{
-	event.preventDefault();
-	return false;
-}
-
-// bool for add/view mode
-var addMode = false;
-// int for keeping track of lights added
-var lightsAdded = 0;
-
-// light data display setup
-var text = document.createElement("div");
-text.style.position = "absolute";
-text.style.width = 100;
-text.style.height = 100;
-text.style.backgroundColor = "black";
-text.style.color = "white";
-text.innerHTML = "";
-text.style.top = 0 + "px";
-text.style.left = 0 + "px";
-text.style.fontSize = 30 + "px";
-text.style.fontFamily = "Calibri";
-document.body.appendChild(text);
-
 function main()
 {
 	// specify server address
 	serverAddress = "http://10.1.11.197:8080/";
 
-	// load data (includes floorplan and light data)
+	// scene init
+	InitThreeJs();
+	InitCameraControls();
+	InitSceneLights();
+	InitOutline();
+	InitGeometry();
+	InitFBXLoader();
+	InitPicking();
+	InitTextDisplay();
+
+	// load default data (includes floorplan and light data)
 	LoadData();
 	
 	// add grid
-	scene.add(gridHelper);
+	scene.add(grid);
 	
 	// add test cube
-	const cube = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial({color:GREEN}));
+	const cube = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color:GREEN}));
 	cube.translateX(3);
 	cube.translateY(1);
 	scene.add(cube);
 
-	// load test model
+	// load test model with default material
 	LoadModel("cottage", 0.005, 0.005, 0.005);
 	
 	// call the render loop
@@ -524,16 +576,6 @@ function drawScene()
 	
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	
-	// load data (c1basement1)
-	if (Dkeyup)
-	{
-		Dkeyup = false;
-		LoadData("c1basement1");
-		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
-		var planeMat = new THREE.MeshLambertMaterial({map: texture});
-		displayPlane.material = planeMat;
-	}
 	
 	// update light data
 	LightArrayUpdate();
@@ -646,7 +688,7 @@ function drawScene()
 	// camera controls update
 	controls.update();
 	
-	// render (use composer.render if postprocessing is used
+	// render (use composer.render if postprocessing is used)
 	composer.render();
 	//renderer.render(scene, camera);
 }
