@@ -298,6 +298,7 @@ function SaveLightData()
 	}
 }
 
+// save to localstorage
 function SaveCurrent()
 {
 	SaveLightData();
@@ -311,6 +312,7 @@ function SaveCurrent()
 	localStorage.setItem("save", JSON.stringify(save));
 }
 
+// load from localstorage
 function LoadData()
 {
 	var load = JSON.parse(localStorage.getItem("save"));
@@ -330,9 +332,6 @@ function LoadData()
 		for (var i = 0; i < load.lightdata.length; ++i)
 		{
 			AddLight(load.lightdata[i].name, 0, load.lightdata[i].pos);
-			console.log(LightArray[i].position.x,
-						LightArray[i].position.y,
-						LightArray[i].position.z);
 		}
 	}
 	else
@@ -341,25 +340,36 @@ function LoadData()
 	}
 }
 
-//var saveData = (function () {
-//    var a = document.createElement("a");
-//    document.body.appendChild(a);
-//    a.style = "display: none";
-//    return function (data, fileName) {
-//        var json = JSON.stringify(data),
-//            blob = new Blob([json], {type: "octet/stream"}),
-//            url = window.URL.createObjectURL(blob);
-//        a.href = url;
-//        a.download = fileName;
-//        a.click();
-//        window.URL.revokeObjectURL(url);
-//    };
-//}());
-//
-//var data = { x: 42, s: "hello, world", d: new Date() },
-//    fileName = "my-download.json";
-//
-//saveData(data, fileName);
+// save data to json
+function DownloadData()
+{
+	var saveData = (function () {
+		var a = document.createElement("a");
+		document.body.appendChild(a);
+		a.style = "display: none";
+		return function (data, fileName) {
+			var json = JSON.stringify(data),
+				blob = new Blob([json], {type: "octet/stream"}),
+				url = window.URL.createObjectURL(blob);
+			a.href = url;
+			a.download = fileName;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		};
+	}());
+	
+	SaveLightData();
+	
+	var save = 
+	{
+		floorplan: "c1basement1.jpg",
+		lightdata: LightData
+	}
+
+	saveData(save, "my-download.json");
+}
+
+
 
 // convert degrees to radians
 function Rad(deg)
@@ -421,6 +431,13 @@ function onKeyUp(event)
 		console.log("clear");
 	}
 	
+	// g
+	if (event.code == "KeyG")
+	{
+		DownloadData();
+		console.log("download");
+	}
+	
 	// b
 	//if(event.code == "KeyB")
 	//{
@@ -458,6 +475,18 @@ document.body.appendChild(text);
 
 function main()
 {
+	// data loading
+	//fetch("http://10.1.11.197:8080/resources/default.json").then(response => response.json());
+
+	let url = "http://10.1.11.197:8080/resources/default.json";
+
+	fetch(url)
+	.then(res => res.json())
+	.then((out) => {
+	console.log("Checkout this JSON! ", out);
+	})
+	.catch(err => { throw err });
+
 	// add plane for testing
 	planegeometry.scale(75, 75, 75);
 	// load test image as material
