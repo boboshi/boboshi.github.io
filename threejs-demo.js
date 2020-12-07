@@ -72,7 +72,7 @@ const gridHelper = new THREE.GridHelper(size, divisions);
 
 // plane
 const planegeometry = new THREE.PlaneBufferGeometry();
-
+planegeometry.scale(75, 75, 75);
 // fbx model loader
 const loader = new FBXLoader();
 
@@ -268,7 +268,13 @@ function ClearDisplayLightData()
 }
 
 // file saving and loading
-var floorplan = "";
+
+// floorplan name
+var DisplayFloorPlan = "";
+// array of lights to be saved/loaded
+var LightData = [];
+// plane to display floorplan on
+var displayplane;
 
 // class for holding light object properties
 class Light
@@ -279,9 +285,6 @@ class Light
 		this.pos = pos;
 	}
 }
-
-// array of lights to be saved/loaded
-var LightData = [];
 
 // function to save current light data
 function SaveLightData()
@@ -298,46 +301,47 @@ function SaveLightData()
 	}
 }
 
-// save to localstorage
-function SaveCurrent()
+async function fetchData(j = "default")
 {
-	SaveLightData();
-	
-	var save = 
-	{
-		floorplan: "c1basement1.jpg",
-		lightdata: LightData
-	}
-	
-	localStorage.setItem("save", JSON.stringify(save));
+	let url = "http://10.1.11.197:8080/resources/" + j + ".json";
+	const response = await fetch(url);
+	const data = await response.json();
+
+	return data;
 }
 
-// load from localstorage
-function LoadData()
+// load data from json
+async function LoadData(j = "default")
 {
-	var load = JSON.parse(localStorage.getItem("save"));
-	
-	if(load)
+	//const response = await fetch(url);
+	const out = await fetchData(j);
+
+	// get floorplan file name
+	DisplayFloorPlan = out.floorplan;
+	// clear existing data
+	for (var i = 0; i < LightArray.length; ++i)
 	{
-		floorplan = load.floorplan;
+		// find and remove object from scene
+		LightArray[i].parent.remove(LightArray[i]);
+	}
+	LightArray = [];
 	
-		// clear existing data
-		for (var i = 0; i < LightArray.length; ++i)
-		{
-			// find and remove object from scene
-			LightArray[i].parent.remove(LightArray[i]);
-		}
-		LightArray = [];
-		
-		for (var i = 0; i < load.lightdata.length; ++i)
-		{
-			AddLight(load.lightdata[i].name, 0, load.lightdata[i].pos);
-		}
-	}
-	else
+	// add lights to scene
+	for (var i = 0; i < out.lightdata.length; ++i)
 	{
-		console.log("load failed");
+		AddLight(out.lightdata[i].name, 0, out.lightdata[i].pos);
 	}
+	
+	// add plane
+	var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/" + DisplayFloorPlan);
+	var planeMat = new THREE.MeshLambertMaterial({map: texture});
+	displayplane = new THREE.Mesh(planegeometry, planeMat);
+	displayplane.receiveShadow = true;
+	displayplane.rotateX(Rad(-90));
+	// translate by z instead of y to move up because it is rotated
+	displayplane.translateZ(10);
+	PlaneArray.push(displayplane);
+	scene.add(displayplane);
 }
 
 // save data to json
@@ -362,14 +366,12 @@ function DownloadData()
 	
 	var save = 
 	{
-		floorplan: "c1basement1.jpg",
+		floorplan: DisplayFloorPlan,
 		lightdata: LightData
 	}
 
-	saveData(save, "my-download.json");
+	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
 }
-
-
 
 // convert degrees to radians
 function Rad(deg)
@@ -380,6 +382,7 @@ function Rad(deg)
 // key events
 var Lmouseup = false;
 var Rmouseup = false;
+var Dkeyup = false;
 
 // mouseup event (use pointer because of orbitcontrols)
 document.addEventListener("pointerup", onDocumentMouseUp, false);
@@ -395,7 +398,7 @@ function onDocumentMouseUp(event)
 			break;
 		// rmb
 		case 3:
-			Rmouseup = true
+			Rmouseup = true;
 			break;
 	}
 }
@@ -413,29 +416,14 @@ function onKeyUp(event)
 	// s
 	if (event.code == "KeyS")
 	{
-		SaveCurrent();
+		DownloadData();
 		console.log("save");
 	}
 	
 	// d
 	if (event.code == "KeyD")
 	{
-		LoadData();
-		console.log("load");
-	}
-	
-	// f
-	if (event.code == "KeyF")
-	{
-		localStorage.removeItem("save");
-		console.log("clear");
-	}
-	
-	// g
-	if (event.code == "KeyG")
-	{
-		DownloadData();
-		console.log("download");
+		Dkeyup = true;
 	}
 	
 	// b
@@ -475,30 +463,8 @@ document.body.appendChild(text);
 
 function main()
 {
-	// data loading
-	//fetch("http://10.1.11.197:8080/resources/default.json").then(response => response.json());
-
-	let url = "http://10.1.11.197:8080/resources/default.json";
-
-	fetch(url)
-	.then(res => res.json())
-	.then((out) => {
-	console.log("Checkout this JSON! ", out);
-	})
-	.catch(err => { throw err });
-
-	// add plane for testing
-	planegeometry.scale(75, 75, 75);
-	// load test image as material
-	var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/c1basement1.jpg");
-	var planeMat = new THREE.MeshLambertMaterial({map: texture});
-	const plane = new THREE.Mesh(planegeometry, planeMat);
-	plane.receiveShadow = true;
-	plane.rotateX(Rad(-90));
-	// translate by z instead of y to move up because it is rotated
-	plane.translateZ(10);
-	PlaneArray.push(plane);
-	scene.add(plane);
+	// load data
+	LoadData();
 	
 	// add grid
 	scene.add(gridHelper);
@@ -549,6 +515,16 @@ function drawScene()
 	
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
+	
+	// load data (c1basement1)
+	if (Dkeyup)
+	{
+		Dkeyup = false;
+		LoadData("c1basement1");
+		var texture = new THREE.TextureLoader().load("http://10.1.11.197:8080/resources/" + DisplayFloorPlan);
+		var planeMat = new THREE.MeshLambertMaterial({map: texture});
+		displayplane.material = planeMat;
+	}
 	
 	// update light data
 	LightArrayUpdate();
