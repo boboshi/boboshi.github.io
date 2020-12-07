@@ -267,23 +267,38 @@ function ClearDisplayLightData()
 	text.innerHTML = "";
 }
 
-// file saving and loading fuck this do it next week
+// file saving and loading
+var vec = new THREE.Vector3(10, 10, 10);
+var vecdata = [];
+vecdata.push(vec);
 
-// save data testing
-function download(data, filename, type)
+var save = 
 {
-	var file = new Blob([data], {type: type});
+	test0: "testing testing one two three",
+	savevec: vecdata
 }
 
-var LoadedData = [];
+var savegame = JSON.parse(localStorage.getItem("save"));
 
-function LoadData(LoadedData)
-{
-	for (var i = 0; i < LoadedData; ++i)
-	{
-		// do something
-	}
-}
+//var saveData = (function () {
+//    var a = document.createElement("a");
+//    document.body.appendChild(a);
+//    a.style = "display: none";
+//    return function (data, fileName) {
+//        var json = JSON.stringify(data),
+//            blob = new Blob([json], {type: "octet/stream"}),
+//            url = window.URL.createObjectURL(blob);
+//        a.href = url;
+//        a.download = fileName;
+//        a.click();
+//        window.URL.revokeObjectURL(url);
+//    };
+//}());
+//
+//var data = { x: 42, s: "hello, world", d: new Date() },
+//    fileName = "my-download.json";
+//
+//saveData(data, fileName);
 
 // convert degrees to radians
 function Rad(deg)
@@ -322,6 +337,19 @@ function onKeyUp(event)
 	if(event.code == "Space")
 	{
 		addMode = !addMode;
+	}
+	
+	// s
+	if (event.code == "KeyS")
+	{
+		localStorage.setItem("save", JSON.stringify(save));
+		console.log("save");
+	}
+	
+	// d
+	if (event.code == "KeyD")
+	{
+		console.log(savegame.savevec[0]);
 	}
 	
 	// b
