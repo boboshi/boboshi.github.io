@@ -534,7 +534,7 @@ function DownloadData()
 		document.body.appendChild(a);
 		a.style = "display: none";
 		return function (data, fileName) {
-			var json = JSON.stringify(data),
+			var json = JSON.stringify(data, null, 2),
 				blob = new Blob([json], {type: "octet/stream"}),
 				url = window.URL.createObjectURL(blob);
 			a.href = url;
