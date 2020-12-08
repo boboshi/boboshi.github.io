@@ -1,4 +1,6 @@
 - add "ghost" light in add mode
-- dual key input to activate add mode? to allow use of spacebar
+- way to set a number to increment from at the 3rd subset
+  of light names (easier initial setup)
+	- verify the format first
 
 - progress update after all this is done?
