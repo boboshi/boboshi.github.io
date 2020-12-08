@@ -324,6 +324,9 @@ function onDocumentMouseMove(event)
 // resize handling
 function onWindowResize() 
 {
+	innerWidth = window.innerWidth;
+	innerHeight = window.innerHeight;
+
 	camera.aspect = innerWidth / innerHeight;
 	camera.updateProjectionMatrix();
 
