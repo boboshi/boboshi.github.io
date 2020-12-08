@@ -97,8 +97,20 @@ function InitCameraControls()
 	controls.maxPolarAngle = Math.PI / 2;
 	// camera initial facing
 	controls.target.set(0.0, 0.0, 0.0);
-	camera.position.set(0.0, 20.0, 0.0);
+	camera.position.set(0.0, 45.4, 0.0);
 	controls.update();
+	// limit camera panning
+	var minPan = new THREE.Vector3(-10.0, -10.0, -10.0);
+	var maxPan = new THREE.Vector3(10.0, 10.0, 10.0);
+	var _v = new THREE.Vector3();
+	// event listener to limit camera panning
+	controls.addEventListener("change", function()
+	{
+		_v.copy(controls.target);
+		controls.target.clamp(minPan, maxPan);
+		_v.sub(controls.target);
+		camera.position.sub(_v);
+	});
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 	// event listener to track mouse clicks (pointerup because of orbicontrols)
@@ -278,6 +290,9 @@ function onKeyUp(event)
 			if (!addMode)
 				LoadData("c1basement2");
 			break;
+		case "KeyC":
+			ResetCamera();
+			break;
 		case "KeyB":
 
 			//if(LightArray.find(light => light.userData.name == "lighttest0"))
@@ -322,6 +337,14 @@ const translucentMat = new THREE.MeshPhongMaterial(
 		transparent: true,
 		side: THREE.DoubleSide,
 	});
+
+// reset camera
+function ResetCamera()
+{
+	controls.target.set(0.0, 0.0, 0.0);
+	camera.position.set(0.0, 45.4, 0.0);
+	controls.update();
+}
 
 // load model into scene (default material is translucent)
 function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
@@ -601,9 +624,10 @@ function drawScene()
 	requestAnimationFrame(drawScene);
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
+
 	// update light data
 	LightArrayUpdate();
-	
+
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	
