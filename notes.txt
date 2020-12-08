@@ -4,9 +4,5 @@ notes
     - are dimensions of floorplans consistent?
     - do i have to scale the camera pan limit to dimensions?
     - should i limit zoom?
-- remove test elements
-    - remove model, cube
-    - move floorplan down to 0 height
-    - change camera starting position
 
-- progress update after all this is done
+- progress update after all this is done?

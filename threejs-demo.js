@@ -95,7 +95,10 @@ function InitCameraControls()
 	controls.rotateSpeed = 0.5;
 	controls.screenSpacePanning = false;
 	controls.maxPolarAngle = Math.PI / 2;
-
+	// camera initial facing
+	controls.target.set(0.0, 0.0, 0.0);
+	camera.position.set(0.0, 20.0, 0.0);
+	controls.update();
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 	// event listener to track mouse clicks (pointerup because of orbicontrols)
@@ -171,7 +174,7 @@ function InitGeometry()
 
 	// plane
 	plane = new THREE.PlaneBufferGeometry();
-	plane.scale(75, 75, 75);
+	plane.scale(100, 71, 71);
 }
 
 // initialise model loader
@@ -514,8 +517,6 @@ async function LoadData(j = "default")
 		displayPlane = new THREE.Mesh(plane, planeMat);
 		displayPlane.receiveShadow = true;
 		displayPlane.rotateX(Rad(-90));
-		// translate by z instead of y to move up because it is rotated
-		displayPlane.translateZ(10);
 		PlaneArray.push(displayPlane);
 		scene.add(displayPlane);
 	}
@@ -580,17 +581,15 @@ function main()
 	// load default data (includes floorplan and light data)
 	LoadData();
 	
-	// add grid
-	scene.add(grid);
+	// testing
+	//scene.add(grid);
 	
-	// add test cube
-	const cube = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color:GREEN}));
-	cube.translateX(3);
-	cube.translateY(1);
-	scene.add(cube);
+	//const cube = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color:GREEN}));
+	//cube.translateX(3);
+	//cube.translateY(1);
+	//scene.add(cube);
 
-	// load test model with default material
-	LoadModel("cottage", 0.005, 0.005, 0.005);
+	//LoadModel("cottage", 0.005, 0.005, 0.005);
 	
 	// call the render loop
 	drawScene();
