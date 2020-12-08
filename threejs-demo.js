@@ -322,7 +322,8 @@ function onKeyUp(event)
 				LoadData("c1basement2");
 			break;
 		case "KeyC":
-			ResetCamera();
+			if (!addMode)
+				ResetCamera();
 			break;
 		case "ControlLeft":
 			LCTRLdown = false;
