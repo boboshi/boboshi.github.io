@@ -1,9 +1,3 @@
-- limit camera panning
-    - to keep 3d or nah?
-    - are dimensions of floorplans consistent?
-    - do i have to scale the camera pan limit to dimensions?
-    - should i limit zoom?
-
 - try to keep focus on input field? (not sure how to solve)
 
 - progress update after all this is done?

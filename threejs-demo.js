@@ -94,15 +94,18 @@ function InitCameraControls()
 	//controls.dampingFactor = 0.05;
 	controls.rotateSpeed = 0.5;
 	controls.screenSpacePanning = false;
-	controls.maxPolarAngle = Math.PI / 2;
+	controls.maxPolarAngle = Rad(86);
 	// camera initial facing
 	controls.target.set(0.0, 0.0, 0.0);
 	camera.position.set(0.0, 45.4, 0.0);
 	controls.update();
 	// limit camera panning
-	var minPan = new THREE.Vector3(-10.0, -10.0, -10.0);
-	var maxPan = new THREE.Vector3(10.0, 10.0, 10.0);
+	var minPan = new THREE.Vector3(-40.0, -40.0, -20.0);
+	var maxPan = new THREE.Vector3(40.0, 40.0, 20.0);
 	var _v = new THREE.Vector3();
+	// limit camera zoom
+	controls.minDistance = 5.0;
+	controls.maxDistance = 45.4;
 	// event listener to limit camera panning
 	controls.addEventListener("change", function()
 	{
@@ -127,7 +130,7 @@ function InitSceneLights()
 	//scene.add(ambientLight);
 
 	// directional light
-	const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+	const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
 	scene.add(directionalLight);
 }
 
@@ -433,7 +436,7 @@ function MoveToLight(name)
 	{
 		find.userData.selected = true;
 		controls.target.set(find.position.x, find.position.y, find.position.z);
-		camera.position.set(find.position.x, find.position.y + 5, find.position.z);
+		camera.position.set(find.position.x, find.position.y + 10, find.position.z);
 		outlinePass.selectedObjects = [find];
 		controls.update();
 	}
@@ -663,7 +666,6 @@ function drawScene()
 				// check if in view mode
 				if(!addMode)
 				{
-					console.log("clicked on light in view mode");
 					MoveToLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
@@ -674,7 +676,6 @@ function drawScene()
 				// check if in add mode
 				if(addMode)
 				{
-					console.log("remove light");
 					RemoveLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
