@@ -16,7 +16,7 @@ var innerWidth, innerHeight;
 // server address
 var serverAddress;
 // three.js basic functionality
-let scene, camera, controls, renderer;
+let scene, camera, controls, renderer, canvas, offsetx, offsety;
 // model loader
 let loader;
 // outline effect use
@@ -78,6 +78,13 @@ function InitThreeJs()
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(innerWidth, innerHeight);
+	// reposition canvas (if needed)
+	canvas = renderer.domElement;
+	canvas.style.position = "absolute";
+	offsetx = 0;
+	offsety = 0;
+	canvas.style.left = offsetx + "px";
+	canvas.style.top = offsety + "px";
 	// event listener to track window resize
 	window.addEventListener("resize", onWindowResize, false);
 	// add renderer to HTML
@@ -220,14 +227,14 @@ function InitTextDisplay()
 	text.style.backgroundColor = "black";
 	text.style.color = "white";
 	text.innerHTML = "";
-	text.style.top = 0 + "px";
-	text.style.left = 0 + "px";
+	text.style.top = offsety + "px";
+	text.style.left = offsetx + "px";
 	text.style.fontSize = 30 + "px";
 	text.style.fontFamily = "Calibri";
 	document.body.appendChild(text);
 }
 
-// initialise gui
+// ialise gui
 function InitGUI()
 {
 	gui = new GUI();
@@ -241,6 +248,10 @@ function InitGUI()
 		// store value into current name
 		currname = value;
 	});
+
+	gui.domElement.style.position = "absolute";
+	gui.domElement.style.top = offsety + "px";
+	gui.domElement.style.right = "0px";
 
 	// off by default
 	GUI.toggleHide();
@@ -317,8 +328,8 @@ function onContextMenu(event)
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
-	mouse.x =  (event.clientX / innerWidth) * 2 - 1;
-	mouse.y = -(event.clientY / innerHeight) * 2 + 1;
+	mouse.x =  ((event.clientX - offsetx) / innerWidth) * 2 - 1;
+	mouse.y = -((event.clientY - offsetx) / innerHeight) * 2 + 1;
 }
 
 // resize handling
