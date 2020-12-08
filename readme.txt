@@ -19,4 +19,4 @@ S - save and download data
 D - load c1basement1
 F - load c1basement2
 C - reset camera
-Space - toggle add/view mode
+LCTRL + Space - toggle add/view mode

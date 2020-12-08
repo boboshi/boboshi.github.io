@@ -25,6 +25,7 @@ let composer, renderPass, outlinePass, effectFXAA;
 let box, sphere, grid, plane;
 // raycasting and picking
 let mouse, mouseradius, raycaster, LIGHTINTERSECTED, PLANEINTERSECTED;
+var LCTRLdown = false;
 var Lmouseup = false;
 var Rmouseup = false;
 // arrays used for raycasting and picking
@@ -125,7 +126,8 @@ function InitCameraControls()
 	document.addEventListener("contextmenu", onContextMenu, false);
 	// event listener to track mouse clicks (pointerup because of orbicontrols)
 	renderer.domElement.addEventListener("pointerup", onDocumentMouseUp, false);
-	// event listener to track key presses
+	// event listeners to track key presses
+	document.addEventListener("keydown", onKeyDown, false);
 	document.addEventListener("keyup", onKeyUp, false);
 }
 
@@ -279,6 +281,18 @@ function onDocumentMouseUp(event)
 	}
 }
 
+function onKeyDown(event)
+{
+	switch(event.code)
+	{
+		case "ControlLeft":
+			LCTRLdown = true;
+			break;
+		default:
+			break;
+	}
+}
+
 // key events
 function onKeyUp(event)
 {
@@ -286,8 +300,11 @@ function onKeyUp(event)
 	{
 		case "Space":
 			// toggle add/view mode
-			addMode = !addMode;
-			GUI.toggleHide();
+			if (LCTRLdown)
+			{
+				addMode = !addMode;
+				GUI.toggleHide();
+			}
 			break;
 		case "KeyS":
 			// save into json and download
@@ -306,6 +323,9 @@ function onKeyUp(event)
 			break;
 		case "KeyC":
 			ResetCamera();
+			break;
+		case "ControlLeft":
+			LCTRLdown = false;
 			break;
 		case "KeyB":
 
@@ -747,7 +767,7 @@ function drawScene()
 		}
 	}
 
-	// reset mouse event bools
+	// reset key event bools
 	Lmouseup = false;
 	Rmouseup = false;
 	

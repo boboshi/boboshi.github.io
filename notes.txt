@@ -1,3 +1,4 @@
-all done??
+- add "ghost" light in add mode
+- dual key input to activate add mode? to allow use of spacebar
 
 - progress update after all this is done?
