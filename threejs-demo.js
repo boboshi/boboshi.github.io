@@ -645,6 +645,9 @@ function drawScene()
 	// update light data
 	LightArrayUpdate();
 
+	var tmp = document.getElementsByTagName("INPUT");
+	tmp[0].focus();
+
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	
