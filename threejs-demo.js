@@ -7,6 +7,7 @@ import {RenderPass} from "../node_modules/three/examples/jsm/postprocessing/Rend
 import {ShaderPass} from "../node_modules/three/examples/jsm/postprocessing/ShaderPass.js";
 import {OutlinePass} from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
 import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
+import {GUI} from "../node_modules/three/examples/jsm/libs/dat.gui.module.js"
 
 // global variable declarations
 
@@ -41,6 +42,8 @@ var addMode = false;
 var lightsAdded = 0;
 // text display
 var text;
+// gui for id modification
+var gui;
 
 // class for holding light object properties
 class Light
@@ -97,7 +100,7 @@ function InitCameraControls()
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 	// event listener to track mouse clicks (pointerup because of orbicontrols)
-	document.addEventListener("pointerup", onDocumentMouseUp, false);
+	renderer.domElement.addEventListener("pointerup", onDocumentMouseUp, false);
 	// event listener to track key presses
 	document.addEventListener("keyup", onKeyUp, false);
 }
@@ -207,6 +210,25 @@ function InitTextDisplay()
 	document.body.appendChild(text);
 }
 
+// initialise gui
+function InitGUI()
+{
+	gui = new GUI;
+	
+	const params = 
+	{
+		"Change Name": ""
+	}
+	gui.on
+	gui.add(params, "Change Name").onFinishChange(function(value)
+	{
+		console.log(value);
+	});
+
+	// off by default
+	GUI.toggleHide();
+}
+
 // event handlers
 
 // mouseup event
@@ -237,6 +259,7 @@ function onKeyUp(event)
 		case "Space":
 			// toggle add/view mode
 			addMode = !addMode;
+			GUI.toggleHide();
 			break;
 		case "KeyS":
 			// save into json and download
@@ -244,11 +267,13 @@ function onKeyUp(event)
 			break;
 		case "KeyD":
 			// load c1basement1
-			LoadData("c1basement1");
+			if (!addMode)
+				LoadData("c1basement1");
 			break;
 		case "KeyF":
 			// load c1basement2
-			LoadData("c1basement2");
+			if (!addMode)
+				LoadData("c1basement2");
 			break;
 		case "KeyB":
 			//if(LightArray.find(light => light.userData.name == "lighttest0"))
@@ -549,6 +574,7 @@ function main()
 	InitFBXLoader();
 	InitPicking();
 	InitTextDisplay();
+	InitGUI();
 
 	// load default data (includes floorplan and light data)
 	LoadData();
