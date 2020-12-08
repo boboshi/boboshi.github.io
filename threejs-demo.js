@@ -645,6 +645,7 @@ function drawScene()
 	// update light data
 	LightArrayUpdate();
 
+	// keeps focus on input field for light name
 	var tmp = document.getElementsByTagName("INPUT");
 	tmp[0].focus();
 
