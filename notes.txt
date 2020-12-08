@@ -1,10 +1,4 @@
 notes
-- modifying of light name (id)
-    - gui text input?
-    - incremented for convenience? 
-        - but what about removal of lights during setup process
-    - externally??? (don't think its possible though)
-    - what the fuck??????
 - limit camera panning
     - to keep 3d or nah?
     - are dimensions of floorplans consistent?

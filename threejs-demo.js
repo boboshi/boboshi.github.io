@@ -38,12 +38,11 @@ var LightData = [];
 var displayPlane;
 // bool for add/view mode
 var addMode = false;
-// int for keeping track of lights added
-var lightsAdded = 0;
 // text display
 var text;
 // gui for id modification
 var gui;
+var currname = "";
 
 // class for holding light object properties
 class Light
@@ -213,16 +212,16 @@ function InitTextDisplay()
 // initialise gui
 function InitGUI()
 {
-	gui = new GUI;
-	
+	gui = new GUI();
+
 	const params = 
 	{
 		"Change Name": ""
 	}
-	gui.on
-	gui.add(params, "Change Name").onFinishChange(function(value)
+	gui.add(params, "Change Name").onChange(function(value)
 	{
-		console.log(value);
+		// store value into current name
+		currname = value;
 	});
 
 	// off by default
@@ -263,7 +262,8 @@ function onKeyUp(event)
 			break;
 		case "KeyS":
 			// save into json and download
-			DownloadData();
+			if (!addMode)
+				DownloadData();
 			break;
 		case "KeyD":
 			// load c1basement1
@@ -276,6 +276,7 @@ function onKeyUp(event)
 				LoadData("c1basement2");
 			break;
 		case "KeyB":
+
 			//if(LightArray.find(light => light.userData.name == "lighttest0"))
 			//	MoveToLight("lighttest0");
 			break;
@@ -599,10 +600,8 @@ function main()
 function drawScene()
 {
 	requestAnimationFrame(drawScene);
-	
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	
 	// update light data
 	LightArrayUpdate();
 	
@@ -689,8 +688,10 @@ function drawScene()
 				if(Lmouseup)
 				{
 					// intersects[0].point returns vector3 of collision point
-					AddLight("lighttest" + lightsAdded.toString(), 0.0, planeintersects[0].point);
-					lightsAdded += 1;
+					if(currname == "")
+						AddLight("lighttest", 0.0, planeintersects[0].point);
+					else
+						AddLight(currname, 0.0, planeintersects[0].point);
 				}
 			}
 		}
