@@ -286,6 +286,7 @@ function onDocumentMouseUp(event)
 	}
 }
 
+// key events
 function onKeyDown(event)
 {
 	switch(event.code)
@@ -298,13 +299,12 @@ function onKeyDown(event)
 	}
 }
 
-// key events
 function onKeyUp(event)
 {
 	switch(event.code)
 	{
 		case "Space":
-			// toggle add/view mode
+			// toggle add/view mode (with lctrl pressed)
 			if (LCTRLdown)
 			{
 				addMode = !addMode;
@@ -762,7 +762,7 @@ function drawScene()
 						AddLight(currname, 0.0, planeintersects[0].point);
 				}
 
-					// update "ghost" sphere
+				// update "ghost" sphere
 				if (addMode)
 				{
 					ghost.position.x = planeintersects[0].point.x;
@@ -781,7 +781,7 @@ function drawScene()
 		}
 	}
 
-	// reset key event bools
+	// reset mouse click event bools
 	Lmouseup = false;
 	Rmouseup = false;
 	

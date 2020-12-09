@@ -1,5 +1,6 @@
+additional features???
 - way to set a number to increment from at the 3rd subset
   of light names (easier initial setup)
 	- verify the format first
-
-- progress update after all this is done?
+- save previous camera location and orientation?
+- smooth camera movement to light?
