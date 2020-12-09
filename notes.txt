@@ -3,10 +3,5 @@ additional features???
 - smooth camera movement to light?
 
 needed features
-
-controls
-- set light off/on/normal with buttons
-  - update material based on status
-  - ON - blue
-  - OFF - grey
-  - NORMAL - green
+- error checking for duplicate light name? program would kinda bug out
+  otherise
