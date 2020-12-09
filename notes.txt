@@ -1,7 +1,3 @@
 additional features???
 - save previous camera location and orientation?
 - smooth camera movement to light?
-
-needed features
-- error checking for duplicate light name? program would kinda bug out
-  otherise

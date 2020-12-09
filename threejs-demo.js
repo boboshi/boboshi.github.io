@@ -464,6 +464,14 @@ function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
 // helper for adding new light objects to the scene
 function AddLight(name, pos)
 {
+	// check for existing light with same name
+	var find = FindLight(name);
+	if(find)
+	{
+		console.log("duplicate name found");
+		return null;
+	}
+
 	// init mesh and data
 	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:GREY}));
 	
