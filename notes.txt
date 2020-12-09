@@ -1,4 +1,3 @@
-- add "ghost" light in add mode
 - way to set a number to increment from at the 3rd subset
   of light names (easier initial setup)
 	- verify the format first

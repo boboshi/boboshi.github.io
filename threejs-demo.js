@@ -24,7 +24,7 @@ let composer, renderPass, outlinePass, effectFXAA;
 // basic geometry shapes
 let box, sphere, grid, plane;
 // raycasting and picking
-let mouse, mouseradius, raycaster, LIGHTINTERSECTED, PLANEINTERSECTED;
+let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
 var LCTRLdown = false;
 var Lmouseup = false;
 var Rmouseup = false;
@@ -214,7 +214,12 @@ function InitPicking()
 	mouseradius = 100;
 	raycaster = new THREE.Raycaster();
 
-	// event listener to track mouse movement
+	// create "ghost" sphere for placing lights
+	ghost = new THREE.Mesh(sphere, translucentMat);
+	scene.add(ghost);
+	ghost.visible = false;
+
+	// event listener to track mouse
 	document.addEventListener("mousemove", onDocumentMouseMove, false);
 }
 
@@ -303,6 +308,7 @@ function onKeyUp(event)
 			if (LCTRLdown)
 			{
 				addMode = !addMode;
+				ghost.visible = !ghost.visible;
 				GUI.toggleHide();
 			}
 			break;
@@ -329,7 +335,6 @@ function onKeyUp(event)
 			LCTRLdown = false;
 			break;
 		case "KeyB":
-
 			//if(LightArray.find(light => light.userData.name == "lighttest0"))
 			//	MoveToLight("lighttest0");
 			break;
@@ -755,6 +760,14 @@ function drawScene()
 						AddLight("lighttest", 0.0, planeintersects[0].point);
 					else
 						AddLight(currname, 0.0, planeintersects[0].point);
+				}
+
+					// update "ghost" sphere
+				if (addMode)
+				{
+					ghost.position.x = planeintersects[0].point.x;
+					ghost.position.y = planeintersects[0].point.y;
+					ghost.position.z = planeintersects[0].point.z;
 				}
 			}
 		}
