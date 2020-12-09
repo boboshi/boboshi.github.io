@@ -1,6 +1,12 @@
 additional features???
-- way to set a number to increment from at the 3rd subset
-  of light names (easier initial setup)
-	- verify the format first
 - save previous camera location and orientation?
 - smooth camera movement to light?
+
+needed features
+
+controls
+- set light off/on/normal with buttons
+  - update material based on status
+  - ON - blue
+  - OFF - grey
+  - NORMAL - green

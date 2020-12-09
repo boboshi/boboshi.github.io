@@ -25,6 +25,7 @@ let composer, renderPass, outlinePass, effectFXAA;
 let box, sphere, grid, plane;
 // raycasting and picking
 let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
+var clickedlight = "";
 var LCTRLdown = false;
 var Lmouseup = false;
 var Rmouseup = false;
@@ -42,7 +43,7 @@ var addMode = false;
 // text display
 var text;
 // gui for id modification
-var gui;
+var textgui, buttongui;
 var currname = "";
 
 // class for holding light object properties
@@ -55,11 +56,21 @@ class Light
 	}
 }
 
+// "enum" for light status
+const STATUS = 
+{
+	OFF : 1,
+	ON : 2,
+	NORMAL : 3,
+}
+
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
+const RED = 0xFF0000;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 const YELLOW = 0xF8FF33;
+const GREY = 0x808080;
 
 // initialise basic functionality
 function InitThreeJs()
@@ -124,8 +135,10 @@ function InitCameraControls()
 	});
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
+
 	// event listener to track mouse clicks (pointerup because of orbicontrols)
 	renderer.domElement.addEventListener("pointerup", onDocumentMouseUp, false);
+
 	// event listeners to track key presses
 	document.addEventListener("keydown", onKeyDown, false);
 	document.addEventListener("keyup", onKeyUp, false);
@@ -241,27 +254,43 @@ function InitTextDisplay()
 	document.body.appendChild(text);
 }
 
-// ialise gui
+// initialise gui
 function InitGUI()
 {
-	gui = new GUI();
+	textgui = new GUI();
+	buttongui = new GUI();
 
+	// input field gui
 	const params = 
 	{
 		"Change Name": ""
 	}
-	gui.add(params, "Change Name").onChange(function(value)
+	textgui.add(params, "Change Name").onChange(function(value)
 	{
 		// store value into current name
 		currname = value;
 	});
 
-	gui.domElement.style.position = "absolute";
-	gui.domElement.style.top = offsety + "px";
-	gui.domElement.style.right = "0px";
+	textgui.domElement.style.position = "absolute";
+	textgui.domElement.style.top = offsety + "px";
+	textgui.domElement.style.right = "0px";
 
-	// off by default
-	GUI.toggleHide();
+	// input closed by default
+	textgui.closed = true;
+
+	// button gui
+	var obj = { add:function(){ console.log("clicked") }};
+
+	buttongui.add(obj,'add');
+	buttongui.add(obj,'add');
+	buttongui.add(obj,'add');
+
+	buttongui.domElement.style.position = "absolute";
+	buttongui.domElement.style.top = offsety + 100 + "px";
+	buttongui.domElement.style.right = "0px";
+
+	// buttons closed by default
+	buttongui.closed = true;
 }
 
 // event handlers
@@ -270,7 +299,7 @@ function InitGUI()
 function onDocumentMouseUp(event)
 {
 	event.preventDefault();
-	
+
 	switch(event.which)
 	{
 		// lmb
@@ -309,7 +338,7 @@ function onKeyUp(event)
 			{
 				addMode = !addMode;
 				ghost.visible = !ghost.visible;
-				GUI.toggleHide();
+				textgui.closed = !addMode;
 			}
 			break;
 		case "KeyS":
@@ -354,6 +383,7 @@ function onContextMenu(event)
 function onDocumentMouseMove(event)
 {
 	event.preventDefault();
+
 	mouse.x =  ((event.clientX - offsetx) / innerWidth) * 2 - 1;
 	mouse.y = -((event.clientY - offsetx) / innerHeight) * 2 + 1;
 }
@@ -419,25 +449,29 @@ function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
 	);
 }
 
-// userData currently has 3 properties
-// - name
-// - selected (bool)
-// - testproperty
-// further properties can be added to and accessed from userData
+// userData has 5 properties
+// - name (string)
+// - selected (bool for internal use)
+// - last heard (string)
+// - last status (int? enum?)
+//	- 1 - off 
+//	- 2 - on
+//	- 3 - normal
+// - pvm level (int)
 
 // helper for adding new light objects to the scene
-function AddLight(name, testproperty, pos)
+function AddLight(name, pos)
 {
 	// init mesh and data
-	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:LIGHTBLUE}));
+	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:GREY}));
 	
 	// not sure why position.set doesn't work, this is okay though
 	lightmesh.position.x = pos.x;
 	lightmesh.position.y = pos.y;
 	lightmesh.position.z = pos.z;
-	
+
 	// add lightdata into the three.js mesh
-	lightmesh.userData = {name: name, selected: false, testproperty: testproperty};
+	lightmesh.userData = {name: name, selected: false, lastheard: "test", status: STATUS.OFF, pvm: 0};
 	
 	// add mesh to array (for raycasting/picking)
 	LightArray.push(lightmesh);
@@ -467,10 +501,21 @@ function RemoveLight(name)
 		LightArray.splice(index, 1);
 }
 
+// helper for setting light status
+function SetLightStatus(name, status)
+{
+	var find = FindLight(name);
+
+	if (find)
+	{
+		find.userData.status = status;
+	}
+}
+
 // move camera to selected light
 function MoveToLight(name)
 {
-	find = FindLight(name);
+	var find = FindLight(name);
 
 	if (find)
 	{
@@ -485,21 +530,45 @@ function MoveToLight(name)
 // light data update
 function LightArrayUpdate()
 {
-	// only display data of first selected light on screen
+	// only display data of selected light on screen
 	var foundselected = false;
 	// loop through all lights and update accordingly
 	for (var i = 0; i < LightArray.length; ++i)
 	{
-		// selected check
-		if(!foundselected && LightArray[i].userData.selected === true)
+		var light = LightArray[i];
+
+		// status display (off/on/normal)
+		if (light.userData.status == STATUS.OFF)
+			light.material.color.setHex(GREY);
+		else if (light.userData.status == STATUS.ON)
+			light.material.color.setHex(LIGHTBLUE);
+		else
+			light.material.color.setHex(GREEN);
+
+		// data display
+		// check for currently clicked on light
+		if (clickedlight != "")
 		{
-			foundselected = true;
-			DisplayLightData(LightArray[i].userData.name);
-			outlinePass.selectedObjects = [LightArray[i]];
+			if (light.userData.name == clickedlight)
+			{
+				foundselected = true;
+				DisplayLightData(light.userData.name);
+				outlinePass.selectedObjects = [light];
+			}
+		}
+		else
+		{
+			// selected check
+			if (!foundselected && light.userData.selected === true)
+			{
+				foundselected = true;
+				DisplayLightData(light.userData.name);
+				outlinePass.selectedObjects = [light];
+			}
 		}
 	}
 	
-	// if none are selected, turn off display
+	// if none are selected, turn off data display
 	if (!foundselected)
 		ClearDisplayLightData();
 }
@@ -508,10 +577,20 @@ function LightArrayUpdate()
 function DisplayLightData(name)
 {
 	find = FindLight(name);
-	
+	var laststatus;
+
+	if (find.userData.status == STATUS.OFF)
+		laststatus = "OFF";
+	else if (find.userData.status == STATUS.ON)
+		laststatus = "ON";
+	else
+		laststatus = "NORMAL";
+
 	// <br/> is a newline, parseFloat sets it to 1 decimal place
 	text.innerHTML = "Name: " + find.userData.name + "<br/>" +
-					"TestProperty: " + parseFloat(find.userData.testproperty).toFixed(1);
+					"Last Heard: " + find.userData.lastheard + "<br/>" +
+					"Last Status: " + laststatus + "<br/>" +
+					"PVM Level: " + find.userData.pvm;
 	// top and left specifies the position of the data
 	//text.style.top = window.innerHeight - 100 + "px";
 	//text.style.left = 500 + "px";
@@ -574,7 +653,7 @@ async function LoadData(j = "default")
 		// add lights to scene
 		for (var i = 0; i < out.lightdata.length; ++i)
 		{
-			AddLight(out.lightdata[i].name, 0, out.lightdata[i].pos);
+			AddLight(out.lightdata[i].name, out.lightdata[i].pos);
 		}
 
 		// add plane
@@ -683,7 +762,8 @@ function drawScene()
 	
 	const intersects = raycaster.intersectObjects(LightArray);
 	const planeintersects = raycaster.intersectObjects(PlaneArray);
-	
+	var tmp2 = false;
+
 	// light
 	if(intersects.length > 0)
 	{
@@ -692,11 +772,14 @@ function drawScene()
 			// select the intersected object
 			LIGHTINTERSECTED = intersects[0].object;
 			// onenter
-			
-			// clear display first
-			for (var i = 0; i < LightArray.length; ++i)
+			// check if light has been clicked on
+			if (clickedlight == "")
 			{
-				LightArray[i].userData.selected = false;
+				// clear display
+				for (var i = 0; i < LightArray.length; ++i)
+				{
+					LightArray[i].userData.selected = false;
+				}
 			}
 		}
 		else
@@ -710,6 +793,11 @@ function drawScene()
 				// check if in view mode
 				if(!addMode)
 				{
+					// select this light
+					clickedlight = intersects[0].object.userData.name;
+					tmp2 = true;
+					buttongui.closed = false;
+					// move camera to light
 					MoveToLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
@@ -730,9 +818,13 @@ function drawScene()
 		if(LIGHTINTERSECTED)
 		{
 			// onexit
-			// clear display and outline
-			ClearDisplayLightData();
-			outlinePass.selectedObjects = [];
+			// clear display and outline if no light clicked
+			if (clickedlight == "")
+			{
+				buttongui.closed = true;
+				ClearDisplayLightData();
+				outlinePass.selectedObjects = [];
+			}
 			
 			LIGHTINTERSECTED.userData.selected = false;
 		}
@@ -757,9 +849,9 @@ function drawScene()
 				{
 					// intersects[0].point returns vector3 of collision point
 					if(currname == "")
-						AddLight("lighttest", 0.0, planeintersects[0].point);
+						AddLight("lighttest", planeintersects[0].point);
 					else
-						AddLight(currname, 0.0, planeintersects[0].point);
+						AddLight(currname, planeintersects[0].point);
 				}
 
 				// update "ghost" sphere
@@ -780,11 +872,21 @@ function drawScene()
 			PLANEINTERSECTED = null;
 		}
 	}
+	else
+	{
+		// deselect light if left clicked in view mode
+		if (Lmouseup && clickedlight && !tmp2)
+		{
+			clickedlight = "";
+			ClearDisplayLightData();
+			outlinePass.selectedObjects = [];
+		}
+	}
 
-	// reset mouse click event bools
+	// reset mouse click event bools	
 	Lmouseup = false;
 	Rmouseup = false;
-	
+
 	// update the global transform of the camera object
 	camera.updateMatrixWorld();
 	
