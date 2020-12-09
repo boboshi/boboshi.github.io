@@ -279,14 +279,16 @@ function InitGUI()
 	textgui.closed = true;
 
 	// button gui
-	var obj = { add:function(){ console.log("clicked") }};
+	var offbutton = { OFF:function(){ SetLightStatus(clickedlight, STATUS.OFF) }};
+	var onbutton = { ON:function(){ SetLightStatus(clickedlight, STATUS.ON) }};
+	var normalbutton = { NORMAL:function(){ SetLightStatus(clickedlight, STATUS.NORMAL) }};
 
-	buttongui.add(obj,'add');
-	buttongui.add(obj,'add');
-	buttongui.add(obj,'add');
+	buttongui.add(offbutton,"OFF");
+	buttongui.add(onbutton,"ON");
+	buttongui.add(normalbutton,"NORMAL");
 
 	buttongui.domElement.style.position = "absolute";
-	buttongui.domElement.style.top = offsety + 100 + "px";
+	buttongui.domElement.style.top = offsety + 45 + "px";
 	buttongui.domElement.style.right = "0px";
 
 	// buttons closed by default
@@ -821,7 +823,6 @@ function drawScene()
 			// clear display and outline if no light clicked
 			if (clickedlight == "")
 			{
-				buttongui.closed = true;
 				ClearDisplayLightData();
 				outlinePass.selectedObjects = [];
 			}
@@ -877,6 +878,7 @@ function drawScene()
 		// deselect light if left clicked in view mode
 		if (Lmouseup && clickedlight && !tmp2)
 		{
+			buttongui.closed = true;
 			clickedlight = "";
 			ClearDisplayLightData();
 			outlinePass.selectedObjects = [];
