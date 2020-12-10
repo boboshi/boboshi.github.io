@@ -8,7 +8,7 @@ Click on buttons to change status when light is selected.
 Controls:
 
 View mode:
-LMB - drag to pan, click to select light, click again to deselect
+LMB - drag to multi select, click to select light, click again to deselect
 Mouse Scroll - zoom
 RMB - rotate
 
@@ -21,3 +21,9 @@ D - load c1basement1
 F - load c1basement2
 C - reset camera
 LCTRL + Space - toggle add/view mode
+
+Notes:
+- minor changes to SelectionHelper.js from three.js 
+    - added LCTRLdown variable
+    - added check for LMB and LCTRL to be pressed for selection box
+      to appear

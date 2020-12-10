@@ -29,6 +29,7 @@ let box, sphere, grid, plane;
 let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
 var clickedlight = "";
 var LCTRLdown = false;
+
 var Lmouseup = false;
 var Rmouseup = false;
 // selection box
@@ -344,13 +345,17 @@ function onDocumentMouseUp(event)
 		// lmb
 		case 1:
 			Lmouseup = true;
+			controls.enableRotate = true;
 
-			selectionBox.endPoint.set
-			(
-				 (event.clientX / innerWidth) * 2 - 1,
-				-(event.clientY / innerHeight) * 2 + 1,
-				 0.5
-			)
+			if(LCTRLdown)
+			{
+				selectionBox.endPoint.set
+				(
+					 (event.clientX / innerWidth) * 2 - 1,
+					-(event.clientY / innerHeight) * 2 + 1,
+					 0.5
+				)
+			}
 
 			break;
 		// rmb
@@ -375,13 +380,16 @@ function onDocumentMouseDown(event)
 			//{
 			//	item.material.emissive.set(0x000000);
 			//}
-			
-			selectionBox.startPoint.set
-			(
-				 (event.clientX / innerWidth) * 2 - 1,
-				-(event.clientY / innerHeight) * 2 + 1,
-				 0.5
-			);
+
+			if (LCTRLdown)
+			{
+				selectionBox.startPoint.set
+				(
+					 (event.clientX / innerWidth) * 2 - 1,
+					-(event.clientY / innerHeight) * 2 + 1,
+					 0.5
+				);
+			}
 
 			//const allSelected = selectionBox.select();
 			//for (var i = 0; i < allSelected.length; ++i)
@@ -406,6 +414,8 @@ function onKeyDown(event)
 	{
 		case "ControlLeft":
 			LCTRLdown = true;
+			controls.enablePan = false;
+			controls.enableRotate = false;
 			break;
 		default:
 			break;
@@ -446,6 +456,8 @@ function onKeyUp(event)
 			break;
 		case "ControlLeft":
 			LCTRLdown = false;
+			controls.enablePan = true;
+			controls.enableRotate = true;
 			break;
 		case "KeyB":
 			//if(LightArray.find(light => light.userData.name == "lighttest0"))
@@ -471,7 +483,8 @@ function onDocumentMouseMove(event)
 	mouse.x =  ((event.clientX - offsetx) / innerWidth) * 2 - 1;
 	mouse.y = -((event.clientY - offsetx) / innerHeight) * 2 + 1;
 
-	if (selectionBoxHelper.isDown)
+	// selection
+	if (selectionBoxHelper.isDown && LCTRLdown)
 	{
 		//for (var i = 0; i < selectionBox.collection.length; ++i) 
 		//{
@@ -867,7 +880,7 @@ function drawScene()
 	requestAnimationFrame(drawScene);
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-
+	
 	// update light data
 	LightArrayUpdate();
 
