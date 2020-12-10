@@ -1,2 +1,3 @@
 additional features???
 - save previous camera location and orientation?
+- minor bug with rolling over light when doing selection box
