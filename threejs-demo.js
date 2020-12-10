@@ -683,6 +683,7 @@ function LightArrayUpdate()
 			if (light.userData.name == selectedlights[0])
 			{
 				foundselected = true;
+				outlinePass.selectedObjects = [light];
 				DisplayLightData(light.userData.name);
 			}
 		}
@@ -692,16 +693,11 @@ function LightArrayUpdate()
 			if (!foundselected && light.userData.selected === true)
 			{
 				foundselected = true;
+				outlinePass.selectedObjects = [light];
 				DisplayLightData(light.userData.name);
 			}
 		}
 	}
-	//outlinePass.selectedObjects = [];
-	//for (var i = 0; i < selectedlights.length; ++i)
-	//{
-	//	var find = FindLight(selectedlights[i]);
-	//	outlinePass.selectedObjects.push(find);
-	//}
 	
 	// if none are selected, turn off data display
 	if (!foundselected)
