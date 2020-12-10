@@ -956,6 +956,8 @@ function drawScene()
 	{
 		if(LIGHTINTERSECTED)
 		{
+			// BUG IS SOMEWHERE HERE PLS TAKE NOTE
+
 			// onexit
 			// clear display and outline if no light clicked
 			if (selectedlights.length < 1)
