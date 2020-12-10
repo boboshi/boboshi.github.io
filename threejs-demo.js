@@ -167,9 +167,9 @@ function InitOutline()
 {
 	// outline effect parameters
 	const params = {
-		edgeStrength: 3.0,
+		edgeStrength: 5.0,
 		edgeGlow: 0.0,
-		edgeThickness: 3.0,
+		edgeThickness: 5.0,
 		pulsePeriod: 0,
 		rotate: false,
 		usePatternTexture: false
