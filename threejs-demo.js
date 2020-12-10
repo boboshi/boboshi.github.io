@@ -382,6 +382,7 @@ function onDocumentMouseDown(event)
 			if (LCTRLdown)
 			{
 				selectedlights = [];
+				outlinePass.selectedObjects = [];
 
 				selectionBox.startPoint.set
 				(
@@ -491,10 +492,14 @@ function onDocumentMouseMove(event)
 		for (var i = 0; i < allSelected.length; ++i)
 		{
 			// check if object selected is a light
-			if(allSelected[i].userData.name)
+			if (allSelected[i].userData.name)
 			{
 				// select object
-				selectedlights.push(allSelected[i].userData.name);
+				if (selectedlights.indexOf(allSelected[i].userData.name) == -1)
+				{
+					outlinePass.selectedObjects.push(allSelected[i]);
+					selectedlights.push(allSelected[i].userData.name);
+				}
 			}
 		}
 	}

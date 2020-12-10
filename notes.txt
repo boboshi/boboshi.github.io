@@ -1,4 +1,2 @@
 additional features???
 - save previous camera location and orientation?
-- multi light select support
-    - set status at once
