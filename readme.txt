@@ -8,7 +8,7 @@ Click on buttons to change status when light is selected.
 Controls:
 
 View mode:
-LMB - drag to multi select, click to select light, click again to deselect
+LMB - ctrl click for selection box, click to select light, click again to deselect
 Mouse Scroll - zoom
 RMB - rotate
 
