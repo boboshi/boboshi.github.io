@@ -1,3 +1,4 @@
 additional features???
 - save previous camera location and orientation?
-- smooth camera movement to light?
+- multi light select support
+    - set status at once

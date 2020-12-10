@@ -8,6 +8,8 @@ import {ShaderPass} from "../node_modules/three/examples/jsm/postprocessing/Shad
 import {OutlinePass} from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
 import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
 import {GUI} from "../node_modules/three/examples/jsm/libs/dat.gui.module.js"
+import {SelectionBox} from "../node_modules/three/examples/jsm/interactive/SelectionBox.js";
+import {SelectionHelper} from "../node_modules/three/examples/jsm/interactive/SelectionHelper.js";
 
 // global variable declarations
 
@@ -29,6 +31,9 @@ var clickedlight = "";
 var LCTRLdown = false;
 var Lmouseup = false;
 var Rmouseup = false;
+// selection box
+var selectedlights = [];
+var selectionBox, selectionBoxHelper;
 // arrays used for raycasting and picking
 var LightArray = [];
 var PlaneArray = [];
@@ -87,7 +92,7 @@ function InitThreeJs()
 	camera.position.y = 2;
 	camera.position.z = 10;
 	// init renderer
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(innerWidth, innerHeight);
 	// reposition canvas (if needed)
@@ -137,8 +142,9 @@ function InitCameraControls()
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 
-	// event listener to track mouse clicks (pointerup because of orbicontrols)
+	// event listeners to track mouse clicks (pointerup because of orbicontrols)
 	renderer.domElement.addEventListener("pointerup", onDocumentMouseUp, false);
+	renderer.domElement.addEventListener("pointerdown", onDocumentMouseDown, false);
 
 	// event listeners to track key presses
 	document.addEventListener("keydown", onKeyDown, false);
@@ -233,8 +239,25 @@ function InitPicking()
 	scene.add(ghost);
 	ghost.visible = false;
 
-	// event listener to track mouse
-	document.addEventListener("mousemove", onDocumentMouseMove, false);
+	// selection box
+	var styles = `
+		.selectBox
+		{
+			border: 1px solid #55aaff;
+			background-color: rgba(75, 160, 255, 0.3);
+			position: fixed;
+		}
+		`;
+	var styleSheet = document.createElement("style");
+	styleSheet.type = "text/css"
+	styleSheet.innerText = styles;
+	document.head.appendChild(styleSheet);
+
+	selectionBox = new SelectionBox(camera, scene);
+	selectionBoxHelper = new SelectionHelper(selectionBox, renderer, "selectBox");
+
+	// event listener to track mouse move
+	document.addEventListener("pointermove", onDocumentMouseMove, false);
 }
 
 // initialise light data text display
@@ -321,10 +344,55 @@ function onDocumentMouseUp(event)
 		// lmb
 		case 1:
 			Lmouseup = true;
+
+			selectionBox.endPoint.set
+			(
+				 (event.clientX / innerWidth) * 2 - 1,
+				-(event.clientY / innerHeight) * 2 + 1,
+				 0.5
+			)
+
 			break;
 		// rmb
 		case 3:
 			Rmouseup = true;
+			break;
+		default:
+			break;
+	}
+}
+
+// mousedown event
+function onDocumentMouseDown(event)
+{
+	event.preventDefault();
+
+	switch(event.which)
+	{
+		// lmb
+		case 1:
+			//for (const item of selectionBox.collection)
+			//{
+			//	item.material.emissive.set(0x000000);
+			//}
+			
+			selectionBox.startPoint.set
+			(
+				 (event.clientX / innerWidth) * 2 - 1,
+				-(event.clientY / innerHeight) * 2 + 1,
+				 0.5
+			);
+
+			//const allSelected = selectionBox.select();
+			//for (var i = 0; i < allSelected.length; ++i)
+			//{
+			//	allSelected[i].material.emissive.set(0xffffff);
+			//}
+
+			break;
+		// rmb
+		case 3:
+
 			break;
 		default:
 			break;
@@ -402,6 +470,27 @@ function onDocumentMouseMove(event)
 
 	mouse.x =  ((event.clientX - offsetx) / innerWidth) * 2 - 1;
 	mouse.y = -((event.clientY - offsetx) / innerHeight) * 2 + 1;
+
+	if (selectionBoxHelper.isDown)
+	{
+		//for (var i = 0; i < selectionBox.collection.length; ++i) 
+		//{
+		//	selectionBox.collection[i].material.emissive.set(0x000000);
+		//}
+
+		selectionBox.endPoint.set
+		(
+			 (event.clientX / innerWidth) * 2 - 1,
+			-(event.clientY / innerHeight) * 2 + 1,
+			0.5 
+		);
+
+		//const allSelected = selectionBox.select();
+		//for (var i = 0; i < allSelected.length; ++i) 
+		//{
+		//	allSelected[ i ].material.emissive.set(0xffffff);
+		//}
+	}
 }
 
 // resize handling
@@ -794,7 +883,7 @@ function drawScene()
 	
 	// disable orbitcontrols if viewing
 	controls.enabled = !addMode;
-	
+
 	const intersects = raycaster.intersectObjects(LightArray);
 	const planeintersects = raycaster.intersectObjects(PlaneArray);
 	var tmp2 = false;
