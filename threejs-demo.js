@@ -121,18 +121,19 @@ function InitCameraControls()
 	// limit camera panning
 	var minPan = new THREE.Vector3(-40.0, -40.0, -20.0);
 	var maxPan = new THREE.Vector3(40.0, 40.0, 20.0);
-	var _v = new THREE.Vector3();
+	var v = new THREE.Vector3();
 	// limit camera zoom
 	controls.minDistance = 5.0;
 	controls.maxDistance = 45.4;
 	// event listener to limit camera panning
 	controls.addEventListener("change", function()
 	{
-		_v.copy(controls.target);
+		v.copy(controls.target);
 		controls.target.clamp(minPan, maxPan);
-		_v.sub(controls.target);
-		camera.position.sub(_v);
+		v.sub(controls.target);
+		camera.position.sub(v);
 	});
+
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 
@@ -281,7 +282,6 @@ function InitGUI()
 	}
 	textgui.add(params, "Change Name").onChange(function(value)
 	{
-		// store value into current name
 		currname = value;
 	});
 
@@ -784,7 +784,10 @@ function drawScene()
 
 	// keeps focus on input field for light name
 	var tmp = document.getElementsByTagName("INPUT");
-	tmp[0].focus();
+	if (addMode)
+		tmp[0].focus();
+	else
+		tmp[0].blur();
 
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
