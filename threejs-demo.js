@@ -41,7 +41,7 @@ var displayPlane;
 // bool for add/view mode
 var addMode = false;
 // text display
-var text;
+var text, error;
 // gui for id modification
 var textgui, buttongui;
 var currname = "";
@@ -252,6 +252,20 @@ function InitTextDisplay()
 	text.style.fontSize = 30 + "px";
 	text.style.fontFamily = "Calibri";
 	document.body.appendChild(text);
+
+	// error display setup
+	error = document.createElement("div");
+	error.style.position = "absolute";
+	error.style.width = 100;
+	error.style.height = 100;
+	error.style.backgroundColor = "black";
+	error.style.color = "white";
+	error.innerHTML = "";
+	error.style.bottom = offsety + "px";
+	error.style.left = offsetx + "px";
+	error.style.fontSize = 30 + "px";
+	error.style.fontFamily = "Calibri";
+	document.body.appendChild(error);
 }
 
 // initialise gui
@@ -451,6 +465,12 @@ function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
 	);
 }
 
+// clear error display
+function ClearError()
+{
+	error.innerHTML = "";
+}
+
 // userData has 5 properties
 // - name (string)
 // - selected (bool for internal use)
@@ -469,6 +489,8 @@ function AddLight(name, pos)
 	if(find)
 	{
 		console.log("duplicate name found");
+		error.innerHTML = "Error: duplicate light name";
+		setTimeout(ClearError, 3000);
 		return null;
 	}
 
@@ -542,7 +564,7 @@ function LightArrayUpdate()
 {
 	// only display data of selected light on screen
 	var foundselected = false;
-	// loop through all lights and update accordingly
+	// loop through all lights and update data accordingly
 	for (var i = 0; i < LightArray.length; ++i)
 	{
 		var light = LightArray[i];
