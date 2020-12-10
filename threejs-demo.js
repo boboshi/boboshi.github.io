@@ -355,6 +355,18 @@ function onDocumentMouseUp(event)
 					-(event.clientY / innerHeight) * 2 + 1,
 					 0.5
 				)
+
+				//const allSelected = selectionBox.select();
+				//for (var i = 0; i < allSelected.length; ++i)
+				//{
+				//	// check if object selected is a light
+				//	if(allSelected[i].userData.name)
+				//	{
+				//		// do stuff
+				//		var find = FindLight(allSelected[i].userData.name);
+				//		find.userData.status = STATUS.NORMAL;
+				//	}
+				//}
 			}
 
 			break;
@@ -376,11 +388,6 @@ function onDocumentMouseDown(event)
 	{
 		// lmb
 		case 1:
-			//for (const item of selectionBox.collection)
-			//{
-			//	item.material.emissive.set(0x000000);
-			//}
-
 			if (LCTRLdown)
 			{
 				selectionBox.startPoint.set
@@ -390,12 +397,6 @@ function onDocumentMouseDown(event)
 					 0.5
 				);
 			}
-
-			//const allSelected = selectionBox.select();
-			//for (var i = 0; i < allSelected.length; ++i)
-			//{
-			//	allSelected[i].material.emissive.set(0xffffff);
-			//}
 
 			break;
 		// rmb
@@ -486,11 +487,6 @@ function onDocumentMouseMove(event)
 	// selection
 	if (selectionBoxHelper.isDown && LCTRLdown)
 	{
-		//for (var i = 0; i < selectionBox.collection.length; ++i) 
-		//{
-		//	selectionBox.collection[i].material.emissive.set(0x000000);
-		//}
-
 		selectionBox.endPoint.set
 		(
 			 (event.clientX / innerWidth) * 2 - 1,
@@ -498,11 +494,17 @@ function onDocumentMouseMove(event)
 			0.5 
 		);
 
-		//const allSelected = selectionBox.select();
-		//for (var i = 0; i < allSelected.length; ++i) 
-		//{
-		//	allSelected[ i ].material.emissive.set(0xffffff);
-		//}
+		const allSelected = selectionBox.select();
+		for (var i = 0; i < allSelected.length; ++i)
+		{
+			// check if object selected is a light
+			if(allSelected[i].userData.name)
+			{
+				// do stuff
+				var find = FindLight(allSelected[i].userData.name);
+				find.userData.status = STATUS.NORMAL;
+			}
+		}
 	}
 }
 
