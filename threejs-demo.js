@@ -27,9 +27,7 @@ let composer, renderPass, outlinePass, effectFXAA;
 let box, sphere, grid, plane;
 // raycasting and picking
 let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
-var clickedlight = "";
 var LCTRLdown = false;
-
 var Lmouseup = false;
 var Rmouseup = false;
 // selection box
@@ -317,9 +315,9 @@ function InitGUI()
 	textgui.closed = true;
 
 	// button gui
-	var offbutton = { OFF:function(){ SetLightStatus(clickedlight, STATUS.OFF) }};
-	var onbutton = { ON:function(){ SetLightStatus(clickedlight, STATUS.ON) }};
-	var normalbutton = { NORMAL:function(){ SetLightStatus(clickedlight, STATUS.NORMAL) }};
+	var offbutton = { OFF:function(){ SetSelectedLightStatus(selectedlights, STATUS.OFF) }};
+	var onbutton = { ON:function(){ SetSelectedLightStatus(selectedlights, STATUS.ON) }};
+	var normalbutton = { NORMAL:function(){ SetSelectedLightStatus(selectedlights, STATUS.NORMAL) }};
 
 	buttongui.add(offbutton,"OFF");
 	buttongui.add(onbutton,"ON");
@@ -356,17 +354,10 @@ function onDocumentMouseUp(event)
 					 0.5
 				)
 
-				//const allSelected = selectionBox.select();
-				//for (var i = 0; i < allSelected.length; ++i)
-				//{
-				//	// check if object selected is a light
-				//	if(allSelected[i].userData.name)
-				//	{
-				//		// do stuff
-				//		var find = FindLight(allSelected[i].userData.name);
-				//		find.userData.status = STATUS.NORMAL;
-				//	}
-				//}
+				if (selectedlights.length > 0)
+					buttongui.closed = false;
+				else
+					buttongui.closed = true;
 			}
 
 			break;
@@ -390,6 +381,8 @@ function onDocumentMouseDown(event)
 		case 1:
 			if (LCTRLdown)
 			{
+				selectedlights = [];
+
 				selectionBox.startPoint.set
 				(
 					 (event.clientX / innerWidth) * 2 - 1,
@@ -500,9 +493,8 @@ function onDocumentMouseMove(event)
 			// check if object selected is a light
 			if(allSelected[i].userData.name)
 			{
-				// do stuff
-				var find = FindLight(allSelected[i].userData.name);
-				find.userData.status = STATUS.NORMAL;
+				// select object
+				selectedlights.push(allSelected[i].userData.name);
 			}
 		}
 	}
@@ -638,13 +630,16 @@ function RemoveLight(name)
 }
 
 // helper for setting light status
-function SetLightStatus(name, status)
+function SetSelectedLightStatus(selected, status)
 {
-	var find = FindLight(name);
-
-	if (find)
+	for (var i = 0; i < selected.length; ++i)
 	{
-		find.userData.status = status;
+		var find = FindLight(selected[i]);
+
+		if (find)
+		{
+			find.userData.status = status;
+		}
 	}
 }
 
@@ -683,13 +678,12 @@ function LightArrayUpdate()
 
 		// data display
 		// check for currently clicked on light
-		if (clickedlight != "")
+		if (selectedlights.length == 1)
 		{
-			if (light.userData.name == clickedlight)
+			if (light.userData.name == selectedlights[0])
 			{
 				foundselected = true;
 				DisplayLightData(light.userData.name);
-				outlinePass.selectedObjects = [light];
 			}
 		}
 		else
@@ -699,10 +693,15 @@ function LightArrayUpdate()
 			{
 				foundselected = true;
 				DisplayLightData(light.userData.name);
-				outlinePass.selectedObjects = [light];
 			}
 		}
 	}
+	//outlinePass.selectedObjects = [];
+	//for (var i = 0; i < selectedlights.length; ++i)
+	//{
+	//	var find = FindLight(selectedlights[i]);
+	//	outlinePass.selectedObjects.push(find);
+	//}
 	
 	// if none are selected, turn off data display
 	if (!foundselected)
@@ -912,7 +911,7 @@ function drawScene()
 			LIGHTINTERSECTED = intersects[0].object;
 			// onenter
 			// check if light has been clicked on
-			if (clickedlight == "")
+			if (selectedlights.length > 0)
 			{
 				// clear display
 				for (var i = 0; i < LightArray.length; ++i)
@@ -933,7 +932,7 @@ function drawScene()
 				if(!addMode)
 				{
 					// select this light
-					clickedlight = intersects[0].object.userData.name;
+					selectedlights = [intersects[0].object.userData.name];
 					tmp2 = true;
 					buttongui.closed = false;
 					// move camera to light
@@ -958,7 +957,7 @@ function drawScene()
 		{
 			// onexit
 			// clear display and outline if no light clicked
-			if (clickedlight == "")
+			if (selectedlights.length < 1)
 			{
 				ClearDisplayLightData();
 				outlinePass.selectedObjects = [];
@@ -1013,10 +1012,10 @@ function drawScene()
 	else
 	{
 		// deselect light if left clicked in view mode
-		if (Lmouseup && clickedlight && !tmp2)
+		if (Lmouseup && (selectedlights.length > 0) && !tmp2 && !LCTRLdown)
 		{
 			buttongui.closed = true;
-			clickedlight = "";
+			selectedlights = [];
 			ClearDisplayLightData();
 			outlinePass.selectedObjects = [];
 		}
