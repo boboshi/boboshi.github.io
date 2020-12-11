@@ -267,8 +267,8 @@ function InitTextDisplay()
 	// light data display setup
 	text = document.createElement("div");
 	text.style.position = "absolute";
-	text.style.width = 100;
-	text.style.height = 100;
+	text.style.width = "260px";
+	text.style.height = "150px";
 	text.style.backgroundColor = "black";
 	text.style.color = "white";
 	text.innerHTML = "";
@@ -276,13 +276,12 @@ function InitTextDisplay()
 	text.style.left = offsetx + "px";
 	text.style.fontSize = 30 + "px";
 	text.style.fontFamily = "Calibri";
+	text.style.display = "none";
 	document.body.appendChild(text);
 
 	// error display setup
 	error = document.createElement("div");
 	error.style.position = "absolute";
-	error.style.width = 100;
-	error.style.height = 100;
 	error.style.backgroundColor = "black";
 	error.style.color = "white";
 	error.innerHTML = "";
@@ -744,6 +743,7 @@ function DisplayLightData(name)
 					"Last Heard: " + find.userData.lastheard + "<br/>" +
 					"Last Status: " + laststatus + "<br/>" +
 					"PVM Level: " + find.userData.pvm;
+	text.style.display = "block";
 	// top and left specifies the position of the data
 	//text.style.top = window.innerHeight - 100 + "px";
 	//text.style.left = 500 + "px";
@@ -753,6 +753,7 @@ function DisplayLightData(name)
 function ClearDisplayLightData()
 {
 	text.innerHTML = "";
+	text.style.display = "none";
 }
 
 // file saving and loading
@@ -899,7 +900,7 @@ function drawScene()
 	requestAnimationFrame(drawScene);
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	
+
 	// update light data
 	LightArrayUpdate();
 
