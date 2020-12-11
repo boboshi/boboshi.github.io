@@ -28,6 +28,7 @@ let box, sphere, grid, plane;
 // raycasting and picking
 let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
 var LCTRLdown = false;
+var toggle = false;
 var Lmouseup = false;
 var Rmouseup = false;
 // selection box
@@ -353,6 +354,14 @@ function onDocumentMouseUp(event)
 				 0.5
 			)
 
+			// deselect light if left clicked in view mode
+			if (!addMode && Lmouseup && (selectedlights.length > 0) && !selectedStart)
+			{
+				selectedlights = [];
+				ClearDisplayLightData();
+				outlinePass.selectedObjects = [];
+			}
+
 			if (selectedStart)
 			{
 				selectedStart = false;
@@ -415,6 +424,10 @@ function onKeyDown(event)
 			controls.enablePan = false;
 			controls.enableRotate = false;
 			break;
+		case "Space":
+			if (LCTRLdown)
+				toggle = true;
+			break;
 		default:
 			break;
 	}
@@ -426,8 +439,9 @@ function onKeyUp(event)
 	{
 		case "Space":
 			// toggle add/view mode (with lctrl pressed)
-			if (LCTRLdown)
+			if (toggle)
 			{
+				toggle = false;
 				addMode = !addMode;
 				ghost.visible = !ghost.visible;
 				textgui.closed = !addMode;
@@ -904,7 +918,6 @@ function drawScene()
 
 	const intersects = raycaster.intersectObjects(LightArray);
 	const planeintersects = raycaster.intersectObjects(PlaneArray);
-	var tmp2 = false;
 
 	// light
 	if(intersects.length > 0)
@@ -935,12 +948,14 @@ function drawScene()
 				// check if in view mode
 				if(!addMode)
 				{
-					// select this light
-					selectedlights = [intersects[0].object.userData.name];
-					tmp2 = true;
+					// if single selection
+					if (!selectedStart && selectedlights.length == 1)
+					{
+						// select this light
+						selectedlights = [intersects[0].object.userData.name];
+						MoveToLight(LIGHTINTERSECTED.userData.name);
+					}
 					buttongui.closed = false;
-					// move camera to light
-					MoveToLight(LIGHTINTERSECTED.userData.name);
 				}
 			}
 			
@@ -959,8 +974,6 @@ function drawScene()
 	{
 		if(LIGHTINTERSECTED)
 		{
-			// BUG IS SOMEWHERE HERE PLS TAKE NOTE
-
 			// onexit
 			// clear display and outline if no light clicked
 			if (selectedlights.length < 1 && !selectedStart)
@@ -1013,16 +1026,6 @@ function drawScene()
 				// onexit
 			}
 			PLANEINTERSECTED = null;
-		}
-	}
-	else
-	{
-		// deselect light if left clicked in view mode
-		if (Lmouseup && (selectedlights.length > 0) && !tmp2 && !selectedStart)
-		{
-			selectedlights = [];
-			ClearDisplayLightData();
-			outlinePass.selectedObjects = [];
 		}
 	}
 
