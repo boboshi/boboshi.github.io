@@ -27,3 +27,4 @@ Notes:
     - added LCTRLdown variable
     - added check for LMB and LCTRL to be pressed for selection box
       to appear
+    - added check for null parent on lmb up
