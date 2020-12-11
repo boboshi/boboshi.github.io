@@ -8,9 +8,10 @@ Click on buttons to change status when light is selected.
 Controls:
 
 View mode:
-LMB - ctrl click for selection box, click to select light, click again to deselect
+LMB - click to select light, click again to deselect
 Mouse Scroll - zoom
 RMB - rotate
+LCTRL + LMB - selection box for multiselect
 
 Add mode:
 LMB - add light
