@@ -738,11 +738,11 @@ function DisplayLightData(name)
 	else
 		laststatus = "NORMAL";
 
-	// <br/> is a newline, parseFloat sets it to 1 decimal place
+	// <br/> is a newline
 	text.innerHTML = "Name: " + find.userData.name + "<br/>" +
-					"Last Heard: " + find.userData.lastheard + "<br/>" +
-					"Last Status: " + laststatus + "<br/>" +
-					"PVM Level: " + find.userData.pvm;
+					 "Last Heard: " + find.userData.lastheard + "<br/>" +
+					 "Last Status: " + laststatus + "<br/>" +
+					 "PVM Level: " + find.userData.pvm;
 	text.style.display = "block";
 	// top and left specifies the position of the data
 	//text.style.top = window.innerHeight - 100 + "px";

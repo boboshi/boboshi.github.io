@@ -1,3 +1,4 @@
 additional features???
 - save previous camera location and orientation?
-- make the data display more pretty
+- make the data display more pretty?
+- code refactoring (all the time)
