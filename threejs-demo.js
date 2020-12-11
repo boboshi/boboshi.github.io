@@ -356,7 +356,8 @@ function onDocumentMouseUp(event)
 			if (selectedStart)
 			{
 				selectedStart = false;
-				buttongui.closed = false;
+				if (selectedlights.length > 0)
+					buttongui.closed = false;
 			}
 			else
 			{
@@ -962,7 +963,7 @@ function drawScene()
 
 			// onexit
 			// clear display and outline if no light clicked
-			if (selectedlights.length < 1)
+			if (selectedlights.length < 1 && !selectedStart)
 			{
 				ClearDisplayLightData();
 				outlinePass.selectedObjects = [];
