@@ -899,7 +899,7 @@ function drawScene()
 	requestAnimationFrame(drawScene);
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-
+	
 	// update light data
 	LightArrayUpdate();
 
@@ -949,7 +949,7 @@ function drawScene()
 				if(!addMode)
 				{
 					// if single selection
-					if (!selectedStart && selectedlights.length == 1)
+					if (!selectedStart && selectedlights.length == 0)
 					{
 						// select this light
 						selectedlights = [intersects[0].object.userData.name];
