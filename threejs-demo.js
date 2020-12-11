@@ -32,6 +32,7 @@ var Lmouseup = false;
 var Rmouseup = false;
 // selection box
 var selectedlights = [];
+var selectedStart = false;
 var selectionBox, selectionBoxHelper;
 // arrays used for raycasting and picking
 var LightArray = [];
@@ -345,22 +346,22 @@ function onDocumentMouseUp(event)
 			Lmouseup = true;
 			controls.enableRotate = true;
 
-			if(LCTRLdown)
+			selectionBox.endPoint.set
+			(
+				 (event.clientX / innerWidth) * 2 - 1,
+				-(event.clientY / innerHeight) * 2 + 1,
+				 0.5
+			)
+
+			if (selectedStart)
 			{
-				selectionBox.endPoint.set
-				(
-					 (event.clientX / innerWidth) * 2 - 1,
-					-(event.clientY / innerHeight) * 2 + 1,
-					 0.5
-				)
-
-				if (selectedlights.length > 0)
-					buttongui.closed = false;
-				else
-					buttongui.closed = true;
+				selectedStart = false;
+				buttongui.closed = false;
 			}
-
-			break;
+			else
+			{
+				buttongui.closed = true;
+			}
 		// rmb
 		case 3:
 			Rmouseup = true;
@@ -381,6 +382,7 @@ function onDocumentMouseDown(event)
 		case 1:
 			if (LCTRLdown)
 			{
+				selectedStart = true;
 				selectedlights = [];
 				outlinePass.selectedObjects = [];
 
@@ -882,7 +884,7 @@ function drawScene()
 	requestAnimationFrame(drawScene);
 	// stuff to do inside the loop
 	// i.e. updating stuff like animation
-	
+
 	// update light data
 	LightArrayUpdate();
 
@@ -1015,9 +1017,8 @@ function drawScene()
 	else
 	{
 		// deselect light if left clicked in view mode
-		if (Lmouseup && (selectedlights.length > 0) && !tmp2 && !LCTRLdown)
+		if (Lmouseup && (selectedlights.length > 0) && !tmp2 && !selectedStart)
 		{
-			buttongui.closed = true;
 			selectedlights = [];
 			ClearDisplayLightData();
 			outlinePass.selectedObjects = [];
