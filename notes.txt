@@ -2,3 +2,4 @@ additional features???
 - save previous camera location and orientation?
 - make the data display more pretty?
 - code refactoring (all the time)
+- optimise program, pretty intense after leaving it for awhile
