@@ -38,8 +38,8 @@ var selectionBox, selectionBoxHelper;
 // arrays used for raycasting and picking
 var LightArray = [];
 var PlaneArray = [];
-// floorplan name
-var DisplayFloorPlan = "";
+// filename
+var filename = "";
 // array of lights to be saved/loaded
 var LightData = [];
 // plane to display floorplan on
@@ -822,6 +822,7 @@ async function LoadScene(s = "default")
 
 	if (out)
 	{
+		filename = s;
 		// clear existing scene
 		while (scene.children.length > 0)
 		{
@@ -849,48 +850,6 @@ async function LoadScene(s = "default")
 	setTimeout(UpdateArrays, 1000);
 }
 
-// load data from json
-async function LoadData(j = "default")
-{
-	//const response = await fetch(url);
-	const out = await FetchData(j);
-
-	if(out)
-	{
-		// get floorplan file name
-		DisplayFloorPlan = out.floorplan;
-		// clear existing data
-		for (var i = 0; i < LightArray.length; ++i)
-		{
-			// find and remove object from scene
-			LightArray[i].parent.remove(LightArray[i]);
-		}
-		LightArray = [];
-
-		// add lights to scene
-		for (var i = 0; i < out.lightdata.length; ++i)
-		{
-			AddLight(out.lightdata[i].name, out.lightdata[i].pos);
-		}
-
-		// add plane
-		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + DisplayFloorPlan);
-		var planeMat = new THREE.MeshLambertMaterial({map: texture});
-		displayPlane = new THREE.Mesh(plane, planeMat);
-		displayPlane.receiveShadow = true;
-		displayPlane.rotateX(Rad(-90));
-		displayPlane.scale.x = 100;
-		displayPlane.scale.y = 71;
-		displayPlane.scale.z = 71;
-		PlaneArray.push(displayPlane);
-		scene.add(displayPlane);
-	}
-	else
-	{
-		console.log("failed to load data");
-	}
-}
-
 // save scene to json
 function DownloadScene()
 {
@@ -911,7 +870,49 @@ function DownloadScene()
 	}());
 
 	var save = scene.toJSON();
-	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
+	saveData(save, filename.replace(/\..+$/, '') + ".json");
+}
+
+// load data from json
+async function LoadData(j = "default")
+{
+	//const response = await fetch(url);
+	const out = await FetchData(j);
+
+	if(out)
+	{
+		// get floorplan file name
+		filename = j;
+		// clear existing data
+		for (var i = 0; i < LightArray.length; ++i)
+		{
+			// find and remove object from scene
+			LightArray[i].parent.remove(LightArray[i]);
+		}
+		LightArray = [];
+
+		// add lights to scene
+		for (var i = 0; i < out.lightdata.length; ++i)
+		{
+			AddLight(out.lightdata[i].name, out.lightdata[i].pos);
+		}
+
+		// add plane
+		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + filename);
+		var planeMat = new THREE.MeshLambertMaterial({map: texture});
+		displayPlane = new THREE.Mesh(plane, planeMat);
+		displayPlane.receiveShadow = true;
+		displayPlane.rotateX(Rad(-90));
+		displayPlane.scale.x = 100;
+		displayPlane.scale.y = 71;
+		displayPlane.scale.z = 71;
+		PlaneArray.push(displayPlane);
+		scene.add(displayPlane);
+	}
+	else
+	{
+		console.log("failed to load data");
+	}
 }
 
 // save data to json
@@ -937,11 +938,11 @@ function DownloadData()
 	
 	var save = 
 	{
-		floorplan: DisplayFloorPlan,
+		floorplan: filename,
 		lightdata: LightData
 	}
 
-	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
+	saveData(save, filename.replace(/\..+$/, '') + ".json");
 }
 
 // convert degrees to radians
