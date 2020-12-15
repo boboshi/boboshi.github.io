@@ -4,6 +4,5 @@ additional features???
 - code refactoring (all the time)
 - optimise program, pretty intense after leaving it for awhile
 - change light model (find a free model for this)
-- add dropdown box to select floorplans and switch between them
 - search function for light name (id)
-- check with online 2d to 3d floor plan conversion services (fiverr right now)
+- use three.js editor in separate page

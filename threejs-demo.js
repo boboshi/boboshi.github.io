@@ -19,8 +19,8 @@ var innerWidth, innerHeight;
 var serverAddress;
 // three.js basic functionality
 let scene, camera, controls, renderer, canvas, offsetx, offsety;
-// model loader
-let loader;
+// model loader and scene loader
+let fbxloader, sceneloader;
 // outline effect use
 let composer, renderPass, outlinePass, effectFXAA;
 // basic geometry shapes
@@ -210,7 +210,6 @@ function InitGeometry()
 
 	// sphere
 	sphere = new THREE.SphereBufferGeometry();
-	sphere.scale(0.35, 0.35, 0.35);
 
 	// grid
 	const size = 100;
@@ -219,13 +218,13 @@ function InitGeometry()
 
 	// plane
 	plane = new THREE.PlaneBufferGeometry();
-	plane.scale(100, 71, 71);
 }
 
 // initialise model loader
-function InitFBXLoader()
+function InitLoaders()
 {
-	loader = new FBXLoader();
+	fbxloader = new FBXLoader();
+	sceneloader = new THREE.ObjectLoader();
 }
 
 // initialise raycasting and picking
@@ -237,6 +236,9 @@ function InitPicking()
 
 	// create "ghost" sphere for placing lights
 	ghost = new THREE.Mesh(sphere, translucentMat);
+	ghost.scale.x = 0.35;
+	ghost.scale.y = 0.35;
+	ghost.scale.z = 0.35;
 	scene.add(ghost);
 	ghost.visible = false;
 
@@ -449,17 +451,18 @@ function onKeyUp(event)
 		case "KeyS":
 			// save into json and download
 			if (!addMode)
-				DownloadData();
+				DownloadScene();
+				//DownloadData();
 			break;
 		case "KeyD":
 			// load c1basement1
 			if (!addMode)
-				LoadData("c1basement1");
+				LoadScene("c1basement1");
 			break;
 		case "KeyF":
 			// load c1basement2
 			if (!addMode)
-				LoadData("c1basement2");
+				LoadScene("c1basement2");
 			break;
 		case "KeyC":
 			if (!addMode)
@@ -556,7 +559,7 @@ function ResetCamera()
 function LoadModel(model, xscale, yscale, zscale, material = translucentMat)
 {
 	// load and add test model to scene
-	loader.load
+	fbxloader.load
 	(
 		serverAddress + "/resources/" + model + ".fbx", function (fbx) 
 			{
@@ -618,6 +621,9 @@ function AddLight(name, pos)
 	lightmesh.position.x = pos.x;
 	lightmesh.position.y = pos.y;
 	lightmesh.position.z = pos.z;
+	lightmesh.scale.x = 0.35;
+	lightmesh.scale.y = 0.35;
+	lightmesh.scale.z = 0.35;
 
 	// add lightdata into the three.js mesh
 	lightmesh.userData = {name: name, selected: false, lastheard: "test", status: STATUS.OFF, pvm: 0};
@@ -786,6 +792,63 @@ async function FetchData(j = "default")
 	}
 }
 
+// update light and plane arrays with loaded objects
+function UpdateArrays()
+{
+	// add lights and plane to array
+	scene.traverse(function (object)
+	{
+		// lights
+		if (object.userData.name)
+		{
+			LightArray.push(object);
+		}
+		else if (object.isMesh)
+		{
+			// plane
+			if (object.geometry.type == "PlaneBufferGeometry" || object.geometry.type == "PlaneGeometry")
+				PlaneArray.push(object);
+			// ghost light
+			else if (object.geometry.type == "SphereBufferGeometry" || object.geometry.type == "SphereGeometry")
+				ghost = object;
+		}
+	});
+}
+
+// load scene from json
+async function LoadScene(s = "default")
+{
+	const out = await FetchData(s);
+
+	if (out)
+	{
+		// clear existing scene
+		while (scene.children.length > 0)
+		{
+			scene.remove(scene.children[0]);
+		}
+		sceneloader.load(serverAddress + "/resources/" + s + ".json", function(object) 
+		{
+			scene.add(object);
+		});
+
+		// clear existing data
+		for (var i = 0; i < LightArray.length; ++i)
+		{
+			// find and remove object from scene
+			LightArray[i].parent.remove(LightArray[i]);
+		}
+		LightArray = [];
+		PlaneArray = [];
+	}
+	else
+	{
+		console.log("failed to load data");
+	}
+
+	setTimeout(UpdateArrays, 1000);
+}
+
 // load data from json
 async function LoadData(j = "default")
 {
@@ -816,6 +879,9 @@ async function LoadData(j = "default")
 		displayPlane = new THREE.Mesh(plane, planeMat);
 		displayPlane.receiveShadow = true;
 		displayPlane.rotateX(Rad(-90));
+		displayPlane.scale.x = 100;
+		displayPlane.scale.y = 71;
+		displayPlane.scale.z = 71;
 		PlaneArray.push(displayPlane);
 		scene.add(displayPlane);
 	}
@@ -823,6 +889,29 @@ async function LoadData(j = "default")
 	{
 		console.log("failed to load data");
 	}
+}
+
+// save scene to json
+function DownloadScene()
+{
+	var saveData = (function () 
+	{
+		var a = document.createElement("a");
+		document.body.appendChild(a);
+		a.style = "display: none";
+		return function (data, fileName) {
+			var json = JSON.stringify(data, null, 2),
+				blob = new Blob([json], {type: "octet/stream"}),
+				url = window.URL.createObjectURL(blob);
+			a.href = url;
+			a.download = fileName;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		};
+	}());
+
+	var save = scene.toJSON();
+	saveData(save, DisplayFloorPlan.replace(/\..+$/, '') + ".json");
 }
 
 // save data to json
@@ -872,14 +961,15 @@ function main()
 	InitSceneLights();
 	InitOutline();
 	InitGeometry();
-	InitFBXLoader();
+	InitLoaders();
 	InitPicking();
 	InitTextDisplay();
 	InitGUI();
 
-	// load default data (includes floorplan and light data)
-	LoadData();
-	
+	// load default scene
+	LoadScene();
+	//LoadData();
+
 	// testing
 	//scene.add(grid);
 	
