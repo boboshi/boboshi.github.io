@@ -5,4 +5,8 @@ additional features???
 - optimise program, pretty intense after leaving it for awhile
 - change light model (find a free model for this)
 - search function for light name (id)
-- use three.js editor in separate page
+- add three.js editor in separate file
+    - modifications needed
+        - create default loaded scene
+        - modify controls to be consistent with viewer
+        - remove examples tab

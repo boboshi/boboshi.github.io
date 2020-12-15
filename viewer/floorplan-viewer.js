@@ -1,15 +1,15 @@
 // imports
-import * as THREE from "../node_modules/three/build/three.module.js";
-import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
-import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
-import {EffectComposer} from "../node_modules/three/examples/jsm/postprocessing/EffectComposer.js";
-import {RenderPass} from "../node_modules/three/examples/jsm/postprocessing/RenderPass.js";
-import {ShaderPass} from "../node_modules/three/examples/jsm/postprocessing/ShaderPass.js";
-import {OutlinePass} from "../node_modules/three/examples/jsm/postprocessing/OutlinePass.js";
-import {FXAAShader} from "../node_modules/three/examples/jsm/shaders/FXAAShader.js";
-import {GUI} from "../node_modules/three/examples/jsm/libs/dat.gui.module.js"
-import {SelectionBox} from "../node_modules/three/examples/jsm/interactive/SelectionBox.js";
-import {SelectionHelper} from "../node_modules/three/examples/jsm/interactive/SelectionHelper.js";
+import * as THREE from "../lib/threejs/build/three.module.js";
+import {OrbitControls} from "../lib/threejs/examples/jsm/controls/OrbitControls.js";
+import {FBXLoader} from "../lib/threejs/examples/jsm/loaders/FBXLoader.js";
+import {EffectComposer} from "../lib/threejs/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "../lib/threejs/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "../lib/threejs/examples/jsm/postprocessing/ShaderPass.js";
+import {OutlinePass} from "../lib/threejs/examples/jsm/postprocessing/OutlinePass.js";
+import {FXAAShader} from "../lib/threejs/examples/jsm/shaders/FXAAShader.js";
+import {GUI} from "../lib/threejs/examples/jsm/libs/dat.gui.module.js"
+import {SelectionBox} from "../lib/threejs/examples/jsm/interactive/SelectionBox.js";
+import {SelectionHelper} from "../lib/threejs/examples/jsm/interactive/SelectionHelper.js";
 
 // global variable declarations
 
@@ -873,77 +873,79 @@ function DownloadScene()
 	saveData(save, filename.replace(/\..+$/, '') + ".json");
 }
 
+
+// UNUSED
 // load data from json
-async function LoadData(j = "default")
-{
-	//const response = await fetch(url);
-	const out = await FetchData(j);
-
-	if(out)
-	{
-		// get floorplan file name
-		filename = j;
-		// clear existing data
-		for (var i = 0; i < LightArray.length; ++i)
-		{
-			// find and remove object from scene
-			LightArray[i].parent.remove(LightArray[i]);
-		}
-		LightArray = [];
-
-		// add lights to scene
-		for (var i = 0; i < out.lightdata.length; ++i)
-		{
-			AddLight(out.lightdata[i].name, out.lightdata[i].pos);
-		}
-
-		// add plane
-		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + filename);
-		var planeMat = new THREE.MeshLambertMaterial({map: texture});
-		displayPlane = new THREE.Mesh(plane, planeMat);
-		displayPlane.receiveShadow = true;
-		displayPlane.rotateX(Rad(-90));
-		displayPlane.scale.x = 100;
-		displayPlane.scale.y = 71;
-		displayPlane.scale.z = 71;
-		PlaneArray.push(displayPlane);
-		scene.add(displayPlane);
-	}
-	else
-	{
-		console.log("failed to load data");
-	}
-}
-
+//async function LoadData(j = "default")
+//{
+//	//const response = await fetch(url);
+//	const out = await FetchData(j);
+//
+//	if(out)
+//	{
+//		// get floorplan file name
+//		filename = j;
+//		// clear existing data
+//		for (var i = 0; i < LightArray.length; ++i)
+//		{
+//			// find and remove object from scene
+//			LightArray[i].parent.remove(LightArray[i]);
+//		}
+//		LightArray = [];
+//
+//		// add lights to scene
+//		for (var i = 0; i < out.lightdata.length; ++i)
+//		{
+//			AddLight(out.lightdata[i].name, out.lightdata[i].pos);
+//		}
+//
+//		// add plane
+//		var texture = new THREE.TextureLoader().load(serverAddress + "resources/" + filename);
+//		var planeMat = new THREE.MeshLambertMaterial({map: texture});
+//		displayPlane = new THREE.Mesh(plane, planeMat);
+//		displayPlane.receiveShadow = true;
+//		displayPlane.rotateX(Rad(-90));
+//		displayPlane.scale.x = 100;
+//		displayPlane.scale.y = 71;
+//		displayPlane.scale.z = 71;
+//		PlaneArray.push(displayPlane);
+//		scene.add(displayPlane);
+//	}
+//	else
+//	{
+//		console.log("failed to load data");
+//	}
+//}
+// UNUSED
 // save data to json
-function DownloadData()
-{
-	var saveData = (function () 
-	{
-		var a = document.createElement("a");
-		document.body.appendChild(a);
-		a.style = "display: none";
-		return function (data, fileName) {
-			var json = JSON.stringify(data, null, 2),
-				blob = new Blob([json], {type: "octet/stream"}),
-				url = window.URL.createObjectURL(blob);
-			a.href = url;
-			a.download = fileName;
-			a.click();
-			window.URL.revokeObjectURL(url);
-		};
-	}());
-	
-	SaveLightData();
-	
-	var save = 
-	{
-		floorplan: filename,
-		lightdata: LightData
-	}
-
-	saveData(save, filename.replace(/\..+$/, '') + ".json");
-}
+//function DownloadData()
+//{
+//	var saveData = (function () 
+//	{
+//		var a = document.createElement("a");
+//		document.body.appendChild(a);
+//		a.style = "display: none";
+//		return function (data, fileName) {
+//			var json = JSON.stringify(data, null, 2),
+//				blob = new Blob([json], {type: "octet/stream"}),
+//				url = window.URL.createObjectURL(blob);
+//			a.href = url;
+//			a.download = fileName;
+//			a.click();
+//			window.URL.revokeObjectURL(url);
+//		};
+//	}());
+//	
+//	SaveLightData();
+//	
+//	var save = 
+//	{
+//		floorplan: filename,
+//		lightdata: LightData
+//	}
+//
+//	saveData(save, filename.replace(/\..+$/, '') + ".json");
+//}
 
 // convert degrees to radians
 function Rad(deg)
@@ -954,7 +956,7 @@ function Rad(deg)
 function main()
 {
 	// specify server address
-	serverAddress = "http://10.1.11.197:8080/";
+	serverAddress = "http://10.1.11.197:8080/viewer/";
 
 	// scene init
 	InitThreeJs();
