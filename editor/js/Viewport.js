@@ -5,6 +5,7 @@ import { TransformControls } from '../../lib/threejs/examples/jsm/controls/Trans
 import { UIPanel } from './libs/ui.js';
 
 import { EditorControls } from './EditorControls.js';
+import { OrbitControls } from "../../lib/threejs/examples/jsm/controls/OrbitControls.js"
 
 import { ViewportCamera } from './Viewport.Camera.js';
 import { ViewportInfo } from './Viewport.Info.js';
@@ -279,7 +280,12 @@ function Viewport( editor ) {
 	// controls need to be added *after* main logic,
 	// otherwise controls.enabled doesn't work.
 
+	//var controls = new OrbitControls( camera, container.dom );
+	//controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
+
 	var controls = new EditorControls( camera, container.dom );
+	controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
+
 	controls.addEventListener( 'change', function () {
 
 		signals.cameraChanged.dispatch( camera );

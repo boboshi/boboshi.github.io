@@ -8,5 +8,6 @@ additional features???
 - add three.js editor in separate file
     - modifications needed
         - create default loaded scene
-        - modify controls to be consistent with viewer
-        - remove examples tab
+
+scale: 0.35, 0.35, 0.35
+pos: ?, 0, ?

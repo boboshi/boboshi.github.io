@@ -170,7 +170,23 @@ function EditorControls( object, domElement ) {
 
 	function onMouseDown( event ) {
 
-		if ( event.button === 0 ) {
+		// ORIGINAL
+		//if ( event.button === 0 ) {
+		//
+		//	state = STATE.ROTATE;
+		//
+		//} else if ( event.button === 1 ) {
+		//
+		//	state = STATE.ZOOM;
+		//
+		//} else if ( event.button === 2 ) {
+		//
+		//	state = STATE.PAN;
+		//
+		//}
+
+		// EDITED
+		if ( event.button === 2 ) {
 
 			state = STATE.ROTATE;
 
@@ -178,7 +194,7 @@ function EditorControls( object, domElement ) {
 
 			state = STATE.ZOOM;
 
-		} else if ( event.button === 2 ) {
+		} else if ( event.button === 0 ) {
 
 			state = STATE.PAN;
 
