@@ -7,8 +7,7 @@ additional features???
 - search function for light name (id)
 - add three.js editor in separate file
     - modifications needed
-        - create default loaded scene
+        - allow for scaling and resizing of canvas
 
 scale: 0.35, 0.35, 0.35
 pos: ?, 0, ?
-menubar.file.js - import section

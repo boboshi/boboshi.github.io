@@ -65,26 +65,6 @@
 
 			};
 
-			async function createFile(){
-  				let response = await fetch('http://10.1.11.197:8080/default.json');
-  				let data = await response.blob();
-  				let metadata = {
-    				type: 'data/json'
-  				};
-				let file = new File([data], "default.json", metadata);
-				console.log(file);  
-				return file;
-			}
-
-			var FUCK = createFile();
-
-			function whatthefuck()
-			{
-				console.log(FUCK);
-			}
-
-			setTimeout(whatthefuck, 10000);
-
 			//
 			window.localStorage.clear();
 			var editor = new Editor();
@@ -261,6 +241,21 @@
 				}
 
 			}
+
+			const qwe = new THREE.ObjectLoader();
+
+			qwe.load(
+				"http://10.1.11.197:8080/default.json",
+				function ( obj ) 
+				{
+					editor.addObject( obj );
+				},
+				function ( xhr ) {},
+				function ( err ) 
+				{
+					console.error( 'An error happened' );
+				}
+			);
 
 		</script>
 	</body>
