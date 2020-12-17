@@ -1,17 +1,17 @@
-additional features???
+viewer
 - save previous camera location and orientation?
 - make the data display more pretty?
 - code refactoring (all the time)
 - optimise program, pretty intense after leaving it for awhile
 - change light model (find a free model for this)
 - search function for light name (id)
-- add three.js editor in separate file
-    - modifications needed
-        - allow for scaling and resizing of canvas
-        - add light object function
 
+editor
+- allow for scaling and resizing of canvas
+- add light object function
+
+light
 scale: 0.35, 0.35, 0.35
-pos: ?, 0, ?
 
 to resize entire canvas:
 - reposition and scale the toolbars and viewport individually

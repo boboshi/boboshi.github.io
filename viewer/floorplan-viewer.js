@@ -828,19 +828,22 @@ async function LoadScene(s = "default")
 		{
 			scene.remove(scene.children[0]);
 		}
-		sceneloader.load(serverAddress + "/resources/" + s + ".json", function(object) 
-		{
-			scene.add(object);
-		});
 
 		// clear existing data
 		for (var i = 0; i < LightArray.length; ++i)
 		{
 			// find and remove object from scene
-			LightArray[i].parent.remove(LightArray[i]);
+			if(LightArray[i].parent)
+				LightArray[i].parent.remove(LightArray[i]);
 		}
 		LightArray = [];
 		PlaneArray = [];
+
+		// add objects from json
+		sceneloader.load(serverAddress + "/resources/" + s + ".json", function(object) 
+		{
+			scene.add(object);
+		});
 	}
 	else
 	{

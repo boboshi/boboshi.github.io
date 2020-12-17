@@ -39,6 +39,28 @@ function MenubarAdd( editor ) {
 
 	options.add( new UIHorizontalRule() );
 
+	// Light
+
+	var option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/add/light' ) );
+	option.onClick( function() {
+
+		// create sphere
+		var geometry = new THREE.SphereBufferGeometry();
+		var mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial ({color:0x808080}));
+		mesh.name = 'Light';
+		mesh.scale.x = 0.35;
+		mesh.scale.y = 0.35;
+		mesh.scale.z = 0.35;
+
+		// initialise userData
+		mesh.userData = {name: "lightobject", selected: false, lastheard: "test", status: 1, pvm: 0};
+		editor.execute(new AddObjectCommand(editor, mesh));
+
+	} );
+	options.add( option );
+
 	// Box
 
 	var option = new UIRow();
