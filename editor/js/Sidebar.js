@@ -14,7 +14,13 @@ function Sidebar( editor ) {
 
 	var container = new UITabbedPanel();
 	container.setId( 'sidebar' );
-
+	// setBorderTop
+	// setPaddingTop
+	// setPaddingBottom
+	// setLeft
+	// setBottom
+	// setPosition??
+	//container.setLeft("100px");
 	var scene = new UISpan().add(
 		new SidebarScene( editor ),
 		new SidebarProperties( editor ),
