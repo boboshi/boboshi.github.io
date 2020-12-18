@@ -301,12 +301,30 @@ function InitGUI()
 	textgui = new GUI();
 	buttongui = new GUI();
 
-	// search field gui
-	const param = { "Search": ""};
-	searchgui.add(param, "Search").onChange(function(value)
-	{
-		var findlight = FindLight(value);
-	});
+	//// search field gui
+	//const param = { "Search": ""};
+	//searchgui.add(param, "Search").onFinishChange(function(value)
+	//{
+	//	// find and select light
+	//	var light = FindLight(value);
+	//	// deselect any current lights
+	//	selectedlights = [];
+	//	ClearDisplayLightData();
+	//	outlinePass.selectedObjects = [];
+	//	// select light
+	//	if (light)
+	//	{
+	//		selectedlights.push(light);
+	//		outlinePass.selectedObjects = [light];
+	//		buttongui.closed = false;
+	//	}
+	//	else
+	//	{
+	//		console.log("light not found");
+	//		error.innerHTML = "Error: light not found";
+	//	}
+//
+	//});
 
 	searchgui.domElement.style.position = "absolute";
 	searchgui.domElement.style.top = offsety + "px";

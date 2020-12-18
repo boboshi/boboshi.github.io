@@ -11,3 +11,5 @@ editor
 
 to resize entire canvas:
 - reposition and scale the toolbars and viewport individually
+
+fix search field and focus issues
