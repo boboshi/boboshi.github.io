@@ -49,7 +49,7 @@ var addMode = false;
 // text display
 var text, error;
 // gui for id modification
-var textgui, buttongui;
+var searchgui, textgui, buttongui;
 var currname = "";
 
 // class for holding light object properties
@@ -297,21 +297,33 @@ function InitTextDisplay()
 // initialise gui
 function InitGUI()
 {
+	searchgui = new GUI();
 	textgui = new GUI();
 	buttongui = new GUI();
 
-	// input field gui
-	const params = 
+	// search field gui
+	const param = { "Search": ""};
+	searchgui.add(param, "Search").onChange(function(value)
 	{
-		"Change Name": ""
-	}
+		var findlight = FindLight(value);
+	});
+
+	searchgui.domElement.style.position = "absolute";
+	searchgui.domElement.style.top = offsety + "px";
+	searchgui.domElement.style.right = "0px";
+
+	// search closed by default
+	searchgui.closed = true;
+
+	// input field gui
+	const params = {"Change Name": ""};
 	textgui.add(params, "Change Name").onChange(function(value)
 	{
 		currname = value;
 	});
 
 	textgui.domElement.style.position = "absolute";
-	textgui.domElement.style.top = offsety + "px";
+	textgui.domElement.style.top = offsety + 45 + "px";
 	textgui.domElement.style.right = "0px";
 
 	// input closed by default
@@ -327,7 +339,7 @@ function InitGUI()
 	buttongui.add(normalbutton,"NORMAL");
 
 	buttongui.domElement.style.position = "absolute";
-	buttongui.domElement.style.top = offsety + 45 + "px";
+	buttongui.domElement.style.top = offsety + 90 + "px";
 	buttongui.domElement.style.right = "0px";
 
 	// buttons closed by default
