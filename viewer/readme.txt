@@ -18,8 +18,8 @@ LMB - add light
 RMB - remove light
 
 S - save and download data
-D - load c1basement1
-F - load c1basement2
+Q - load c1basement1
+W - load c1basement2
 C - reset camera
 LCTRL + Space - toggle add/view mode
 

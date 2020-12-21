@@ -4,12 +4,9 @@ viewer
 - code refactoring (all the time)
 - optimise program, pretty intense after leaving it for awhile
 - change light model (find a free model for this)
-- search function for light name (id)
 
 editor
 - allow for scaling and resizing of canvas
 
 to resize entire canvas:
 - reposition and scale the toolbars and viewport individually
-
-fix search field and focus issues

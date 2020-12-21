@@ -44,8 +44,6 @@ var filename = "";
 var LightData = [];
 // plane to display floorplan on
 var displayPlane;
-// bool for add/view mode
-var addMode = false;
 // text display
 var text, error;
 // gui for id modification
@@ -143,7 +141,7 @@ function InitCameraControls()
 	// event listener to disable right click context menu
 	document.addEventListener("contextmenu", onContextMenu, false);
 
-	// event listeners to track mouse clicks (pointerup because of orbicontrols)
+	// event listeners to track mouse clicks (pointerup because of orbitcontrols)
 	renderer.domElement.addEventListener("pointerup", onDocumentMouseUp, false);
 	renderer.domElement.addEventListener("pointerdown", onDocumentMouseDown, false);
 
@@ -301,30 +299,35 @@ function InitGUI()
 	textgui = new GUI();
 	buttongui = new GUI();
 
-	//// search field gui
-	//const param = { "Search": ""};
-	//searchgui.add(param, "Search").onFinishChange(function(value)
-	//{
-	//	// find and select light
-	//	var light = FindLight(value);
-	//	// deselect any current lights
-	//	selectedlights = [];
-	//	ClearDisplayLightData();
-	//	outlinePass.selectedObjects = [];
-	//	// select light
-	//	if (light)
-	//	{
-	//		selectedlights.push(light);
-	//		outlinePass.selectedObjects = [light];
-	//		buttongui.closed = false;
-	//	}
-	//	else
-	//	{
-	//		console.log("light not found");
-	//		error.innerHTML = "Error: light not found";
-	//	}
-//
-	//});
+	// search field gui
+	const param = { "Search": ""};
+	searchgui.add(param, "Search").onFinishChange(function(value)
+	{
+		// find and select light
+		var light = FindLight(value);
+		// deselect any current lights
+		selectedlights = [];
+		ClearDisplayLightData();
+		outlinePass.selectedObjects = [];
+		// select light
+		if (light)
+		{
+			selectedlights = [light.userData.name];
+			MoveToLight(light.userData.name);
+			buttongui.closed = false;
+			buttongui.show();
+
+			DisplayLightData(light.userData.name);
+		}
+		else
+		{
+			console.log("light not found");
+			error.innerHTML = "Error: light not found";
+		}
+
+		searchgui.closed = true;
+		searchgui.hide();
+	});
 
 	searchgui.domElement.style.position = "absolute";
 	searchgui.domElement.style.top = offsety + "px";
@@ -332,20 +335,21 @@ function InitGUI()
 
 	// search closed by default
 	searchgui.closed = true;
+	searchgui.hide();
 
 	// input field gui
-	const params = {"Change Name": ""};
-	textgui.add(params, "Change Name").onChange(function(value)
+	const params = {"Light Name": ""};
+	textgui.add(params, "Light Name").onChange(function(value)
 	{
 		currname = value;
 	});
 
 	textgui.domElement.style.position = "absolute";
-	textgui.domElement.style.top = offsety + 45 + "px";
 	textgui.domElement.style.right = "0px";
 
 	// input closed by default
 	textgui.closed = true;
+	textgui.hide();
 
 	// button gui
 	var offbutton = { OFF:function(){ SetSelectedLightStatus(selectedlights, STATUS.OFF) }};
@@ -357,11 +361,11 @@ function InitGUI()
 	buttongui.add(normalbutton,"NORMAL");
 
 	buttongui.domElement.style.position = "absolute";
-	buttongui.domElement.style.top = offsety + 90 + "px";
 	buttongui.domElement.style.right = "0px";
 
 	// buttons closed by default
 	buttongui.closed = true;
+	buttongui.hide();
 }
 
 // event handlers
@@ -386,8 +390,12 @@ function onDocumentMouseUp(event)
 			)
 
 			// deselect light if left clicked in view mode
-			if (!addMode && Lmouseup && (selectedlights.length > 0) && !selectedStart)
+			if (textgui.closed && Lmouseup && (selectedlights.length > 0) && !selectedStart)
 			{
+				var tmp = FindLight(selectedlights[0]);
+				tmp.userData.selected = false;
+				searchgui.closed = true;
+				searchgui.hide();
 				selectedlights = [];
 				ClearDisplayLightData();
 				outlinePass.selectedObjects = [];
@@ -397,11 +405,17 @@ function onDocumentMouseUp(event)
 			{
 				selectedStart = false;
 				if (selectedlights.length > 0)
+				{
 					buttongui.closed = false;
+					buttongui.show();
+				}
 			}
 			else
 			{
+				searchgui.closed = true;
 				buttongui.closed = true;
+				searchgui.hide();
+				buttongui.hide();
 			}
 		// rmb
 		case 3:
@@ -448,6 +462,14 @@ function onDocumentMouseDown(event)
 // key events
 function onKeyDown(event)
 {
+	// disable ctrl f and use my own
+	if (textgui.closed && (event.code == "F3" || (event.ctrlKey && event.code == "KeyF")))
+	{
+		event.preventDefault();
+
+		ToggleSearch();
+	}
+
 	switch(event.code)
 	{
 		case "ControlLeft":
@@ -473,29 +495,27 @@ function onKeyUp(event)
 			if (toggle)
 			{
 				toggle = false;
-				addMode = !addMode;
-				ghost.visible = !ghost.visible;
-				textgui.closed = !addMode;
+				ToggleAdd();
 			}
 			break;
 		case "KeyS":
 			// save into json and download
-			if (!addMode)
+			if (textgui.closed && searchgui.closed)
 				DownloadScene();
 				//DownloadData();
 			break;
-		case "KeyD":
+		case "KeyQ":
 			// load c1basement1
-			if (!addMode)
+			if (textgui.closed && searchgui.closed)
 				LoadScene("c1basement1");
 			break;
-		case "KeyF":
+		case "KeyW":
 			// load c1basement2
-			if (!addMode)
+			if (textgui.closed && searchgui.closed)
 				LoadScene("c1basement2");
 			break;
 		case "KeyC":
-			if (!addMode)
+			if (textgui.closed && searchgui.closed)
 				ResetCamera();
 			break;
 		case "ControlLeft":
@@ -576,6 +596,46 @@ const translucentMat = new THREE.MeshPhongMaterial(
 		transparent: true,
 		side: THREE.DoubleSide,
 	});
+
+// toggle search input field
+function ToggleSearch()
+{
+	searchgui.closed = !searchgui.closed;
+	if (!searchgui.closed)
+	{
+		searchgui.show();
+		textgui.closed = true;
+		textgui.hide();
+		buttongui.closed = true;
+		buttongui.hide();
+		text.innerHTML = "";
+	}
+	else
+	{
+		searchgui.hide();
+	}
+}
+
+// toggle light name input field
+function ToggleAdd()
+{
+	textgui.closed = !textgui.closed;
+	if (!textgui.closed)
+	{
+		textgui.show();
+		searchgui.closed = true;
+		searchgui.hide();
+		buttongui.closed = true;
+		buttongui.hide();
+		text.innerHTML = "";
+	}
+	else
+	{
+		textgui.hide();
+	}
+
+	ghost.visible = !textgui.closed;
+}
 
 // reset camera
 function ResetCamera()
@@ -1032,16 +1092,24 @@ function drawScene()
 
 	// keeps focus on input field for light name
 	var tmp = document.getElementsByTagName("INPUT");
-	if (addMode)
-		tmp[0].focus();
-	else
+	// 0 - search
+	// 1 - input
+	if (!textgui.closed)
+	{
+		tmp[1].focus();
 		tmp[0].blur();
+	}
+	else if (!searchgui.closed)
+	{
+		tmp[1].blur();
+		tmp[0].focus();
+	}
 
 	// intersection checks for picking
 	raycaster.setFromCamera(mouse, camera);
 	
 	// disable orbitcontrols if viewing
-	controls.enabled = !addMode;
+	controls.enabled = textgui.closed;
 
 	const intersects = raycaster.intersectObjects(LightArray);
 	const planeintersects = raycaster.intersectObjects(PlaneArray);
@@ -1073,7 +1141,7 @@ function drawScene()
 			{	
 				// don't have to set lmouseup to false, done at end of loop
 				// check if in view mode
-				if(!addMode)
+				if(textgui.closed)
 				{
 					// if single selection
 					if (!selectedStart && selectedlights.length == 0)
@@ -1083,6 +1151,7 @@ function drawScene()
 						MoveToLight(LIGHTINTERSECTED.userData.name);
 					}
 					buttongui.closed = false;
+					buttongui.show();
 				}
 			}
 			
@@ -1090,7 +1159,7 @@ function drawScene()
 			if(Rmouseup)
 			{
 				// check if in add mode
-				if(addMode)
+				if(!textgui.closed)
 				{
 					RemoveLight(LIGHTINTERSECTED.userData.name);
 				}
@@ -1115,7 +1184,7 @@ function drawScene()
 	}
 	
 	// plane
-	if(addMode)
+	if(!textgui.closed)
 	{
 		if(planeintersects.length > 0)
 		{
@@ -1138,7 +1207,7 @@ function drawScene()
 				}
 
 				// update "ghost" sphere
-				if (addMode)
+				if (!textgui.closed)
 				{
 					ghost.position.x = planeintersects[0].point.x;
 					ghost.position.y = planeintersects[0].point.y;
