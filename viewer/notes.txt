@@ -10,3 +10,24 @@ editor
 
 to resize entire canvas:
 - reposition and scale the toolbars and viewport individually
+
+#0 LMS new UI revamp <- you may start working on this with a suitable front-end web-app 
+   language/architecture you are comfortable with (I recommend react)
+
+You may ask Viola for any missing resources that you may need in the development
+
+#1 Edit light page 
+
+#2 Configuration feature – individual feature configure 
+
+#3 Grouping feature – to group the selected lights 
+
+#4 OTA feature – update light’s firmware (progress, firmware check, etc.) 
+
+ 
+Up to your design, these could be multiple pages or a single web page.
+
+You may find some references and come up with some preliminary front-end UI simulation for 
+the above, as firmware/backend are not available yet.
+
+Thereafter, we may find Viola (our design manager) for UI/UX improvements.
