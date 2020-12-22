@@ -19,7 +19,7 @@ var width, height;
 // server address
 var serverAddress;
 // three.js basic functionality
-var scene, camera, controls, renderer, canvas, offsetx, offsety;
+var scene, camera, controls, renderer, canvas, offsetx, offsety, minPan, maxPan, v;
 // model loader and scene loader
 let fbxloader, sceneloader;
 // outline effect use
@@ -88,51 +88,126 @@ class ThreeJsScene extends Component
         // define dimensions
         width = this.mount.clientWidth;
         height = this.mount.clientHeight;
+        console.log(width, height);
+        // init scene to grey/silver colour
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xC0C0C0);
+        // args: fov, aspect ratio, near plane, far plane
+        camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
+        // initial settings
+        camera.position.y = 2;
+        camera.position.z = 10;
+        // init renderer
+        renderer = new THREE.WebGL1Renderer({antialias: true});
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        // event listener to track window resize
+        window.addEventListener("resize", this.onWindowResize);
+        //window.addEventListener("resize", function()
+        //{
+        //    console.log(width, height);
+        //
+        //    width = this.mount.clientWidth;
+        //    height = this.mount.clientHeight;
+        //    camera.aspect = width / height;
+        //    camera.updateProjectionMatrix();
+        //    renderer.setSize(width, height);
+        //
+        //    console.log(width, height);
+        //}, false);
+        // add renderer to page
+        this.mount.appendChild(renderer.domElement);
 
-		scene = new THREE.Scene();
-		camera = new THREE.PerspectiveCamera( 75, width/height, 0.1, 1000 );
-		renderer = new THREE.WebGLRenderer();
-		renderer.setSize(width, height);
-		this.mount.appendChild(renderer.domElement);
+        // add test cube
 		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 		cube = new THREE.Mesh( geometry, material );
 		scene.add( cube );
-		camera.position.z = 5;
+    }
+
+    InitCameraControls()
+    {
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.mouseButtons ={LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE};
+        controls.enableDamping = false;
+        //controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 0.5;
+        controls.screenSpacePanning = false;
+        controls.maxPolarAngle = this.Rad(86);
+        // camera initial facing
+        controls.target.set(0.0, 0.0, 0.0);
+        camera.position.set(0.0, 45.4, 0.0);
+        controls.update();
+        // limit camera panning
+        minPan = new THREE.Vector3(-40.0, -40.0, -20.0);
+        maxPan = new THREE.Vector3(40.0, 40.0, 20.0);
+        v= new THREE.Vector3();
+        // limit camera zoom
+        controls.minDistance = 5.0;
+        controls.maxDistance = 45.4;
+        // event listener to limit camera panning
+        controls.addEventListener("change", function()
+        {
+            v.copy(controls.target);
+            controls.target.clamp(minPan, maxPan);
+            v.sub(controls.target);
+            camera.position.sub(v);
+        });
+    }
+
+    // helper functions
+
+    // convert degrees to radians
+    Rad(deg)
+    {
+	    return deg * Math.PI / 180;
     }
 
     // "main"
 	componentDidMount() 
 	{
-        this.InitThreeJs();
-		//var controls = new OrbitControls(camera, renderer.domElement);
+        // define server address
+        serverAddress = "http://10.1.11.197:8080/";
 
-    	var animate = function () {
-    	  	requestAnimationFrame( animate );
+        // scene init
+        this.InitThreeJs();
+        this.InitCameraControls();
+
+        // render loop
+        var DrawScene = function () 
+        {
+    	  	requestAnimationFrame( DrawScene );
     	  	cube.rotation.x += 0.01;
     	  	cube.rotation.y += 0.01;
     	  	renderer.render( scene, camera );
     	};
-		animate();
-		
-		// end main
-  	}
+		DrawScene();
+    }
+
+    // cleanup
+    componentWillUnmount()
+    {
+        window.removeEventListener("resize", this.onWindowResize);
+    }
+
+    // event handlers
+    onWindowResize()
+    {
+        console.log(window.clientWidth, window.clientHeight);
+    }
+
+    // canvas size
     render() 
     {
 	    return (<div 
             style={{ 
                 position: "absolute", 
-                width: "100%", height: "100%",
-                //left: "200px", top: "200px" 
+                width: "70%", height: "70%",
+                left: "200px", top: "100px" 
             }}
 	        ref={mount => { this.mount = mount}}
 	    />)
 	}
-	  //render() {
-	//	return (
-	//	  <div ref={ref => (this.mount = ref)} />
-	//	)
-	  //}
 }
 
 export default ThreeJsScene;

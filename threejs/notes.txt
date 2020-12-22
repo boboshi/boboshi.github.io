@@ -31,3 +31,6 @@ You may find some references and come up with some preliminary front-end UI simu
 the above, as firmware/backend are not available yet.
 
 Thereafter, we may find Viola (our design manager) for UI/UX improvements.
+
+TODO
+get eventlisteners working with react
