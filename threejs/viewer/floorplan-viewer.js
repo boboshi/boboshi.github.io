@@ -466,7 +466,6 @@ function onKeyDown(event)
 	if (textgui.closed && (event.code == "F3" || (event.ctrlKey && event.code == "KeyF")))
 	{
 		event.preventDefault();
-
 		ToggleSearch();
 	}
 
