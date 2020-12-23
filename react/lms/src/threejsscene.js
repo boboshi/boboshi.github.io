@@ -19,7 +19,7 @@ var width, height, widthscale, heightscale;
 // server address
 var serverAddress;
 // three.js basic functionality
-var scene, camera, controls, renderer, offsetx, offsety, minPan, maxPan, v;
+var scene, camera, controls, renderer, minPan, maxPan, v;
 // model loader and scene loader
 let fbxloader, sceneloader;
 // outline effect use
@@ -27,7 +27,7 @@ let composer, renderPass, outlinePass, effectFXAA;
 // basic geometry shapes
 let box, sphere, grid, plane;
 // raycasting and picking
-let mouse, mouseradius, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
+let mouse, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
 var LCTRLdown = false;
 var toggle = false;
 var Lmouseup = false;
@@ -43,12 +43,10 @@ var PlaneArray = [];
 var filename = "";
 // array of lights to be saved/loaded
 var LightData = [];
-// plane to display floorplan on
-var displayPlane;
 // text display
 var text, error;
 // gui for id modification
-var searchgui, textgui, buttongui, currsearch;
+var searchgui, textgui, buttongui, currsearch, changestatus;
 var currname = "";
 
 // class for holding light object properties
@@ -71,10 +69,10 @@ const STATUS =
 
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
-const RED = 0xFF0000;
+//const RED = 0xFF0000;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
-const YELLOW = 0xF8FF33;
+//const YELLOW = 0xF8FF33;
 const GREY = 0x808080;
 
 // translucent material
@@ -134,12 +132,6 @@ class ThreeJsScene extends Component
         window.addEventListener("resize", this.onWindowResize, false);
         // add renderer to page
         this.mount.appendChild(renderer.domElement);
-
-        // add test cube
-		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-		cube = new THREE.Mesh( geometry, material );
-		scene.add( cube );
     }
     // camera controls
     InitCameraControls()
@@ -249,7 +241,6 @@ class ThreeJsScene extends Component
     InitPicking()
     {
         mouse = new THREE.Vector2();
-        mouseradius = 100;
         raycaster = new THREE.Raycaster();
     
         // create "ghost" sphere for placing lights
@@ -291,8 +282,8 @@ class ThreeJsScene extends Component
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
-	    text.style.top = offsety + "px";
-	    text.style.left = offsetx + "px";
+	    text.style.top = "0px";
+	    text.style.left = "0px";
 	    text.style.fontSize = 30 + "px";
 	    text.style.fontFamily = "Calibri";
 	    text.style.display = "none";
@@ -304,8 +295,8 @@ class ThreeJsScene extends Component
 	    error.style.backgroundColor = "black";
 	    error.style.color = "white";
 	    error.innerHTML = "";
-	    error.style.bottom = offsety + "px";
-	    error.style.left = offsetx + "px";
+	    error.style.bottom = "0px";
+	    error.style.left = "0px";
 	    error.style.fontSize = 30 + "px";
 	    error.style.fontFamily = "Calibri";
 	    document.body.appendChild(error);
@@ -319,11 +310,10 @@ class ThreeJsScene extends Component
 
     	// search field gui
     	const param = {"Search": ""};
-    	//searchgui.add(param, "Search").onFinishChange(this.SearchGUIHelper.bind(this));
     	searchgui.add(param, "Search").onFinishChange(function(value){currsearch = value});
 
     	searchgui.domElement.style.position = "absolute";
-    	searchgui.domElement.style.top = offsety + "px";
+        searchgui.domElement.style.top = "0px";
     	searchgui.domElement.style.right = "0px";
 
     	// search closed by default
@@ -338,22 +328,24 @@ class ThreeJsScene extends Component
     	});
 
     	textgui.domElement.style.position = "absolute";
+        textgui.domElement.style.top = "0px";
     	textgui.domElement.style.right = "0px";
 
     	// input closed by default
     	textgui.closed = true;
     	textgui.hide();
 
-    	// button gui
-    	var offbutton = { OFF:function(){ this.SetSelectedLightStatus(selectedlights, STATUS.OFF) }};
-    	var onbutton = { ON:function(){ this.SetSelectedLightStatus(selectedlights, STATUS.ON) }};
-    	var normalbutton = { NORMAL:function(){ this.SetSelectedLightStatus(selectedlights, STATUS.NORMAL) }};
+    	// button gui        
+        var offbutton = {OFF:function(){changestatus = STATUS.OFF;}};
+        var onbutton = {ON:function(){changestatus = STATUS.ON;}};
+        var normalbutton = {NORMAL:function(){changestatus = STATUS.NORMAL;}};
 
     	buttongui.add(offbutton,"OFF");
     	buttongui.add(onbutton,"ON");
     	buttongui.add(normalbutton,"NORMAL");
 
-    	buttongui.domElement.style.position = "absolute";
+        buttongui.domElement.style.position = "absolute";
+        buttongui.domElement.style.top = "0px";
     	buttongui.domElement.style.right = "0px";
 
     	// buttons closed by default
@@ -774,11 +766,20 @@ class ThreeJsScene extends Component
         requestAnimationFrame(this.DrawScene);
         // update light data
         this.LightArrayUpdate();
+
+        // searchgui helper 
         if (currsearch)
         {
             this.SearchGUIHelper(currsearch);
             currsearch = null;
         }
+        
+        if (changestatus)
+        {
+            this.SetSelectedLightStatus(selectedlights, changestatus);
+            changestatus = null;
+        }
+
         // keeps focus on input field for light name
         var tmp = document.getElementsByTagName("INPUT");
         // 0 - search
@@ -976,11 +977,14 @@ class ThreeJsScene extends Component
             case 1:
                 Lmouseup = true;
                 controls.enableRotate = true;
-    
+
+                var offsetx = renderer.domElement.getBoundingClientRect().left;
+                var offsety = renderer.domElement.getBoundingClientRect().top;
+
                 selectionBox.endPoint.set
                 (
-                     (event.clientX / width) * 2 - 1,
-                    -(event.clientY / height) * 2 + 1,
+                     ((event.clientX - offsetx) / width) * 2 - 1,
+                    -((event.clientY - offsety) / height) * 2 + 1,
                      0.5
                 )
     
@@ -1034,11 +1038,14 @@ class ThreeJsScene extends Component
                     selectedStart = true;
                     selectedlights = [];
                     outlinePass.selectedObjects = [];
-    
+                    
+                    var offsetx = renderer.domElement.getBoundingClientRect().left;
+                    var offsety = renderer.domElement.getBoundingClientRect().top;
+
                     selectionBox.startPoint.set
                     (
-                         (event.clientX / width) * 2 - 1,
-                        -(event.clientY / height) * 2 + 1,
+                         ((event.clientX - offsetx) / width) * 2 - 1,
+                        -((event.clientY - offsety) / height) * 2 + 1,
                          0.5
                     );
                 }
@@ -1127,16 +1134,19 @@ class ThreeJsScene extends Component
     {
         event.preventDefault();
         
+        var offsetx = renderer.domElement.getBoundingClientRect().left;
+        var offsety = renderer.domElement.getBoundingClientRect().top;
+
         mouse.x =  ((event.clientX - offsetx) / width) * 2 - 1;
-        mouse.y = -((event.clientY - offsetx) / height) * 2 + 1;
-        
+        mouse.y = -((event.clientY - offsety) / height) * 2 + 1;
+
         // selection
         if (selectionBoxHelper.isDown && LCTRLdown)
         {
             selectionBox.endPoint.set
             (
-                 (event.clientX / width) * 2 - 1,
-                -(event.clientY / height) * 2 + 1,
+                 ((event.clientX - offsetx) / width) * 2 - 1,
+                -((event.clientY - offsety) / height) * 2 + 1,
                 0.5 
             );
     

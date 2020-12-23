@@ -33,4 +33,8 @@ the above, as firmware/backend are not available yet.
 Thereafter, we may find Viola (our design manager) for UI/UX improvements.
 
 TODO
-get eventlisteners working with react
+things broken so far
+- positions of gui and text ui
+
+features to add under edit light page
+- grouping
