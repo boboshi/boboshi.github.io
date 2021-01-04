@@ -698,7 +698,7 @@ class ThreeJsScene extends Component
     		PlaneArray = [];
 
     		// add objects from json
-    		sceneloader.load(serverAddress + "/resources/" + s + ".json", function(object) 
+    		sceneloader.load(serverAddress + "resources/" + s + ".json", function(object) 
     		{
     			scene.add(object);
     		});
