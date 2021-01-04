@@ -3,7 +3,7 @@ viewer
 - make the data display more pretty?
 - code refactoring (all the time)
 - optimise program, pretty intense after leaving it for awhile
-- change light model (find a free model for this)
+- change light model?
 
 editor
 - allow for scaling and resizing of canvas
@@ -37,4 +37,11 @@ things broken so far
 - positions of gui and text ui
 
 features to add under edit light page
-- grouping
+- add gui for changing groupid
+
+ACTUAL TODO:
+add lightdisplay contents
+commands
+- dim led 
+- set config
+- firmware update

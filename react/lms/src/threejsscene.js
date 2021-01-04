@@ -39,6 +39,8 @@ var selectionBox, selectionBoxHelper;
 // arrays used for raycasting and picking
 var LightArray = [];
 var PlaneArray = [];
+// grouping
+
 // filename
 var filename = "";
 // array of lights to be saved/loaded
@@ -46,25 +48,15 @@ var LightData = [];
 // text display
 var text, error;
 // gui for id modification
-var searchgui, textgui, buttongui, currsearch, changestatus;
+var searchgui, textgui, lightgui, groupidgui, currsearch, currgroupid;
 var currname = "";
-
-// class for holding light object properties
-class Light
-{
-	constructor(name, pos)
-	{
-		this.name = name;
-		this.pos = pos;
-	}
-}
+var ledstatus, resetkey, configrequest, firmwareupdate, currbrightness, changebrightness;
 
 // "enum" for light status
 const STATUS = 
 {
-	OFF : 1,
-	ON : 2,
-	NORMAL : 3,
+	ON : 1,
+	OFF : 2
 }
 
 // colour codes for quick access
@@ -104,16 +96,17 @@ class ThreeJsScene extends Component
 
         this.DrawScene = this.DrawScene.bind(this);
         this.SearchGUIHelper = this.SearchGUIHelper.bind(this);
-        this.FindLight = this.FindLight.bind(this);
+        this.FindLightByName = this.FindLightByName.bind(this);
+        this.FindLightByKey = this.FindLightByKey.bind(this);
     }
 
     // threejs functions
     InitThreeJs()
     {
         // define dimensions
-        widthscale = 0.7;
+        widthscale = 1.0;
         width = this.mount.clientWidth * widthscale;
-        heightscale = 0.7;
+        heightscale = 1.0;
         height = this.mount.clientHeight * heightscale;
 
         // init scene to grey/silver colour
@@ -278,7 +271,7 @@ class ThreeJsScene extends Component
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
 	    text.style.width = "260px";
-	    text.style.height = "150px";
+	    text.style.height = "187.5px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
@@ -305,24 +298,33 @@ class ThreeJsScene extends Component
     InitGUI()
     {
     	searchgui = new GUI();
-    	textgui = new GUI();
-    	buttongui = new GUI();
+        textgui = new GUI();
+        groupidgui = new GUI();
+        lightgui = new GUI();
 
     	// search field gui
-    	const param = {"Search": ""};
-    	searchgui.add(param, "Search").onFinishChange(function(value){currsearch = value});
-
+    	const searchparam = {"Search": ""};
+    	searchgui.add(searchparam, "Search").onFinishChange(function(value){currsearch = value});
     	searchgui.domElement.style.position = "absolute";
         searchgui.domElement.style.top = "0px";
     	searchgui.domElement.style.right = "0px";
-
     	// search closed by default
     	searchgui.closed = true;
     	searchgui.hide();
 
+        // groupid gui
+    	const groupidparam = {"Group ID": ""};
+    	groupidgui.add(groupidparam, "Group ID").onFinishChange(function(value){currgroupid = value});
+    	groupidgui.domElement.style.position = "absolute";
+        groupidgui.domElement.style.top = "0px";
+    	groupidgui.domElement.style.right = "0px";
+        // groupid closed by default
+    	groupidgui.closed = true;
+        groupidgui.hide();
+        
     	// input field gui
-    	const params = {"Light Name": ""};
-    	textgui.add(params, "Light Name").onChange(function(value)
+    	const inputparam = {"Light Name": ""};
+    	textgui.add(inputparam, "Light Name").onChange(function(value)
     	{
     		currname = value;
     	});
@@ -335,29 +337,160 @@ class ThreeJsScene extends Component
     	textgui.closed = true;
     	textgui.hide();
 
-    	// button gui        
-        var offbutton = {OFF:function(){changestatus = STATUS.OFF;}};
-        var onbutton = {ON:function(){changestatus = STATUS.ON;}};
-        var normalbutton = {NORMAL:function(){changestatus = STATUS.NORMAL;}};
+        // light gui
 
-    	buttongui.add(offbutton,"OFF");
-    	buttongui.add(onbutton,"ON");
-    	buttongui.add(normalbutton,"NORMAL");
+        var onbutton = {On:function(){ledstatus = STATUS.ON;}};
+        var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
+        const dimparam = {"Brightness": "100"};
+        var configbutton = {ConfigRequest:function(){configrequest = true;}};
+        var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
+        var resetkeybutton = {ResetKey:function(){resetkey = true;}};
 
-        buttongui.domElement.style.position = "absolute";
-        buttongui.domElement.style.top = "0px";
-    	buttongui.domElement.style.right = "0px";
+        lightgui.add(onbutton, "On");
+        lightgui.add(offbutton, "Off");
+        lightgui.add(dimparam, "Brightness").onFinishChange(function(value){currbrightness = value;
+                                                                            changebrightness = true;});
+        lightgui.add(configbutton, "ConfigRequest");
+        lightgui.add(firmwarebutton, "FirmwareUpdate");
+        lightgui.add(resetkeybutton, "ResetKey");
 
-    	// buttons closed by default
-    	buttongui.closed = true;
-    	buttongui.hide();
+    	lightgui.domElement.style.position = "absolute";
+        lightgui.domElement.style.top = "0px";
+    	lightgui.domElement.style.right = "0px";
+
+        // closed by default
+        lightgui.closed = true;
+        lightgui.hide();
     }
     // helper functions
+
+    // commands
+    // provision - add light
+    ProvisionRequest(name, key, pos)
+    {
+        console.log("Sent provision request: name: " + name + " key: " + key);
+        this.ProvisionResponse(name, key, pos);
+    }
+
+    ProvisionResponse(name, key, pos)
+    {
+        // key is same as name for now
+        console.log("Received provision response: name: " + name + " key: " + name);
+
+        // add light to scene (use name as key for now)
+        this.AddLightHelper(name, name, pos);
+    }
+
+    ProvisionStatusRequest(key)
+    {
+        console.log("Sent provision status request: key: " + key);
+        this.ProvisionStatusResponse(key);
+    }
+
+    ProvisionStatusResponse(key)
+    {
+        console.log("Received provision response: key: " + key + " status: placeholder");
+    }
+    
+    RemoveRequest(key)
+    {
+        console.log("Sent remove request: key: " + key);
+        this.RemoveResponse(key);
+    }
+
+    RemoveResponse(key)
+    {
+        console.log("Received remove response: key: " + key + " removed");
+        // remove light
+        this.RemoveLightHelper(key);
+    }
+
+    NewKeyRequest(oldkey, newkey)
+    {
+        console.log("Sent new key request: oldkey: " + oldkey + " newkey: " + newkey);
+        this.NewKeyResponse(oldkey, newkey);
+    }
+
+    NewKeyResponse(oldkey, newkey)
+    {
+        console.log("Received new key response: oldkey: " + oldkey + " newkey: " + newkey);
+        this.SetKeyHelper(oldkey, newkey);
+    }
+
+    ResetKeyRequest(key)
+    {
+        console.log("Sent reset key request: key: " + key);
+        this.ResetKeyResponse(key, key);
+    }
+
+    ResetKeyResponse(oldkey, newkey)
+    {
+        console.log("Received reset key response: oldkey: " + oldkey + " newkey: " + newkey);
+        this.SetKeyHelper(oldkey, newkey);
+    }
+
+    LEDOnRequest(key)
+    {
+        console.log("Sent LED On request: key: " + key);
+        this.LEDOnResponse(key);
+    }
+
+    LEDOnResponse(key)
+    {
+        console.log("Received LED On response: key: " + key);
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.status = STATUS.ON;
+    }
+
+    LEDOffRequest(key)
+    {
+        console.log("Sent LED Off request: key: " + key);
+        this.LEDOffResponse(key);
+    }
+
+    LEDOffResponse(key)
+    {
+        console.log("Received LED Off response: key: " + key);
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.status = STATUS.OFF;
+    }
+
+    DimLEDRequest()
+    {
+
+    }
+
+    DimLEDResponse()
+    {
+
+    }
+
+    SetConfigRequest()
+    {
+
+    }
+
+    SetConfigResponse()
+    {
+
+    }
+
+    FWUpdateRequest()
+    {
+
+    }
+
+    FWUpdateResponse()
+    {
+        
+    }
     // search gui
     SearchGUIHelper(value)
     {
         // find and select light
-    	var light = this.FindLight(value);
+    	var light = this.FindLightByName(value);
     	// deselect any current lights
     	selectedlights = [];
     	this.ClearDisplayLightData();
@@ -367,8 +500,8 @@ class ThreeJsScene extends Component
     	{
     		selectedlights = [light.userData.name];
     		this.MoveToLight(light.userData.name);
-    		buttongui.closed = false;
-    		buttongui.show();
+    		lightgui.closed = false;
+    		lightgui.show();
         
     		this.DisplayLightData(light.userData.name);
     	}
@@ -388,17 +521,39 @@ class ThreeJsScene extends Component
     	searchgui.closed = !searchgui.closed;
     	if (!searchgui.closed)
     	{
-    		searchgui.show();
+            searchgui.show();
+            groupidgui.closed = true;
+            groupidgui.hide();
     		textgui.closed = true;
     		textgui.hide();
-    		buttongui.closed = true;
-    		buttongui.hide();
+    		lightgui.closed = true;
+    		lightgui.hide();
     		text.innerHTML = "";
     	}
     	else
     	{
     		searchgui.hide();
     	}
+    }
+    // toggle search input field
+    ToggleGroupIDField()
+    {
+        groupidgui.closed = !groupidgui.closed;
+        if (!groupidgui.closed)
+        {
+            groupidgui.show();
+            searchgui.closed = true;
+            searchgui.hide();
+            textgui.closed = true;
+            textgui.hide();
+            lightgui.closed = true;
+            lightgui.hide();
+            text.innerHTML = "";
+        }
+        else
+        {
+            groupidgui.hide();
+        }
     }
     // toggle light name input field
     ToggleAdd()
@@ -408,9 +563,11 @@ class ThreeJsScene extends Component
     	{
     		textgui.show();
     		searchgui.closed = true;
-    		searchgui.hide();
-    		buttongui.closed = true;
-    		buttongui.hide();
+            searchgui.hide();
+            groupidgui.closed = true;
+            groupidgui.hide();
+    		lightgui.closed = true;
+    		lightgui.hide();
     		text.innerHTML = "";
     	}
     	else
@@ -463,6 +620,7 @@ class ThreeJsScene extends Component
     }
     // userData has 5 properties
     // - name (string)
+    // - key (string)
     // - selected (bool for internal use)
     // - last heard (string)
     // - last status (int? enum?)
@@ -470,19 +628,19 @@ class ThreeJsScene extends Component
     //	- 2 - on
     //	- 3 - normal
     // - pvm level (int)
+    // - brightness (int, 0-100)
+    // - group id (int) 0xff is default
+    // - zone id (int) 0xff is default
+
     //  adding new light objects to the scene
     AddLight(name, pos)
     {
-    	// check for existing light with same name
-    	var find = this.FindLight(name);
-    	if(find)
-    	{
-    		console.log("duplicate name found");
-    		error.innerHTML = "Error: duplicate light name";
-    		setTimeout(this.ClearError, 3000);
-    		return null;
-    	}
+        // default public key is 0
+        this.ProvisionRequest(name, 0, pos);
+    }
 
+    AddLightHelper(name, key, pos)
+    {
     	// init mesh and data
     	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:GREY}));
     
@@ -494,8 +652,17 @@ class ThreeJsScene extends Component
     	lightmesh.scale.y = 0.35;
     	lightmesh.scale.z = 0.35;
 
+        // keys are just same as name for now
     	// add lightdata into the three.js mesh
-    	lightmesh.userData = {name: name, selected: false, lastheard: "test", status: STATUS.OFF, pvm: 0};
+        lightmesh.userData = {name: name, 
+                              key: key, 
+                              selected: false, 
+                              lastheard: "test", 
+                              status: STATUS.OFF, 
+                              pvm: 0,
+                              brightness: 100,
+                              groupid: 0xff,
+                              zoneid: 0xff};
     
     	// add mesh to array (for raycasting/picking)
     	LightArray.push(lightmesh);
@@ -505,16 +672,26 @@ class ThreeJsScene extends Component
     
     	return lightmesh;
     }
+
     // finding light in lightarray
-    FindLight(name)
+    FindLightByName(name)
     {
     	return LightArray.find(light => light.userData.name === name);
     }
+    FindLightByKey(key)
+    {
+        return LightArray.find(light => light.userData.key === key);
+    }
+
     // removing light objects from the scene
-    RemoveLight(name)
+    RemoveLight(key)
+    {
+        this.RemoveRequest(key);
+    }
+    RemoveLightHelper(key)
     {
     	// find and remove light from LightArray
-    	var index = LightArray.findIndex(light => light.userData.name === name);
+    	var index = LightArray.findIndex(light => light.userData.key === key);
     
     	// find and remove object from scene
     	LightArray[index].parent.remove(LightArray[index]);
@@ -522,23 +699,48 @@ class ThreeJsScene extends Component
     	if(index !== -1)
     		LightArray.splice(index, 1);
     }
-    // for setting light status
+
+    SetKeyHelper(oldkey, newkey)
+    {
+        var index = LightArray.findIndex(light => light.userData.key === oldkey);
+        LightArray[index].userData.key = newkey;
+    }
+
+    // setting light status
     SetSelectedLightStatus(selected, status)
     {
     	for (var i = 0; i < selected.length; ++i)
     	{
-    		var find = this.FindLight(selected[i]);
-
+            var find = this.FindLightByName(selected[i]);
+            
     		if (find)
     		{
-    			find.userData.status = status;
+                if (status === STATUS.ON)
+                    this.LEDOnRequest(find.userData.key);
+                else if (status === STATUS.OFF)
+                    this.LEDOffRequest(find.userData.key);
     		}
     	}
     }
+
+    // reset keys
+    ResetSelectedLightKeys(selected)
+    {
+        for (var i = 0; i < selected.length; ++i)
+    	{
+            var find = this.FindLightByName(selected[i]);
+            
+    		if (find)
+    		{
+                this.ResetKeyRequest(find.userData.key);
+    		}
+    	}
+    }
+
     // move camera to selected light
     MoveToLight(name)
     {
-    	var find = this.FindLight(name);
+    	var find = this.FindLightByName(name);
 
     	if (find)
     	{
@@ -548,6 +750,54 @@ class ThreeJsScene extends Component
     		outlinePass.selectedObjects = [find];
     		controls.update();
     	}
+    }
+    // select group
+    SelectGroup(id)
+    {
+        var found = false;
+
+        // select lights in given groupid
+        for (var i = 0; i < LightArray.length; ++i)
+        {
+            var light = LightArray[i];
+
+            if (light.userData.groupid === id)
+            {
+                // clear current selection once found
+                if (!found)
+                {
+                    found = true;
+                    outlinePass.selectedObjects = [];
+                    selectedlights = [];
+                }
+                outlinePass.selectedObjects.push(light);
+                selectedlights.push(light.userData.name);
+            }
+        }
+
+        // group exists
+        if (found)
+        {
+            searchgui.closed = true;
+            lightgui.closed = false;
+            searchgui.hide();
+            lightgui.show();
+        }
+        else
+        {
+    		console.log("group empty");
+            error.innerHTML = "Error: group empty";
+            setTimeout(this.ClearError, 3000);
+        }
+    }
+    // set groupid
+    SetGroupID(id)
+    {
+        for (var i = 0; i < selectedlights.length; ++i)
+        {
+            var light = this.FindLightByName(selectedlights[i]);
+            light.userData.groupid = id;
+        }
     }
     // light data update
     LightArrayUpdate()
@@ -597,7 +847,7 @@ class ThreeJsScene extends Component
     // display data of light given name/ids
     DisplayLightData(name)
     {
-    	var find = this.FindLight(name);
+    	var find = this.FindLightByName(name);
     	var laststatus;
 
     	if (find.userData.status === STATUS.OFF)
@@ -608,7 +858,8 @@ class ThreeJsScene extends Component
     		laststatus = "NORMAL";
 
     	// <br/> is a newline
-    	text.innerHTML = "Name: " + find.userData.name + "<br/>" +
+        text.innerHTML = "Name: " + find.userData.name + "<br/>" +
+                         "Group: " + find.userData.groupid + "<br/>" +
     					 "Last Heard: " + find.userData.lastheard + "<br/>" +
     					 "Last Status: " + laststatus + "<br/>" +
     					 "PVM Level: " + find.userData.pvm;
@@ -625,20 +876,6 @@ class ThreeJsScene extends Component
     }
 
     // file saving and loading
-    // save current light data
-    SaveLightData()
-    {
-    	for (var i = 0; i < LightArray.length; ++i)
-    	{
-    		var ld = new Light
-    		(
-    			LightArray[i].userData.name,
-    			new THREE.Vector3(LightArray[i].position.x, LightArray[i].position.y, LightArray[i].position.z)
-    		)
-            
-    		LightData.push(ld);
-    	}
-    }
     // fetch helper function
     async FetchData(j = "default")
     {
@@ -700,7 +937,7 @@ class ThreeJsScene extends Component
     		// add objects from json
     		sceneloader.load(serverAddress + "resources/" + s + ".json", function(object) 
     		{
-    			scene.add(object);
+                scene.add(object);
     		});
     	}
     	else
@@ -718,7 +955,8 @@ class ThreeJsScene extends Component
     		var a = document.createElement("a");
     		document.body.appendChild(a);
     		a.style = "display: none";
-    		return function (data, fileName) {
+            return function (data, fileName) 
+            {
     			var json = JSON.stringify(data, null, 2),
     				blob = new Blob([json], {type: "octet/stream"}),
     				url = window.URL.createObjectURL(blob);
@@ -774,10 +1012,42 @@ class ThreeJsScene extends Component
             currsearch = null;
         }
         
-        if (changestatus)
+        // groupidgui helper
+        if (currgroupid)
         {
-            this.SetSelectedLightStatus(selectedlights, changestatus);
-            changestatus = null;
+
+        }
+
+        // light gui helpers
+        //var onbutton = {On:function(){ledstatus = STATUS.ON;}};
+        //var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
+        //const dimparam = {"Brightness": "100"};
+        //var configbutton = {ConfigRequest:function(){configrequest = true;}};
+        //var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
+        if (ledstatus)
+        {
+            this.SetSelectedLightStatus(selectedlights, ledstatus);
+            ledstatus = null;
+        }
+        if (changebrightness)
+        {
+            console.log("changebrightness");
+            changebrightness = null;
+        }
+        if(configrequest)
+        {
+            console.log("configrequest");
+            configrequest = null;
+        }
+        if (firmwareupdate)
+        {
+            console.log("firmwareupdate");
+            firmwareupdate = null;
+        }
+        if (resetkey)
+        {
+            this.ResetSelectedLightKeys(selectedlights);
+            resetkey = null;
         }
 
         // keeps focus on input field for light name
@@ -840,8 +1110,8 @@ class ThreeJsScene extends Component
                             selectedlights = [intersects[0].object.userData.name];
                             this.MoveToLight(LIGHTINTERSECTED.userData.name);
                         }
-                        buttongui.closed = false;
-                        buttongui.show();
+                        lightgui.closed = false;
+                        lightgui.show();
                     }
                 }
 
@@ -851,7 +1121,7 @@ class ThreeJsScene extends Component
                     // check if in add mode
                     if(!textgui.closed)
                     {
-                        this.RemoveLight(LIGHTINTERSECTED.userData.name);
+                        this.RemoveLight(LIGHTINTERSECTED.userData.key);
                     }
                 }
             }
@@ -991,7 +1261,7 @@ class ThreeJsScene extends Component
                 // deselect light if left clicked in view mode
                 if (textgui.closed && Lmouseup && (selectedlights.length > 0) && !selectedStart)
                 {
-                    var tmp = this.FindLight(selectedlights[0]);
+                    var tmp = this.FindLightByName(selectedlights[0]);
                     tmp.userData.selected = false;
                     searchgui.closed = true;
                     searchgui.hide();
@@ -1005,16 +1275,18 @@ class ThreeJsScene extends Component
                     selectedStart = false;
                     if (selectedlights.length > 0)
                     {
-                        buttongui.closed = false;
-                        buttongui.show();
+                        lightgui.closed = false;
+                        lightgui.show();
                     }
                 }
                 else
                 {
                     searchgui.closed = true;
-                    buttongui.closed = true;
+                    groupidgui.closed = true;
+                    lightgui.closed = true;
                     searchgui.hide();
-                    buttongui.hide();
+                    groupidgui.hide();
+                    lightgui.hide();
                 }
                 break;
             // rmb
@@ -1053,7 +1325,6 @@ class ThreeJsScene extends Component
                 break;
             // rmb
             case 3:
-    
                 break;
             default:
                 break;
@@ -1098,23 +1369,27 @@ class ThreeJsScene extends Component
                 break;
             case "KeyS":
                 // save into json and download
-                if (textgui.closed && searchgui.closed)
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
                     this.DownloadScene();
                     //DownloadData();
                 break;
             case "KeyQ":
                 // load c1basement1
-                if (textgui.closed && searchgui.closed)
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
                     this.LoadScene("c1basement1");
                 break;
             case "KeyW":
                 // load c1basement2
-                if (textgui.closed && searchgui.closed)
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
                     this.LoadScene("c1basement2");
                 break;
             case "KeyC":
-                if (textgui.closed && searchgui.closed)
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
                     this.ResetCamera();
+                break;
+            case "KeyG":
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                    this.ToggleGroupIDField();
                 break;
             case "ControlLeft":
                 LCTRLdown = false;
@@ -1124,6 +1399,14 @@ class ThreeJsScene extends Component
             case "KeyB":
                 //if(LightArray.find(light => light.userData.name == "lighttest0"))
                 //	MoveToLight("lighttest0");
+                break;
+            case "Digit1":
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                    this.SelectGroup("default");
+                break;
+            case "Digit2":
+                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                    this.SelectGroup("asdasdasd");
                 break;
             default:
                 break;
@@ -1173,7 +1456,7 @@ class ThreeJsScene extends Component
             style={{ 
                 position: "absolute", 
                 width: "100%", height: "100%",
-                left: "15%", top: "15%" 
+                //left: "15%", top: "15%" 
             }}
 	        ref={mount => { this.mount = mount}}
 	    />)
