@@ -36,14 +36,14 @@ TODO
 things broken so far
 - positions of gui and text ui
 
-features to add under edit light page
-- add gui for changing groupid
-
 ACTUAL TODO:
 commands
 - dim led 
 - set config
 - firmware update
+grouping
+- groupid
+- zoneid
 
 steps:
 npm start in lms/react/lms
