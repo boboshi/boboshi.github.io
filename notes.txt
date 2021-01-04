@@ -40,8 +40,11 @@ features to add under edit light page
 - add gui for changing groupid
 
 ACTUAL TODO:
-add lightdisplay contents
 commands
 - dim led 
 - set config
 - firmware update
+
+steps:
+npm start in lms/react/lms
+http-server -p 8080 --cors -c10 in http-server folder

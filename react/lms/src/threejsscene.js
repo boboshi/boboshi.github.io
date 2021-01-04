@@ -100,7 +100,7 @@ class ThreeJsScene extends Component
         this.FindLightByKey = this.FindLightByKey.bind(this);
     }
 
-    // threejs functions
+    // initialisation ===================================================================
     InitThreeJs()
     {
         // define dimensions
@@ -126,7 +126,7 @@ class ThreeJsScene extends Component
         // add renderer to page
         this.mount.appendChild(renderer.domElement);
     }
-    // camera controls
+
     InitCameraControls()
     {
         controls = new OrbitControls(camera, renderer.domElement);
@@ -163,14 +163,14 @@ class ThreeJsScene extends Component
         document.addEventListener("keydown", this.onKeyDown, false);
         document.addEventListener("keyup", this.onKeyUp, false);
     }
-    // initialise default scene lights
+
     InitSceneLights()
     {
     	// directional light
     	const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
     	scene.add(directionalLight);
     }
-    // initialise outline effects
+
     InitOutline()
     {
     	// outline effect parameters
@@ -207,7 +207,7 @@ class ThreeJsScene extends Component
     	composer.addPass(outlinePass);
     	composer.addPass(effectFXAA);
     }
-    // initialise geometry shapes
+
     InitGeometry()
     {
         // cube
@@ -224,13 +224,13 @@ class ThreeJsScene extends Component
 	    // plane
 	    plane = new THREE.PlaneBufferGeometry();
     }
-    // model and scene loaders
+
     InitLoaders()
     {
         fbxloader = new FBXLoader();
         sceneloader = new THREE.ObjectLoader();
     }
-    // picking
+
     InitPicking()
     {
         mouse = new THREE.Vector2();
@@ -264,14 +264,14 @@ class ThreeJsScene extends Component
         // event listener to track mouse move
         document.addEventListener("pointermove", this.onDocumentMouseMove, false);
     }
-    // light data text display
+
     InitTextDisplay()
     {
         // light data display setup
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
 	    text.style.width = "260px";
-	    text.style.height = "187.5px";
+	    text.style.height = "300px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
@@ -294,7 +294,7 @@ class ThreeJsScene extends Component
 	    error.style.fontFamily = "Calibri";
 	    document.body.appendChild(error);
     }
-    // gui
+
     InitGUI()
     {
     	searchgui = new GUI();
@@ -338,7 +338,6 @@ class ThreeJsScene extends Component
     	textgui.hide();
 
         // light gui
-
         var onbutton = {On:function(){ledstatus = STATUS.ON;}};
         var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
         const dimparam = {"Brightness": "100"};
@@ -362,9 +361,10 @@ class ThreeJsScene extends Component
         lightgui.closed = true;
         lightgui.hide();
     }
-    // helper functions
+    //===================================================================================
 
-    // commands
+
+    // commands =========================================================================
     // provision - add light
     ProvisionRequest(name, key, pos)
     {
@@ -457,14 +457,14 @@ class ThreeJsScene extends Component
             find.userData.status = STATUS.OFF;
     }
 
-    DimLEDRequest()
+    DimLEDRequest(key, brightness)
     {
-
+        console.log("Sent Dim LED request: key: " + " brightness: " + brightness);
     }
 
-    DimLEDResponse()
+    DimLEDResponse(key, brightness)
     {
-
+        console.log("Received Dim LED response: key: " + " brightness: " + brightness);
     }
 
     SetConfigRequest()
@@ -486,7 +486,11 @@ class ThreeJsScene extends Component
     {
         
     }
-    // search gui
+    //===================================================================================
+
+
+
+    // helper functions =================================================================
     SearchGUIHelper(value)
     {
         // find and select light
@@ -515,7 +519,7 @@ class ThreeJsScene extends Component
     	searchgui.closed = true;
     	searchgui.hide();
     }
-    // toggle search input field
+
     ToggleSearch()
     {
     	searchgui.closed = !searchgui.closed;
@@ -535,7 +539,7 @@ class ThreeJsScene extends Component
     		searchgui.hide();
     	}
     }
-    // toggle search input field
+
     ToggleGroupIDField()
     {
         groupidgui.closed = !groupidgui.closed;
@@ -555,7 +559,7 @@ class ThreeJsScene extends Component
             groupidgui.hide();
         }
     }
-    // toggle light name input field
+
     ToggleAdd()
     {
     	textgui.closed = !textgui.closed;
@@ -577,14 +581,14 @@ class ThreeJsScene extends Component
 
     	ghost.visible = !textgui.closed;
     }
-    // reset camera
+
     ResetCamera()
     {
     	controls.target.set(0.0, 0.0, 0.0);
     	camera.position.set(0.0, 45.4, 0.0);
     	controls.update();
     }
-    // load model into scene (default material is translucent)
+
     LoadModel(model, xscale, yscale, zscale, material = translucentMat)
     {
     	// load and add test model to scene
@@ -618,15 +622,13 @@ class ThreeJsScene extends Component
     {
     	error.innerHTML = "";
     }
-    // userData has 5 properties
+
+    // userData properties
     // - name (string)
     // - key (string)
     // - selected (bool for internal use)
     // - last heard (string)
-    // - last status (int? enum?)
-    //	- 1 - off 
-    //	- 2 - on
-    //	- 3 - normal
+    // - last status (enum (int), 1:on, 2:off)
     // - pvm level (int)
     // - brightness (int, 0-100)
     // - group id (int) 0xff is default
@@ -859,7 +861,10 @@ class ThreeJsScene extends Component
 
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
+                         "Key: " + find.userData.key + "<br/>" +
+                         "Brightness: " + find.userData.brightness + "<br/>" + 
                          "Group: " + find.userData.groupid + "<br/>" +
+                         "Zone: " + find.userData.zoneid + "<br/>" + 
     					 "Last Heard: " + find.userData.lastheard + "<br/>" +
     					 "Last Status: " + laststatus + "<br/>" +
     					 "PVM Level: " + find.userData.pvm;
@@ -975,6 +980,9 @@ class ThreeJsScene extends Component
     {
 	    return deg * Math.PI / 180;
     }
+    //===================================================================================
+
+
 
     // "main"
 	componentDidMount() 
@@ -998,7 +1006,10 @@ class ThreeJsScene extends Component
         // call render loop
 		this.DrawScene();
     }
-    // render loop
+
+
+
+    // render loop ======================================================================
     DrawScene()
     {
         requestAnimationFrame(this.DrawScene);
@@ -1019,11 +1030,6 @@ class ThreeJsScene extends Component
         }
 
         // light gui helpers
-        //var onbutton = {On:function(){ledstatus = STATUS.ON;}};
-        //var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
-        //const dimparam = {"Brightness": "100"};
-        //var configbutton = {ConfigRequest:function(){configrequest = true;}};
-        //var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
         if (ledstatus)
         {
             this.SetSelectedLightStatus(selectedlights, ledstatus);
@@ -1198,7 +1204,10 @@ class ThreeJsScene extends Component
         // render (use composer.render if postprocessing is used)
         composer.render();
     }
-    
+    //===================================================================================
+
+
+
     // cleanup
     componentWillUnmount()
     {
@@ -1212,7 +1221,9 @@ class ThreeJsScene extends Component
         document.removeEventListener("pointermove", this.onDocumentMouseMove);
     }
 
-    // event handlers
+
+
+    // event handlers ===================================================================
     // resize
     onWindowResize()
     {
@@ -1449,6 +1460,8 @@ class ThreeJsScene extends Component
             }
         }
     }
+    //===================================================================================
+
     // render function and canvas size
     render() 
     {
@@ -1458,7 +1471,7 @@ class ThreeJsScene extends Component
                 width: "100%", height: "100%",
                 //left: "15%", top: "15%" 
             }}
-	        ref={mount => { this.mount = mount}}
+	        ref={mount => {this.mount = mount}}
 	    />)
 	}
 }
