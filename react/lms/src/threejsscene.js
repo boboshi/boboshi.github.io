@@ -47,7 +47,7 @@ var filename = "";
 // text display
 var text, error, fwprog;
 // gui for id modification
-var searchgui, textgui, lightgui, groupidgui, currsearch, currgroupid;
+var searchgui, textgui, lightgui, groupidgui, currsearch, currgroupid, currzoneid;
 var currname = "";
 var ledstatus, resetkey, configrequest, firmwareupdate, currbrightness, changebrightness;
 
