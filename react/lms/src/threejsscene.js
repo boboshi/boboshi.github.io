@@ -47,7 +47,7 @@ var filename = "";
 // text display
 var text, error, fwprog;
 // gui for id modification
-var searchgui, textgui, lightgui, groupidgui, currsearch, currgroupid, currzoneid;
+var searchgui, textgui, lightgui, currsearch, currgroupid, currzoneid;
 var currname = "";
 var ledstatus, resetkey, configrequest, firmwareupdate, currbrightness, changebrightness;
 
@@ -295,7 +295,6 @@ class ThreeJsScene extends Component
     {
     	searchgui = new GUI();
         textgui = new GUI();
-        groupidgui = new GUI();
         lightgui = new GUI();
 
     	// search field gui
@@ -571,8 +570,6 @@ class ThreeJsScene extends Component
     	if (!searchgui.closed)
     	{
             searchgui.show();
-            groupidgui.closed = true;
-            groupidgui.hide();
     		textgui.closed = true;
     		textgui.hide();
     		lightgui.closed = true;
@@ -585,26 +582,6 @@ class ThreeJsScene extends Component
     	}
     }
 
-    ToggleGroupIDField()
-    {
-        groupidgui.closed = !groupidgui.closed;
-        if (!groupidgui.closed)
-        {
-            groupidgui.show();
-            searchgui.closed = true;
-            searchgui.hide();
-            textgui.closed = true;
-            textgui.hide();
-            lightgui.closed = true;
-            lightgui.hide();
-            text.innerHTML = "";
-        }
-        else
-        {
-            groupidgui.hide();
-        }
-    }
-
     ToggleAdd()
     {
     	textgui.closed = !textgui.closed;
@@ -613,8 +590,6 @@ class ThreeJsScene extends Component
     		textgui.show();
     		searchgui.closed = true;
             searchgui.hide();
-            groupidgui.closed = true;
-            groupidgui.hide();
     		lightgui.closed = true;
     		lightgui.hide();
     		text.innerHTML = "";
@@ -670,7 +645,7 @@ class ThreeJsScene extends Component
 
     AnyGUIOpen()
     {
-        return !textgui.closed || !searchgui.closed || !groupidgui.closed || !lightgui.closed;
+        return !textgui.closed || !searchgui.closed || !lightgui.closed;
     }
     // userData properties
     // - name (string)
@@ -759,7 +734,6 @@ class ThreeJsScene extends Component
         var index = LightArray.findIndex(light => light.userData.key === oldkey);
         LightArray[index].userData.key = newkey;
     }
-
     // setting light status
     SetSelectedLightStatus(selected, status)
     {
@@ -776,7 +750,6 @@ class ThreeJsScene extends Component
     		}
     	}
     }
-
     // reset keys
     ResetSelectedLightKeys(selected)
     {
@@ -790,7 +763,6 @@ class ThreeJsScene extends Component
     		}
     	}
     }
-
     // move camera to selected light
     MoveToLight(name)
     {
@@ -842,7 +814,7 @@ class ThreeJsScene extends Component
             this.ShowError("group empty", 3000);
         }
     }
-    // set groupid
+
     SetGroupID(id)
     {
         for (var i = 0; i < selectedlights.length; ++i)
@@ -851,7 +823,16 @@ class ThreeJsScene extends Component
             light.userData.groupid = id;
         }
     }
-    // light data update
+
+    SetZoneID(id)
+    {
+        for (var i = 0; i < selectedlights.length; ++i)
+        {
+            var light = this.FindLightByName(selectedlights[i]);
+            light.userData.zoneid = id;
+        }
+    }
+
     LightArrayUpdate()
     {
     	// only display data of selected light on screen
@@ -1122,7 +1103,6 @@ class ThreeJsScene extends Component
             }
         }
 
-
         // keeps focus on input field for light name
         var tmp = document.getElementsByTagName("INPUT");
         // 0 - search
@@ -1360,10 +1340,8 @@ class ThreeJsScene extends Component
                 else
                 {
                     searchgui.closed = true;
-                    groupidgui.closed = true;
                     lightgui.closed = true;
                     searchgui.hide();
-                    groupidgui.hide();
                     lightgui.hide();
                 }
                 break;
@@ -1464,10 +1442,6 @@ class ThreeJsScene extends Component
             case "KeyC":
                 if (this.AnyGUIOpen() === false)
                     this.ResetCamera();
-                break;
-            case "KeyG":
-                if (this.AnyGUIOpen() === false)
-                    this.ToggleGroupIDField();
                 break;
             case "ControlLeft":
                 LCTRLdown = false;

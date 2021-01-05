@@ -38,8 +38,8 @@ things broken so far
 
 ACTUAL TODO:
 grouping (groups and zones)
-   - add setgroupid to lightgui
-   - add setzoneid to lightgui
+   - create setgroupid function
+   - create setzoneid function
    - convert all functions to take multi select lights
      (selectedlights array of light names)
    - hotkeys for testing
