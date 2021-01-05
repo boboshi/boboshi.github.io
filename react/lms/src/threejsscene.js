@@ -45,7 +45,7 @@ var PlaneArray = [];
 // filename
 var filename = "";
 // text display
-var text, error;
+var text, error, fwprog;
 // gui for id modification
 var searchgui, textgui, lightgui, groupidgui, currsearch, currgroupid;
 var currname = "";
@@ -95,6 +95,7 @@ class ThreeJsScene extends Component
         this.SearchGUIHelper = this.SearchGUIHelper.bind(this);
         this.FindLightByName = this.FindLightByName.bind(this);
         this.FindLightByKey = this.FindLightByKey.bind(this);
+        this.SetFWVersion = this.SetFWVersion.bind(this);
     }
 
     // initialisation ===================================================================
@@ -275,7 +276,19 @@ class ThreeJsScene extends Component
 	    error.style.left = "0px";
 	    error.style.fontSize = 30 + "px";
 	    error.style.fontFamily = "Calibri";
-	    document.body.appendChild(error);
+        document.body.appendChild(error);
+        
+        // firmware update progress
+        fwprog = document.createElement("div");
+        fwprog.style.position = "absolute";
+        fwprog.style.backgroundColor = "black";
+        fwprog.style.color = "white";
+        fwprog.innerHTML = "";
+        fwprog.style.bottom = "0px";
+        fwprog.style.right  = "0px";
+        fwprog.style.fontSize = 30 + "px";
+	    fwprog.style.fontFamily = "Calibri";
+        document.body.appendChild(fwprog);
     }
 
     InitGUI()
@@ -497,6 +510,17 @@ class ThreeJsScene extends Component
         else
         {
             find.userData.firmwareupdate = true;
+            fwprog.innerHTML = "Firmware update: 0%";
+
+            var foo = function() {fwprog.innerHTML = "Firmware update: 50%"};
+            var bar = function() {fwprog.innerHTML = "Firmware update: 100% (complete)"; 
+                                                     find.userData.firmwareupdate = false;};
+            var loo = function() {fwprog.innerHTML = ""};
+
+            setTimeout(foo, 500);
+            setTimeout(bar, 1000);            
+            setTimeout(this.SetFWVersion, 1000, key, "2.0");
+            setTimeout(loo, 2000);
         }
     }
     //===================================================================================
@@ -504,6 +528,15 @@ class ThreeJsScene extends Component
 
 
     // helper functions =================================================================
+    // placeholder for firmware update
+    SetFWVersion(key, fw)
+    {
+        console.log(key);
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.fwversion = fw;
+    }
+
     ShowError(msg, time)
     {
         console.log(msg);
@@ -812,9 +845,7 @@ class ThreeJsScene extends Component
         }
         else
         {
-    		console.log("group empty");
-            error.innerHTML = "Error: group empty";
-            setTimeout(this.ClearError, 3000);
+            this.ShowError("group empty", 3000);
         }
     }
     // set groupid

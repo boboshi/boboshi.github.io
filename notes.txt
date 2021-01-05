@@ -37,10 +37,6 @@ things broken so far
 - positions of gui and text ui
 
 ACTUAL TODO:
-commands
-- firmware update
-   - add firmware version property to light
-   - show progress at bottom of page
 grouping
 - groupid
 - zoneid
