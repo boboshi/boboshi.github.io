@@ -38,14 +38,25 @@ things broken so far
 
 ACTUAL TODO:
 grouping (groups and zones)
-   - create setgroupid function
-   - create setzoneid function
    - convert all functions to take multi select lights
      (selectedlights array of light names)
-   - hotkeys for testing
-      - select group 1
-      - select zone 1
-      - select all
+add light
+- add fake progress for provisioning light from backend
+configs
+- motion sensor sensitivity (dropdown box)
+   - low
+   - medium-low
+   - medium
+   - medium-high
+   - high
+- settings
+   - synchronise clock (checkbox)
+   - hold time (text input)
+- brightness (1 text input each)
+   - dimmed
+   - motion sensor
+   - max brightness
+reorganise light data format and display
 
 steps:
 npm start in lms/react/lms

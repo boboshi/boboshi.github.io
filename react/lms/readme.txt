@@ -23,6 +23,9 @@ W - load c1basement2
 C - reset camera
 LCTRL + Space - toggle add/view mode
 LCTRL + F - toggle search mode
+1 - Select Group 1
+2 - Select Zone 1
+3 - Select All
 
 Notes:
 - minor changes to SelectionHelper.js from three.js 

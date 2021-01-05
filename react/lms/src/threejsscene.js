@@ -777,31 +777,63 @@ class ThreeJsScene extends Component
     		controls.update();
     	}
     }
-    // select group
-    SelectGroup(id)
+
+    // mode - true for group, false for zone
+    MultiSelectHelper(id, mode)
     {
         var found = false;
 
-        // select lights in given groupid
-        for (var i = 0; i < LightArray.length; ++i)
+        if (id === 0xff)
         {
-            var light = LightArray[i];
-
-            if (light.userData.groupid === id)
+            for (var i = 0; i < LightArray.length; ++i)
             {
-                // clear current selection once found
                 if (!found)
                 {
                     found = true;
                     outlinePass.selectedObjects = [];
                     selectedlights = [];
                 }
+
+                var light = LightArray[i];
                 outlinePass.selectedObjects.push(light);
                 selectedlights.push(light.userData.name);
             }
         }
+        else
+        {
+            for (var j = 0; j < LightArray.length; ++j)
+            {
+                var light0 = LightArray[j];
+                
+                var push = false;
+                // group
+                if (mode)
+                {
+                    if (light0.userData.groupid == id)
+                        push = true;
+                }
+                // zone
+                else
+                {
+                    if (light0.userData.zoneid == id)
+                        push = true;
+                }
 
-        // group exists
+                if (push)
+                {
+                    if (!found)
+                    {
+                        found = true;
+                        outlinePass.selectedObjects = [];
+                        selectedlights = [];
+                    }
+    
+                    outlinePass.selectedObjects.push(light0);
+                    selectedlights.push(light0.userData.name);
+                }
+            }
+        }
+
         if (found)
         {
             searchgui.closed = true;
@@ -811,8 +843,21 @@ class ThreeJsScene extends Component
         }
         else
         {
-            this.ShowError("group empty", 3000);
+            if (mode)
+                this.ShowError("group empty", 3000);
+            else
+                this.ShowError("zone empty", 3000);
         }
+    }
+
+    SelectGroup(id)
+    {
+        this.MultiSelectHelper(id, true);
+    }
+
+    SelectZone(id)
+    {
+        this.MultiSelectHelper(id, false);
     }
 
     SetGroupID(id)
@@ -1090,15 +1135,16 @@ class ThreeJsScene extends Component
                 resetkey = null;
             }
 
+            // uses selectedlights array to set id
             if (currgroupid)
             {
-                console.log("currgroupid");
+                this.SetGroupID(currgroupid);
                 currgroupid = null;
             }
 
             if (currzoneid)
             {
-                console.log("currzoneid");
+                this.SetZoneID(currzoneid);
                 currzoneid = null;
             }
         }
@@ -1454,11 +1500,15 @@ class ThreeJsScene extends Component
                 break;
             case "Digit1":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectGroup("default");
+                    this.SelectGroup(0x1);
                 break;
             case "Digit2":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectGroup("asdasdasd");
+                    this.SelectZone(0x1);
+                break;
+            case "Digit3":
+                if (this.AnyGUIOpen() === false)
+                    this.SelectGroup(0xff);
                 break;
             default:
                 break;
