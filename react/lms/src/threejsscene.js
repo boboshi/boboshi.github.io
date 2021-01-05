@@ -25,7 +25,8 @@ let fbxloader, sceneloader;
 // outline effect use
 let composer, renderPass, outlinePass, effectFXAA;
 // basic geometry shapes
-let box, sphere, grid, plane;
+// let box, grid, plane;
+let sphere;
 // raycasting and picking
 let mouse, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
 var LCTRLdown = false;
@@ -43,8 +44,6 @@ var PlaneArray = [];
 
 // filename
 var filename = "";
-// array of lights to be saved/loaded
-var LightData = [];
 // text display
 var text, error;
 // gui for id modification
@@ -75,8 +74,6 @@ const translucentMat = new THREE.MeshPhongMaterial(
 		transparent: true,
 		side: THREE.DoubleSide,
 	});
-
-var cube;
 
 // three.js scene component
 class ThreeJsScene extends Component 
@@ -173,16 +170,6 @@ class ThreeJsScene extends Component
 
     InitOutline()
     {
-    	// outline effect parameters
-    	const params = {
-    		edgeStrength: 5.0,
-    		edgeGlow: 0.0,
-    		edgeThickness: 5.0,
-    		pulsePeriod: 0,
-    		rotate: false,
-    		usePatternTexture: false
-    	};
-
     	function Configuration()
     	{
     		this.visibleEdgeColor = "#F8FF33";
@@ -210,19 +197,15 @@ class ThreeJsScene extends Component
 
     InitGeometry()
     {
-        // cube
-	    box = new THREE.BoxBufferGeometry();
+	    //box = new THREE.BoxBufferGeometry();
 
-	    // sphere
 	    sphere = new THREE.SphereBufferGeometry();
 
-	    // grid
-	    const size = 100;
-	    const divisions = 100;
-	    grid = new THREE.GridHelper(size, divisions);
+	    //const size = 100;
+	    //const divisions = 100;
+	    //grid = new THREE.GridHelper(size, divisions);
 
-	    // plane
-	    plane = new THREE.PlaneBufferGeometry();
+	    //plane = new THREE.PlaneBufferGeometry();
     }
 
     InitLoaders()
@@ -271,7 +254,7 @@ class ThreeJsScene extends Component
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
 	    text.style.width = "260px";
-	    text.style.height = "300px";
+	    text.style.height = "337.5px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
@@ -459,38 +442,75 @@ class ThreeJsScene extends Component
 
     DimLEDRequest(key, brightness)
     {
-        console.log("Sent Dim LED request: key: " + " brightness: " + brightness);
+        console.log("Sent Dim LED request: key: " + key + " brightness: " + brightness);
+        this.DimLEDResponse(key, brightness);
     }
 
     DimLEDResponse(key, brightness)
     {
-        console.log("Received Dim LED response: key: " + " brightness: " + brightness);
+        console.log("Received Dim LED response: key: " + key + " brightness: " + brightness);
+        // check for invalid input
+        if (brightness < 0 || brightness > 100)
+        {
+            this.ShowError("invalid brightness", 3000);
+            return;
+        }
+        else
+        {
+            var find = this.FindLightByKey(key);
+            if (find)
+            {
+                find.userData.brightness = brightness;
+                find.material.transparent = true;
+                // range from 0.3 to 1.0
+                find.material.opacity = 0.3 + brightness / 100 * 0.7;
+            }
+        }
     }
 
-    SetConfigRequest()
+    SetConfigRequest(key)
     {
-
+        console.log("Sent Set Configuration request: key: " + key + " placeholders");
+        this.SetConfigResponse(key);
     }
 
-    SetConfigResponse()
+    SetConfigResponse(key)
     {
-
+        console.log("Received Set Configuration response: key: " + key + " placeholders");
     }
 
-    FWUpdateRequest()
+    FWUpdateRequest(key)
     {
-
+        console.log("Sent Firmware Update request: key: " + key);
+        this.FWUpdateResponse(key);
     }
 
-    FWUpdateResponse()
+    FWUpdateResponse(key)
     {
-        
+        console.log("Received Firmware Update response: key: " + key);
+        var find = this.FindLightByKey(key);
+
+        if (find.userData.firmwareupdate)
+        {
+            this.ShowError("update in progress");
+        }
+        else
+        {
+            find.userData.firmwareupdate = true;
+        }
     }
     //===================================================================================
 
 
 
     // helper functions =================================================================
+    ShowError(msg, time)
+    {
+        console.log(msg);
+        error.innerHTML = "Error: " + msg;
+        setTimeout(this.ClearError, time);
+    }
+
     SearchGUIHelper(value)
     {
         // find and select light
@@ -511,9 +531,7 @@ class ThreeJsScene extends Component
     	}
     	else
     	{
-    		console.log("light not found");
-            error.innerHTML = "Error: light not found";
-            setTimeout(this.ClearError, 3000);
+            this.ShowError("light not found", 3000);
     	}
         
     	searchgui.closed = true;
@@ -617,24 +635,29 @@ class ThreeJsScene extends Component
     			}
     	);
     }
-    // clear error display
+
     ClearError()
     {
     	error.innerHTML = "";
     }
 
+    AnyGUIOpen()
+    {
+        return !textgui.closed || !searchgui.closed || !groupidgui.closed || !lightgui.closed;
+    }
     // userData properties
     // - name (string)
     // - key (string)
+    // - fwversion (string)
     // - selected (bool for internal use)
+    // - updateprogress (bool for internal use)
     // - last heard (string)
     // - last status (enum (int), 1:on, 2:off)
     // - pvm level (int)
     // - brightness (int, 0-100)
     // - group id (int) 0xff is default
     // - zone id (int) 0xff is default
-
-    //  adding new light objects to the scene
+    
     AddLight(name, pos)
     {
         // default public key is 0
@@ -658,7 +681,9 @@ class ThreeJsScene extends Component
     	// add lightdata into the three.js mesh
         lightmesh.userData = {name: name, 
                               key: key, 
-                              selected: false, 
+                              fwversion : "1.0",
+                              selected: false,
+                              updateprogress: false,
                               lastheard: "test", 
                               status: STATUS.OFF, 
                               pvm: 0,
@@ -862,6 +887,7 @@ class ThreeJsScene extends Component
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
+                         "FW Version: " + find.userData.fwversion + "<br/>" +
                          "Brightness: " + find.userData.brightness + "<br/>" + 
                          "Group: " + find.userData.groupid + "<br/>" +
                          "Zone: " + find.userData.zoneid + "<br/>" + 
@@ -902,6 +928,7 @@ class ThreeJsScene extends Component
     		// lights
     		if (object.userData.name)
     		{
+                object.material.opacity = 0.3 + object.brightness / 100 * 0.7;
     			LightArray.push(object);
     		}
     		else if (object.isMesh)
@@ -1029,32 +1056,38 @@ class ThreeJsScene extends Component
 
         }
 
-        // light gui helpers
-        if (ledstatus)
+        if (selectedlights.length > 0)
         {
-            this.SetSelectedLightStatus(selectedlights, ledstatus);
-            ledstatus = null;
+            var currkey = this.FindLightByName(selectedlights[0]).userData.key;
+            // light gui helpers
+            if (ledstatus)
+            {
+                this.SetSelectedLightStatus(selectedlights, ledstatus);
+                ledstatus = null;
+            }
+            // these functions only work on one for now
+            if (changebrightness)
+            {
+                this.DimLEDRequest(currkey, currbrightness);
+                changebrightness = null;
+            }
+            if(configrequest)
+            {
+                this.SetConfigRequest(currkey);
+                configrequest = null;
+            }
+            if (firmwareupdate)
+            {
+                this.FWUpdateRequest(currkey);
+                firmwareupdate = null;
+            }
+            if (resetkey)
+            {
+                this.ResetSelectedLightKeys(selectedlights);
+                resetkey = null;
+            }
         }
-        if (changebrightness)
-        {
-            console.log("changebrightness");
-            changebrightness = null;
-        }
-        if(configrequest)
-        {
-            console.log("configrequest");
-            configrequest = null;
-        }
-        if (firmwareupdate)
-        {
-            console.log("firmwareupdate");
-            firmwareupdate = null;
-        }
-        if (resetkey)
-        {
-            this.ResetSelectedLightKeys(selectedlights);
-            resetkey = null;
-        }
+
 
         // keeps focus on input field for light name
         var tmp = document.getElementsByTagName("INPUT");
@@ -1380,26 +1413,26 @@ class ThreeJsScene extends Component
                 break;
             case "KeyS":
                 // save into json and download
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.DownloadScene();
                     //DownloadData();
                 break;
             case "KeyQ":
                 // load c1basement1
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.LoadScene("c1basement1");
                 break;
             case "KeyW":
                 // load c1basement2
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.LoadScene("c1basement2");
                 break;
             case "KeyC":
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.ResetCamera();
                 break;
             case "KeyG":
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.ToggleGroupIDField();
                 break;
             case "ControlLeft":
@@ -1412,11 +1445,11 @@ class ThreeJsScene extends Component
                 //	MoveToLight("lighttest0");
                 break;
             case "Digit1":
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.SelectGroup("default");
                 break;
             case "Digit2":
-                if (textgui.closed && searchgui.closed && groupidgui.closed)
+                if (this.AnyGUIOpen() === false)
                     this.SelectGroup("asdasdasd");
                 break;
             default:

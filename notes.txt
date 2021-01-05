@@ -38,9 +38,9 @@ things broken so far
 
 ACTUAL TODO:
 commands
-- dim led 
-- set config
 - firmware update
+   - add firmware version property to light
+   - show progress at bottom of page
 grouping
 - groupid
 - zoneid
