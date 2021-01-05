@@ -1058,6 +1058,19 @@ class ThreeJsScene extends Component
     {
 	    return deg * Math.PI / 180;
     }
+
+    GetKeyArray()
+    {
+        var keyarray = [];
+
+        for (var i = 0; i < selectedlights.length; ++i)
+        {
+            keyarray.push(this.FindLightByName(selectedlights[i]).userData.key);
+        }
+
+        return keyarray;
+    }
+
     //===================================================================================
 
 
@@ -1113,6 +1126,7 @@ class ThreeJsScene extends Component
             // these functions only work on one for now
             if (changebrightness)
             {
+                //keyarray = this.GetKeyArray();
                 this.DimLEDRequest(currkey, currbrightness);
                 changebrightness = null;
             }
