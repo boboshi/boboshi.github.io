@@ -307,16 +307,6 @@ class ThreeJsScene extends Component
     	// search closed by default
     	searchgui.closed = true;
     	searchgui.hide();
-
-        // groupid gui
-    	const groupidparam = {"Group ID": ""};
-    	groupidgui.add(groupidparam, "Group ID").onFinishChange(function(value){currgroupid = value});
-    	groupidgui.domElement.style.position = "absolute";
-        groupidgui.domElement.style.top = "0px";
-    	groupidgui.domElement.style.right = "0px";
-        // groupid closed by default
-    	groupidgui.closed = true;
-        groupidgui.hide();
         
     	// input field gui
     	const inputparam = {"Light Name": ""};
@@ -340,6 +330,8 @@ class ThreeJsScene extends Component
         var configbutton = {ConfigRequest:function(){configrequest = true;}};
         var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
         var resetkeybutton = {ResetKey:function(){resetkey = true;}};
+        const groupparam = {"GroupID": ""};
+        const zoneparam = {"ZoneID": ""};
 
         lightgui.add(onbutton, "On");
         lightgui.add(offbutton, "Off");
@@ -348,6 +340,8 @@ class ThreeJsScene extends Component
         lightgui.add(configbutton, "ConfigRequest");
         lightgui.add(firmwarebutton, "FirmwareUpdate");
         lightgui.add(resetkeybutton, "ResetKey");
+        lightgui.add(groupparam, "GroupID").onFinishChange(function(value){currgroupid = value});
+        lightgui.add(zoneparam, "ZoneID").onFinishChange(function(value){currzoneid = value});
 
     	lightgui.domElement.style.position = "absolute";
         lightgui.domElement.style.top = "0px";
@@ -1080,12 +1074,6 @@ class ThreeJsScene extends Component
             this.SearchGUIHelper(currsearch);
             currsearch = null;
         }
-        
-        // groupidgui helper
-        if (currgroupid)
-        {
-
-        }
 
         if (selectedlights.length > 0)
         {
@@ -1102,20 +1090,35 @@ class ThreeJsScene extends Component
                 this.DimLEDRequest(currkey, currbrightness);
                 changebrightness = null;
             }
+
             if(configrequest)
             {
                 this.SetConfigRequest(currkey);
                 configrequest = null;
             }
+
             if (firmwareupdate)
             {
                 this.FWUpdateRequest(currkey);
                 firmwareupdate = null;
             }
+
             if (resetkey)
             {
                 this.ResetSelectedLightKeys(selectedlights);
                 resetkey = null;
+            }
+
+            if (currgroupid)
+            {
+                console.log("currgroupid");
+                currgroupid = null;
+            }
+
+            if (currzoneid)
+            {
+                console.log("currzoneid");
+                currzoneid = null;
             }
         }
 

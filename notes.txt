@@ -37,9 +37,15 @@ things broken so far
 - positions of gui and text ui
 
 ACTUAL TODO:
-grouping
-- groupid
-- zoneid
+grouping (groups and zones)
+   - add setgroupid to lightgui
+   - add setzoneid to lightgui
+   - convert all functions to take multi select lights
+     (selectedlights array of light names)
+   - hotkeys for testing
+      - select group 1
+      - select zone 1
+      - select all
 
 steps:
 npm start in lms/react/lms
