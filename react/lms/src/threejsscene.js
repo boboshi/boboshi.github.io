@@ -597,7 +597,7 @@ class ThreeJsScene extends Component
 
             var foo = function() {proggui.innerHTML = "Firmware update: 50%"};
             var bar = function() {proggui.innerHTML = "Firmware update: 100% (complete)"; 
-                                                     find.userData.firmwareupdate = false;};
+                                                      find.userData.firmwareupdate = false;};
             var loo = function() {proggui.innerHTML = ""};
 
             setTimeout(foo, 500);
@@ -611,8 +611,25 @@ class ThreeJsScene extends Component
 
 
     // triggers =========================================================================
+    Activate(key)
+    {
+        var find = this.FindLightByKey(key);
+    }
 
+    Trigger(key)
+    {
+        var find = this.FindLightByKey(key);
+    }
 
+    AddTrigger(key, triggereekey)
+    {
+        var find = this.FindLightByKey(key);
+    }
+
+    RemoveTrigger()
+    {
+        
+    }
     //===================================================================================
 
 
@@ -975,7 +992,6 @@ class ThreeJsScene extends Component
             searchgui.closed = true;
             lightgui.closed = false;
             searchgui.hide();
-            inputparams["SyncClock"] = light.userData.syncclock;
             lightgui.show();
         }
         else
@@ -1564,12 +1580,15 @@ class ThreeJsScene extends Component
                 if (textgui.closed && Lmouseup && (selectedlights.length > 0) && !selectedStart)
                 {
                     var tmp = this.FindLightByName(selectedlights[0]);
-                    tmp.userData.selected = false;
-                    searchgui.closed = true;
-                    searchgui.hide();
-                    selectedlights = [];
-                    this.ClearDisplayLightData();
-                    outlinePass.selectedObjects = [];
+                    if(tmp)
+                    {
+                        tmp.userData.selected = false;
+                        searchgui.closed = true;
+                        searchgui.hide();
+                        selectedlights = [];
+                        this.ClearDisplayLightData();
+                        outlinePass.selectedObjects = [];
+                    }
                 }
     
                 if (selectedStart)

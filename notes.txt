@@ -13,7 +13,7 @@ trigger table/group
       - checkbox under lightgui to enable
       - left click to add
       - right click to remove
-      - prototype wouild be something like AddTriggeree(trigger, triggeree)
+      - prototype wouild be something like AddTrigger(trigger, triggeree)
          - function will add triggerer into triggeree's array
          - same thing for remove
 
