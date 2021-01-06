@@ -37,13 +37,6 @@ things broken so far
 - positions of gui and text ui
 
 ACTUAL TODO:
-grouping (groups and zones)
-   - convert all functions to take multi select lights
-     (selectedlights array of light names)
-      - brightness
-      - config request
-      - firmware update
-      - reset key
 add light
 - add fake progress for provisioning light from backend
 configs

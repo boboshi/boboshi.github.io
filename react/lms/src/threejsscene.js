@@ -524,7 +524,6 @@ class ThreeJsScene extends Component
     // placeholder for firmware update
     SetFWVersion(key, fw)
     {
-        console.log(key);
         var find = this.FindLightByKey(key);
         if (find)
             find.userData.fwversion = fw;
@@ -657,8 +656,8 @@ class ThreeJsScene extends Component
     // - last status (enum (int), 1:on, 2:off)
     // - pvm level (int)
     // - brightness (int, 0-100)
-    // - group id (int) 0xff is default
-    // - zone id (int) 0xff is default
+    // - group id (int) 0xff (255) is default
+    // - zone id (int) 0xff (255) is default
     
     AddLight(name, pos)
     {
@@ -690,8 +689,8 @@ class ThreeJsScene extends Component
                               status: STATUS.OFF, 
                               pvm: 0,
                               brightness: 100,
-                              groupid: 0xff,
-                              zoneid: 0xff};
+                              groupid: 255,
+                              zoneid: 255};
     
     	// add mesh to array (for raycasting/picking)
     	LightArray.push(lightmesh);
@@ -783,7 +782,7 @@ class ThreeJsScene extends Component
     {
         var found = false;
 
-        if (id === 0xff)
+        if (id === 255)
         {
             for (var i = 0; i < LightArray.length; ++i)
             {
@@ -809,13 +808,13 @@ class ThreeJsScene extends Component
                 // group
                 if (mode)
                 {
-                    if (light0.userData.groupid == id)
+                    if (parseInt(light0.userData.groupid) === id)
                         push = true;
                 }
                 // zone
                 else
                 {
-                    if (light0.userData.zoneid == id)
+                    if (parseInt(light0.userData.zoneid) === id)
                         push = true;
                 }
 
@@ -1059,18 +1058,6 @@ class ThreeJsScene extends Component
 	    return deg * Math.PI / 180;
     }
 
-    GetKeyArray()
-    {
-        var keyarray = [];
-
-        for (var i = 0; i < selectedlights.length; ++i)
-        {
-            keyarray.push(this.FindLightByName(selectedlights[i]).userData.key);
-        }
-
-        return keyarray;
-    }
-
     //===================================================================================
 
 
@@ -1123,23 +1110,34 @@ class ThreeJsScene extends Component
                 this.SetSelectedLightStatus(selectedlights, ledstatus);
                 ledstatus = null;
             }
-            // these functions only work on one for now
+
             if (changebrightness)
             {
-                //keyarray = this.GetKeyArray();
-                this.DimLEDRequest(currkey, currbrightness);
+                for (var i = 0; i < selectedlights.length; ++i)
+                {
+                    this.DimLEDRequest(this.FindLightByName(selectedlights[i]).userData.key, currbrightness);
+                }
+
                 changebrightness = null;
             }
 
             if(configrequest)
             {
-                this.SetConfigRequest(currkey);
+                for (var i = 0; i < selectedlights.length; ++i)
+                {
+                    this.SetConfigRequest(this.FindLightByName(selectedlights[i]).userData.key);
+                }
+
                 configrequest = null;
             }
 
             if (firmwareupdate)
             {
-                this.FWUpdateRequest(currkey);
+                for (var i = 0; i < selectedlights.length; ++i)
+                {
+                    this.FWUpdateRequest(this.FindLightByName(selectedlights[i]).userData.key);
+                }
+
                 firmwareupdate = null;
             }
 
@@ -1514,15 +1512,15 @@ class ThreeJsScene extends Component
                 break;
             case "Digit1":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectGroup(0x1);
+                    this.SelectGroup(1);
                 break;
             case "Digit2":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectZone(0x1);
+                    this.SelectZone(1);
                 break;
             case "Digit3":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectGroup(0xff);
+                    this.SelectGroup(255);
                 break;
             default:
                 break;
