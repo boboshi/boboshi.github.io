@@ -49,7 +49,7 @@ var searchgui, textgui, lightgui, inputparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
     currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
-    changemssens, changesyncclock, changeholdtime;
+    changemssens, changesyncclock, changeholdtime, changetriggers;
 var currname = "";
 
 // "enum" for light status
@@ -333,7 +333,8 @@ class ThreeJsScene extends Component
                        "SyncClock": true,
                        "MSSensitivity": "Medium",
                        "GroupID": "",
-                       "ZoneID": ""};
+                       "ZoneID": "",
+                       "EditTriggers": false};
         var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
         var resetkeybutton = {ResetKey:function(){resetkey = true;}};
 
@@ -356,6 +357,7 @@ class ThreeJsScene extends Component
                                                                                                                 changemssens = true;});
         lightgui.add(inputparams, "GroupID").onFinishChange(function(value){currgroupid = value});
         lightgui.add(inputparams, "ZoneID").onFinishChange(function(value){currzoneid = value});
+        lightgui.add(inputparams, "EditTriggers").onFinishChange(function(value){changetriggers = value;});
 
     	lightgui.domElement.style.position = "absolute";
         lightgui.domElement.style.top = "0px";
@@ -614,21 +616,35 @@ class ThreeJsScene extends Component
     Activate(key)
     {
         var find = this.FindLightByKey(key);
+
+        for (var i = 0; i < find.userData.triggerees.length; ++i)
+        {
+            var triggeree = find.userData.triggerees[i];
+            this.Trigger(triggeree.userData.key);
+        }
     }
 
     Trigger(key)
     {
         var find = this.FindLightByKey(key);
+
+        console.log(key + " triggered");
     }
 
     AddTrigger(key, triggereekey)
     {
         var find = this.FindLightByKey(key);
+        var findtrig = this.FindLightByKey(triggereekey);
+
+
     }
 
-    RemoveTrigger()
+    RemoveTrigger(key, triggereekey)
     {
-        
+        var find = this.FindLightByKey(key);
+        var findtrig = this.FindLightByKey(triggereekey);
+
+
     }
     //===================================================================================
 
@@ -1087,22 +1103,6 @@ class ThreeJsScene extends Component
     		laststatus = "ON";
     	else
     		laststatus = "NORMAL";
-            //lightmesh.userData = {name: name, 
-            //    key: key, 
-            //    fwversion : "1.0",
-            //    selected: false,
-            //    updateprogress: false,
-            //    provisionprogress: false,
-            //    lastheard: "test", 
-            //    status: STATUS.OFF, 
-            //    pvm: 0,
-            //    mssens: "medium",
-            //    syncclock: true,
-            //    maxbrightness: 100,
-            //    dimmedbrightness: 100,
-            //    msbrightness: 100,
-            //    groupid: 255,
-            //    zoneid: 255};
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
@@ -1131,7 +1131,6 @@ class ThreeJsScene extends Component
     }
 
     // file saving and loading
-    // fetch helper function
     async FetchData(j = "default")
     {
     	let url = serverAddress + "resources/" + j + ".json";
