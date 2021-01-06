@@ -610,6 +610,13 @@ class ThreeJsScene extends Component
 
 
 
+    // triggers =========================================================================
+
+
+    //===================================================================================
+
+
+
     // helper functions =================================================================
     // placeholder for firmware update
     SetFWVersion(key, fw)
@@ -778,6 +785,8 @@ class ThreeJsScene extends Component
     // - holdtime int
     // - group id (int) 0xff (255) is default
     // - zone id (int) 0xff (255) is default
+    // - triggerers (array of strings)
+    // - triggerees (array of strings)
     
     AddLight(name, pos)
     {
@@ -816,7 +825,9 @@ class ThreeJsScene extends Component
                               msbrightness: 100,
                               holdtime: 0,
                               groupid: 255,
-                              zoneid: 255};
+                              zoneid: 255,
+                              triggerers: [],
+                              triggerees: []};
     
     	// add mesh to array (for raycasting/picking)
     	LightArray.push(lightmesh);
