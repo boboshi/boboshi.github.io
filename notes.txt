@@ -1,60 +1,13 @@
-viewer
-- save previous camera location and orientation?
-- make the data display more pretty?
-- code refactoring (all the time)
-- optimise program, pretty intense after leaving it for awhile
-- change light model?
+TODO:
+trigger table/group
+- each object stores 2 arrays of light keys 
+   - triggerers
+   - trigerees
 
-editor
-- allow for scaling and resizing of canvas
 
-to resize entire canvas:
-- reposition and scale the toolbars and viewport individually
+group/zone/trigger colour identification
+documentation for json
 
-#0 LMS new UI revamp <- you may start working on this with a suitable front-end web-app 
-   language/architecture you are comfortable with (I recommend react)
-
-You may ask Viola for any missing resources that you may need in the development
-
-#1 Edit light page 
-
-#2 Configuration feature – individual feature configure 
-
-#3 Grouping feature – to group the selected lights 
-
-#4 OTA feature – update light’s firmware (progress, firmware check, etc.) 
-
- 
-Up to your design, these could be multiple pages or a single web page.
-
-You may find some references and come up with some preliminary front-end UI simulation for 
-the above, as firmware/backend are not available yet.
-
-Thereafter, we may find Viola (our design manager) for UI/UX improvements.
-
-TODO
-things broken so far
-- positions of gui and text ui
-
-ACTUAL TODO:
-add light
-- add fake progress for provisioning light from backend
-configs
-- motion sensor sensitivity (dropdown box)
-   - low
-   - medium-low
-   - medium
-   - medium-high
-   - high
-- settings
-   - synchronise clock (checkbox)
-   - hold time (text input)
-- brightness (1 text input each)
-   - dimmed
-   - motion sensor
-   - max brightness
-reorganise light data format and display
-
-steps:
+running steps:
 npm start in lms/react/lms
 http-server -p 8080 --cors -c10 in http-server folder

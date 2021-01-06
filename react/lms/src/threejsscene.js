@@ -40,16 +40,17 @@ var selectionBox, selectionBoxHelper;
 // arrays used for raycasting and picking
 var LightArray = [];
 var PlaneArray = [];
-// grouping
-
 // filename
 var filename = "";
 // text display
-var text, error, fwprog;
-// gui for id modification
-var searchgui, textgui, lightgui, currsearch, currgroupid, currzoneid;
+var text, error, proggui;
+// gui
+var searchgui, textgui, lightgui, inputparams;
+var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
+    currmssens, currsyncclock;
+var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
+    changemssens, changesyncclock, changeholdtime;
 var currname = "";
-var ledstatus, resetkey, configrequest, firmwareupdate, currbrightness, changebrightness;
 
 // "enum" for light status
 const STATUS = 
@@ -254,14 +255,14 @@ class ThreeJsScene extends Component
         // light data display setup
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
-	    text.style.width = "260px";
-	    text.style.height = "337.5px";
+	    text.style.width = "250px";
+	    text.style.height = "340px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
 	    text.style.top = "0px";
 	    text.style.left = "0px";
-	    text.style.fontSize = 30 + "px";
+	    text.style.fontSize = 20 + "px";
 	    text.style.fontFamily = "Calibri";
 	    text.style.display = "none";
 	    document.body.appendChild(text);
@@ -274,21 +275,21 @@ class ThreeJsScene extends Component
 	    error.innerHTML = "";
 	    error.style.bottom = "0px";
 	    error.style.left = "0px";
-	    error.style.fontSize = 30 + "px";
+	    error.style.fontSize = 20 + "px";
 	    error.style.fontFamily = "Calibri";
         document.body.appendChild(error);
         
         // firmware update progress
-        fwprog = document.createElement("div");
-        fwprog.style.position = "absolute";
-        fwprog.style.backgroundColor = "black";
-        fwprog.style.color = "white";
-        fwprog.innerHTML = "";
-        fwprog.style.bottom = "0px";
-        fwprog.style.right  = "0px";
-        fwprog.style.fontSize = 30 + "px";
-	    fwprog.style.fontFamily = "Calibri";
-        document.body.appendChild(fwprog);
+        proggui = document.createElement("div");
+        proggui.style.position = "absolute";
+        proggui.style.backgroundColor = "black";
+        proggui.style.color = "white";
+        proggui.innerHTML = "";
+        proggui.style.bottom = "0px";
+        proggui.style.right  = "0px";
+        proggui.style.fontSize = 20 + "px";
+	    proggui.style.fontFamily = "Calibri";
+        document.body.appendChild(proggui);
     }
 
     InitGUI()
@@ -325,22 +326,36 @@ class ThreeJsScene extends Component
         // light gui
         var onbutton = {On:function(){ledstatus = STATUS.ON;}};
         var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
-        const dimparam = {"Brightness": "100"};
-        var configbutton = {ConfigRequest:function(){configrequest = true;}};
+        inputparams = {"MaxBrightness": "100",
+                       "DimmedBrightness": "100",
+                       "MSBrightness": "100",
+                       "HoldTime": "0",
+                       "SyncClock": true,
+                       "MSSensitivity": "Medium",
+                       "GroupID": "",
+                       "ZoneID": ""};
         var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
         var resetkeybutton = {ResetKey:function(){resetkey = true;}};
-        const groupparam = {"GroupID": ""};
-        const zoneparam = {"ZoneID": ""};
 
         lightgui.add(onbutton, "On");
         lightgui.add(offbutton, "Off");
-        lightgui.add(dimparam, "Brightness").onFinishChange(function(value){currbrightness = value;
-                                                                            changebrightness = true;});
-        lightgui.add(configbutton, "ConfigRequest");
+        lightgui.add(inputparams, "MaxBrightness").onFinishChange(function(value){currmaxbrightness = value;
+                                                                                  changemaxbrightness = true;});
+        lightgui.add(inputparams, "DimmedBrightness").onFinishChange(function(value){currdimmedbrightness = value;
+                                                                                     changedimmedbrightness = true;});
+        lightgui.add(inputparams, "MSBrightness").onFinishChange(function(value){currmsbrightness = value;
+                                                                                 changemsbrightness = true;});
+        lightgui.add(inputparams, "HoldTime").onFinishChange(function(value){currholdtime = value;
+                                                                             changeholdtime = true;});
         lightgui.add(firmwarebutton, "FirmwareUpdate");
         lightgui.add(resetkeybutton, "ResetKey");
-        lightgui.add(groupparam, "GroupID").onFinishChange(function(value){currgroupid = value});
-        lightgui.add(zoneparam, "ZoneID").onFinishChange(function(value){currzoneid = value});
+        lightgui.add(inputparams, "SyncClock").listen().onFinishChange(function(value){currsyncclock = value;
+                                                                                       changesyncclock = true;});
+        lightgui.add(inputparams, "MSSensitivity", ["Low", "Medium-Low", "Medium", "Medium-High", "High"]).listen()
+                                                                                .onFinishChange(function(value){currmssens = value;
+                                                                                                                changemssens = true;});
+        lightgui.add(inputparams, "GroupID").onFinishChange(function(value){currgroupid = value});
+        lightgui.add(inputparams, "ZoneID").onFinishChange(function(value){currzoneid = value});
 
     	lightgui.domElement.style.position = "absolute";
         lightgui.domElement.style.top = "0px";
@@ -366,8 +381,14 @@ class ThreeJsScene extends Component
         // key is same as name for now
         console.log("Received provision response: name: " + name + " key: " + name);
 
-        // add light to scene (use name as key for now)
-        this.AddLightHelper(name, name, pos);
+        proggui.innerHTML = "Requesting provision...";
+
+        var foo = function() {proggui.innerHTML = "Provision successful, light added"};
+        var bar = function() {proggui.innerHTML = ""};
+
+        setTimeout(foo, 2000);
+        setTimeout(this.AddLightHelper, 2000, name, name, pos);
+        setTimeout(bar, 3000);
     }
 
     ProvisionStatusRequest(key)
@@ -446,15 +467,15 @@ class ThreeJsScene extends Component
             find.userData.status = STATUS.OFF;
     }
 
-    DimLEDRequest(key, brightness)
+    SetMaxBrightnessRequest(key, brightness)
     {
-        console.log("Sent Dim LED request: key: " + key + " brightness: " + brightness);
-        this.DimLEDResponse(key, brightness);
+        console.log("Sent Set MaxBrightness request: key: " + key + " maxbrightness: " + brightness);
+        this.SetMaxBrightnessResponse(key, brightness);
     }
 
-    DimLEDResponse(key, brightness)
+    SetMaxBrightnessResponse(key, brightness)
     {
-        console.log("Received Dim LED response: key: " + key + " brightness: " + brightness);
+        console.log("Received Set MaxBrightness response: key: " + key + " maxbrightness: " + brightness);
         // check for invalid input
         if (brightness < 0 || brightness > 100)
         {
@@ -463,26 +484,95 @@ class ThreeJsScene extends Component
         }
         else
         {
-            var find = this.FindLightByKey(key);
-            if (find)
-            {
-                find.userData.brightness = brightness;
-                find.material.transparent = true;
-                // range from 0.3 to 1.0
-                find.material.opacity = 0.3 + brightness / 100 * 0.7;
-            }
+            this.SetBrightnessHelper(key, brightness, "max");
         }
     }
 
-    SetConfigRequest(key)
+    SetDimmedBrightnessRequest(key, brightness)
     {
-        console.log("Sent Set Configuration request: key: " + key + " placeholders");
-        this.SetConfigResponse(key);
+        console.log("Sent Set DimmedBrightness request: key: " + key + " dimmedbrightness: " + brightness);
+        this.SetDimmedBrightnessResponse(key, brightness);
     }
 
-    SetConfigResponse(key)
+    SetDimmedBrightnessResponse(key, brightness)
     {
-        console.log("Received Set Configuration response: key: " + key + " placeholders");
+        console.log("Received Set DimmedBrightness response: key: " + key + " dimmedbrightness: " + brightness);
+    
+        if (brightness < 0 || brightness > 100)
+        {
+            this.ShowError("invalid brightness", 3000);
+            return;
+        }
+        else
+        {
+            this.SetBrightnessHelper(key, brightness, "dimmed");
+        }
+    }
+
+    SetMSBrightnessRequest(key, brightness)
+    {
+        console.log("Sent Set MSBrightness request: key: " + key + " msbrightness: " + brightness);
+        this.SetMSBrightnessResponse(key, brightness);
+    }
+
+    SetMSBrightnessResponse(key, brightness)
+    {
+        console.log("Received Set MSBrightness response: key: " + key + " msbrightness: " + brightness);
+
+        if (brightness < 0 || brightness > 100)
+        {
+            this.ShowError("invalid brightness", 3000);
+            return;
+        }
+        else
+        {
+            this.SetBrightnessHelper(key, brightness, "motion");
+        }
+    }
+
+    SetMSSensRequest(key, sens)
+    {
+        console.log("Sent Set MSSens request: key: " + key + " mssens: " + sens);
+        this.SetMSSensResponse(key, sens);
+    }
+
+    SetMSSensResponse(key, sens)
+    {
+        console.log("Received Set MSSens response: key: " + key + " mssens: " + sens);
+
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.mssens = sens;
+    }
+
+    SetSyncClockRequest(key, sync)
+    {
+        console.log("Sent Set Sync Clock request: key: " + key + " sync: " + sync);
+        this.SetSyncClockResponse(key, sync);
+    }
+
+    SetSyncClockResponse(key, sync)
+    {
+        console.log("Received Set Sync Clock response: key: " + key + " sync: " + sync);
+
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.syncclock = sync;
+    }
+
+    SetHoldTimeRequest(key, time)
+    {
+        console.log("Sent Set Hold Time request: key: " + key + " time: " + time);
+        this.SetHoldTimeResponse(key, time);
+    }
+
+    SetHoldTimeResponse(key, time)
+    {
+        console.log("Received Set Hold Time response: key: " + key + " time: " + time);
+
+        var find = this.FindLightByKey(key);
+        if (find)
+            find.userData.holdtime = time;
     }
 
     FWUpdateRequest(key)
@@ -503,12 +593,12 @@ class ThreeJsScene extends Component
         else
         {
             find.userData.firmwareupdate = true;
-            fwprog.innerHTML = "Firmware update: 0%";
+            proggui.innerHTML = "Firmware update: 0%";
 
-            var foo = function() {fwprog.innerHTML = "Firmware update: 50%"};
-            var bar = function() {fwprog.innerHTML = "Firmware update: 100% (complete)"; 
+            var foo = function() {proggui.innerHTML = "Firmware update: 50%"};
+            var bar = function() {proggui.innerHTML = "Firmware update: 100% (complete)"; 
                                                      find.userData.firmwareupdate = false;};
-            var loo = function() {fwprog.innerHTML = ""};
+            var loo = function() {proggui.innerHTML = ""};
 
             setTimeout(foo, 500);
             setTimeout(bar, 1000);            
@@ -527,6 +617,29 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         if (find)
             find.userData.fwversion = fw;
+    }
+
+    SetBrightnessHelper(key, brightness, type)
+    {
+        var find = this.FindLightByKey(key);
+        if (find)
+        {
+            if (type === "max")
+            {
+                find.userData.maxbrightness = brightness;
+                find.material.transparent = true;
+                // range from 0.3 to 1.0
+                find.material.opacity = 0.3 + brightness / 100 * 0.7;
+            }
+            else if (type === "dimmed")
+            {
+                find.userData.dimmedbrightness = brightness;
+            }
+            else if (type === "motion")
+            {
+                find.userData.msbrightness = brightness;
+            }
+        }
     }
 
     ShowError(msg, time)
@@ -549,7 +662,8 @@ class ThreeJsScene extends Component
     	{
     		selectedlights = [light.userData.name];
     		this.MoveToLight(light.userData.name);
-    		lightgui.closed = false;
+            lightgui.closed = false;
+            inputparams["SyncClock"] = light.userData.syncclock;
     		lightgui.show();
         
     		this.DisplayLightData(light.userData.name);
@@ -652,10 +766,16 @@ class ThreeJsScene extends Component
     // - fwversion (string)
     // - selected (bool for internal use)
     // - updateprogress (bool for internal use)
+    // - provisionprogress (bool for internal use)
     // - last heard (string)
     // - last status (enum (int), 1:on, 2:off)
     // - pvm level (int)
-    // - brightness (int, 0-100)
+    // - mssens (string)
+    // - syncclock (bool)
+    // - maxbrightness (int, 0-100)
+    // - dimmedbrightness (int, 0-100)
+    // - msbrightness (int, 0-100)
+    // - holdtime int
     // - group id (int) 0xff (255) is default
     // - zone id (int) 0xff (255) is default
     
@@ -685,10 +805,16 @@ class ThreeJsScene extends Component
                               fwversion : "1.0",
                               selected: false,
                               updateprogress: false,
+                              provisionprogress: false,
                               lastheard: "test", 
                               status: STATUS.OFF, 
                               pvm: 0,
-                              brightness: 100,
+                              mssens: "medium",
+                              syncclock: true,
+                              maxbrightness: 100,
+                              dimmedbrightness: 100,
+                              msbrightness: 100,
+                              holdtime: 0,
                               groupid: 255,
                               zoneid: 255};
     
@@ -838,6 +964,7 @@ class ThreeJsScene extends Component
             searchgui.closed = true;
             lightgui.closed = false;
             searchgui.hide();
+            inputparams["SyncClock"] = light.userData.syncclock;
             lightgui.show();
         }
         else
@@ -933,17 +1060,37 @@ class ThreeJsScene extends Component
     		laststatus = "ON";
     	else
     		laststatus = "NORMAL";
-
+            //lightmesh.userData = {name: name, 
+            //    key: key, 
+            //    fwversion : "1.0",
+            //    selected: false,
+            //    updateprogress: false,
+            //    provisionprogress: false,
+            //    lastheard: "test", 
+            //    status: STATUS.OFF, 
+            //    pvm: 0,
+            //    mssens: "medium",
+            //    syncclock: true,
+            //    maxbrightness: 100,
+            //    dimmedbrightness: 100,
+            //    msbrightness: 100,
+            //    groupid: 255,
+            //    zoneid: 255};
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
                          "FW Version: " + find.userData.fwversion + "<br/>" +
-                         "Brightness: " + find.userData.brightness + "<br/>" + 
                          "Group: " + find.userData.groupid + "<br/>" +
                          "Zone: " + find.userData.zoneid + "<br/>" + 
     					 "Last Heard: " + find.userData.lastheard + "<br/>" +
     					 "Last Status: " + laststatus + "<br/>" +
-    					 "PVM Level: " + find.userData.pvm;
+                         "PVM Level: " + find.userData.pvm + "<br/>" +
+                         "MS Sensitivity: " + find.userData.mssens + "<br/>" +
+                         "Sync Clock: " + find.userData.syncclock + "<br/>" +
+                         "Max Brightness: " + find.userData.maxbrightness + "<br/>" +
+                         "Dimmed Brightness: " + find.userData.dimmedbrightness + "<br/>" +
+                         "MS Brightness: " + find.userData.msbrightness + "<br/>" +
+                         "Hold Time: " + find.userData.holdtime;
     	text.style.display = "block";
     	// top and left specifies the position of the data
     	//text.style.top = window.innerHeight - 100 + "px";
@@ -978,7 +1125,7 @@ class ThreeJsScene extends Component
     		// lights
     		if (object.userData.name)
     		{
-                object.material.opacity = 0.3 + object.brightness / 100 * 0.7;
+                object.material.opacity = 0.3 + object.maxbrightness / 100 * 0.7;
     			LightArray.push(object);
     		}
     		else if (object.isMesh)
@@ -1103,7 +1250,6 @@ class ThreeJsScene extends Component
 
         if (selectedlights.length > 0)
         {
-            var currkey = this.FindLightByName(selectedlights[0]).userData.key;
             // light gui helpers
             if (ledstatus)
             {
@@ -1111,24 +1257,52 @@ class ThreeJsScene extends Component
                 ledstatus = null;
             }
 
-            if (changebrightness)
+            if (changemaxbrightness)
             {
                 for (var i = 0; i < selectedlights.length; ++i)
-                {
-                    this.DimLEDRequest(this.FindLightByName(selectedlights[i]).userData.key, currbrightness);
-                }
+                    this.SetMaxBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currmaxbrightness);
 
-                changebrightness = null;
+                changemaxbrightness = null;
             }
 
-            if(configrequest)
+            if (changedimmedbrightness)
             {
                 for (var i = 0; i < selectedlights.length; ++i)
-                {
-                    this.SetConfigRequest(this.FindLightByName(selectedlights[i]).userData.key);
-                }
+                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currdimmedbrightness);
 
-                configrequest = null;
+                changedimmedbrightness = null;
+            }
+
+            if (changemsbrightness)
+            {
+                for (var i = 0; i < selectedlights.length; ++i)
+                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currmsbrightness);
+
+                changemsbrightness = null;
+            }
+
+            if (changeholdtime)
+            {
+                for (var i = 0; i < selectedlights.length; ++i)
+                    this.SetHoldTimeRequest(this.FindLightByName(selectedlights[i]).userData.key, currholdtime);
+
+                changeholdtime = null;
+            }
+
+            if (changesyncclock)
+            {
+                for (var i = 0; i < selectedlights.length; ++i)
+                    this.SetSyncClockRequest(this.FindLightByName(selectedlights[i]).userData.key, currsyncclock);
+
+                changesyncclock = null;
+            }
+
+            if (changemssens)
+            {
+                for (var i = 0; i < selectedlights.length; ++i)
+                    this.SetMSSensRequest(this.FindLightByName(selectedlights[i]).userData.key, currmssens);
+
+                    changemssens = null;
             }
 
             if (firmwareupdate)
@@ -1222,6 +1396,7 @@ class ThreeJsScene extends Component
                             this.MoveToLight(LIGHTINTERSECTED.userData.name);
                         }
                         lightgui.closed = false;
+                        inputparams["SyncClock"] = intersects[0].object.userData.syncclock;
                         lightgui.show();
                     }
                 }
