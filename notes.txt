@@ -3,7 +3,19 @@ trigger table/group
 - each object stores 2 arrays of light keys 
    - triggerers
    - trigerees
-
+- distinction between triggered and activated?
+- Activate() calls Trigger() on triggerees of light
+- how to manage triggerer/triggerees of lights?
+   - mouse?
+   - manually type light names into text field? (how to remove?)
+   - dropdown box? (for real???)
+   - mouse is probably the best option here
+      - checkbox to enable
+      - left click to add
+      - right click to remove
+      - prototype wouild be something like AddTriggeree(trigger, triggeree)
+         - function will add triggerer into triggeree's array
+         - same thing for remove
 
 group/zone/trigger colour identification
 documentation for json
