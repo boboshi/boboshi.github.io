@@ -2,7 +2,7 @@ TODO:
 trigger table/group
 - each object stores 2 arrays of light keys 
    - triggerers
-   - trigerees
+   - triggerees
 - distinction between triggered and activated?
 - Activate() calls Trigger() on triggerees of light
 - how to manage triggerer/triggerees of lights?
@@ -10,7 +10,7 @@ trigger table/group
    - manually type light names into text field? (how to remove?)
    - dropdown box? (for real???)
    - mouse is probably the best option here
-      - checkbox to enable
+      - checkbox under lightgui to enable
       - left click to add
       - right click to remove
       - prototype wouild be something like AddTriggeree(trigger, triggeree)
