@@ -1293,49 +1293,49 @@ class ThreeJsScene extends Component
 
             if (changedimmedbrightness)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currdimmedbrightness);
+                for (var j = 0; i < selectedlights.length; ++j)
+                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[j]).userData.key, currdimmedbrightness);
 
                 changedimmedbrightness = null;
             }
 
             if (changemsbrightness)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currmsbrightness);
+                for (var k = 0; k < selectedlights.length; ++k)
+                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[k]).userData.key, currmsbrightness);
 
                 changemsbrightness = null;
             }
 
             if (changeholdtime)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetHoldTimeRequest(this.FindLightByName(selectedlights[i]).userData.key, currholdtime);
+                for (var l = 0; l < selectedlights.length; ++l)
+                    this.SetHoldTimeRequest(this.FindLightByName(selectedlights[l]).userData.key, currholdtime);
 
                 changeholdtime = null;
             }
 
             if (changesyncclock)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetSyncClockRequest(this.FindLightByName(selectedlights[i]).userData.key, currsyncclock);
+                for (var m = 0; m < selectedlights.length; ++m)
+                    this.SetSyncClockRequest(this.FindLightByName(selectedlights[m]).userData.key, currsyncclock);
 
                 changesyncclock = null;
             }
 
             if (changemssens)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetMSSensRequest(this.FindLightByName(selectedlights[i]).userData.key, currmssens);
+                for (var n = 0; n < selectedlights.length; ++n)
+                    this.SetMSSensRequest(this.FindLightByName(selectedlights[n]).userData.key, currmssens);
 
                     changemssens = null;
             }
 
             if (firmwareupdate)
             {
-                for (var i = 0; i < selectedlights.length; ++i)
+                for (var o = 0; o < selectedlights.length; ++o)
                 {
-                    this.FWUpdateRequest(this.FindLightByName(selectedlights[i]).userData.key);
+                    this.FWUpdateRequest(this.FindLightByName(selectedlights[o]).userData.key);
                 }
 
                 firmwareupdate = null;
@@ -1397,9 +1397,9 @@ class ThreeJsScene extends Component
                 if (selectedlights.length > 0)
                 {
                     // clear display
-                    for (var i = 0; i < LightArray.length; ++i)
+                    for (var p = 0; p < LightArray.length; ++p)
                     {
-                        LightArray[i].userData.selected = false;
+                        LightArray[p].userData.selected = false;
                     }
                 }
             }
