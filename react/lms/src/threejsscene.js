@@ -49,7 +49,7 @@ var searchgui, textgui, lightgui, inputparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
     currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
-    changemssens, changesyncclock, changeholdtime, changetriggers;
+    changemssens, changesyncclock, changetriggers;
 var currname = "";
 
 // "enum" for light status
@@ -256,7 +256,7 @@ class ThreeJsScene extends Component
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
 	    text.style.width = "250px";
-	    text.style.height = "340px";
+	    text.style.height = "390px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
@@ -357,14 +357,16 @@ class ThreeJsScene extends Component
                                                                                                                 changemssens = true;});
         lightgui.add(inputparams, "GroupID").onFinishChange(function(value){currgroupid = value});
         lightgui.add(inputparams, "ZoneID").onFinishChange(function(value){currzoneid = value});
-        lightgui.add(inputparams, "EditTriggers").onFinishChange(function(value){changetriggers = value;});
+        lightgui.add(inputparams, "EditTriggers").listen().onFinishChange(function(value){changetriggers = value;});
 
     	lightgui.domElement.style.position = "absolute";
         lightgui.domElement.style.top = "0px";
     	lightgui.domElement.style.right = "0px";
 
         // closed by default
+        inputparams["EditTriggers"] = false;
         lightgui.closed = true;
+        changetriggers = false;
         lightgui.hide();
     }
     //===================================================================================
@@ -616,6 +618,7 @@ class ThreeJsScene extends Component
     Activate(key)
     {
         var find = this.FindLightByKey(key);
+        console.log(key + " activated");
 
         for (var i = 0; i < find.userData.triggerees.length; ++i)
         {
@@ -636,7 +639,8 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         var findtrig = this.FindLightByKey(triggereekey);
 
-
+        find.userData.triggerees.push(triggereekey);
+        findtrig.userData.triggerers.push(key);
     }
 
     RemoveTrigger(key, triggereekey)
@@ -644,7 +648,14 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         var findtrig = this.FindLightByKey(triggereekey);
 
+        var triggereeindex = find.userData.triggerees.indexOf(triggereekey);
+        var triggererindex = findtrig.userData.triggerers.indexOf(key);
 
+        if (triggereeindex)
+            find.userData.triggerees.splice(triggereeindex, 1);
+
+        if (triggererindex)
+            findtrig.userData.triggerers.splice(key, 1);
     }
     //===================================================================================
 
@@ -724,9 +735,11 @@ class ThreeJsScene extends Component
     	{
             searchgui.show();
     		textgui.closed = true;
-    		textgui.hide();
-    		lightgui.closed = true;
-    		lightgui.hide();
+            textgui.hide();
+            inputparams["EditTriggers"] = false;
+            lightgui.closed = true;
+            //changetriggers = false;
+            lightgui.hide();
     		text.innerHTML = "";
     	}
     	else
@@ -743,7 +756,9 @@ class ThreeJsScene extends Component
     		textgui.show();
     		searchgui.closed = true;
             searchgui.hide();
-    		lightgui.closed = true;
+            inputparams["EditTriggers"] = false;
+            lightgui.closed = true;
+            //changetriggers = false;
     		lightgui.hide();
     		text.innerHTML = "";
     	}
@@ -1117,7 +1132,9 @@ class ThreeJsScene extends Component
                          "Max Brightness: " + find.userData.maxbrightness + "<br/>" +
                          "Dimmed Brightness: " + find.userData.dimmedbrightness + "<br/>" +
                          "MS Brightness: " + find.userData.msbrightness + "<br/>" +
-                         "Hold Time: " + find.userData.holdtime;
+                         "Hold Time: " + find.userData.holdtime + "<br/>" +
+                         "Triggerers: " + find.userData.triggerers + "<br/>" +
+                         "Triggerees: " + find.userData.triggerees;
     	text.style.display = "block";
     	// top and left specifies the position of the data
     	//text.style.top = window.innerHeight - 100 + "px";
@@ -1384,7 +1401,7 @@ class ThreeJsScene extends Component
 
         const intersects = raycaster.intersectObjects(LightArray);
         const planeintersects = raycaster.intersectObjects(PlaneArray);
-
+        
         // light
         if(intersects.length > 0)
         {
@@ -1414,16 +1431,23 @@ class ThreeJsScene extends Component
                     // check if in view mode
                     if(textgui.closed)
                     {
-                        // if single selection
-                        if (!selectedStart && selectedlights.length === 0)
+                        if (changetriggers)
                         {
-                            // select this light
-                            selectedlights = [intersects[0].object.userData.name];
-                            this.MoveToLight(LIGHTINTERSECTED.userData.name);
+                            this.AddTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
                         }
-                        lightgui.closed = false;
-                        inputparams["SyncClock"] = intersects[0].object.userData.syncclock;
-                        lightgui.show();
+                        else
+                        {
+                            // if single selection
+                            if (!selectedStart && selectedlights.length === 0)
+                            {
+                                // select this light
+                                selectedlights = [intersects[0].object.userData.name];
+                                this.MoveToLight(LIGHTINTERSECTED.userData.name);
+                            }
+                            lightgui.closed = false;
+                            inputparams["SyncClock"] = intersects[0].object.userData.syncclock;
+                            lightgui.show();
+                        }
                     }
                 }
 
@@ -1576,7 +1600,7 @@ class ThreeJsScene extends Component
                 )
     
                 // deselect light if left clicked in view mode
-                if (textgui.closed && Lmouseup && (selectedlights.length > 0) && !selectedStart)
+                if (textgui.closed && (selectedlights.length > 0) && !selectedStart && !changetriggers)
                 {
                     var tmp = this.FindLightByName(selectedlights[0]);
                     if(tmp)
@@ -1601,10 +1625,15 @@ class ThreeJsScene extends Component
                 }
                 else
                 {
-                    searchgui.closed = true;
-                    lightgui.closed = true;
-                    searchgui.hide();
-                    lightgui.hide();
+                    if (!changetriggers)
+                    {
+
+                        searchgui.closed = true;
+                        inputparams["EditTriggers"] = false;
+                        lightgui.closed = true;
+                        searchgui.hide();
+                        lightgui.hide();
+                    }
                 }
                 break;
             // rmb
