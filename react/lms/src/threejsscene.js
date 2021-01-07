@@ -658,11 +658,13 @@ class ThreeJsScene extends Component
         var triggereeindex = find.userData.triggerees.indexOf(triggereekey);
         var triggererindex = findtrig.userData.triggerers.indexOf(key);
 
-        if (triggereeindex)
+        if (triggereeindex !== -1)
             find.userData.triggerees.splice(triggereeindex, 1);
+        else
+            this.ShowError("Trigger does not exist", 3000);
 
-        if (triggererindex)
-            findtrig.userData.triggerers.splice(key, 1);
+        if (triggererindex !== -1)
+            findtrig.userData.triggerers.splice(triggererindex, 1);
     }
     //===================================================================================
 
