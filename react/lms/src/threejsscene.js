@@ -639,6 +639,13 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         var findtrig = this.FindLightByKey(triggereekey);
 
+        // check for existing trigger
+        if (find.userData.triggerees.includes(triggereekey))
+        {
+            this.ShowError("Trigger already exists", 3000);
+            return;
+        }
+
         find.userData.triggerees.push(triggereekey);
         findtrig.userData.triggerers.push(key);
     }
@@ -1458,6 +1465,13 @@ class ThreeJsScene extends Component
                     if(!textgui.closed)
                     {
                         this.RemoveLight(LIGHTINTERSECTED.userData.key);
+                    }
+                    else
+                    {
+                        if (changetriggers)
+                        {
+                            this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
+                        }
                     }
                 }
             }
