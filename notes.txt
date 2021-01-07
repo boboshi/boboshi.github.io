@@ -4,6 +4,7 @@ group/zone/trigger colour identification
 
 documentation for json
 highlight technical document by end of month
+cpu overheating issue??????
 
 running steps:
 npm start in lms/react/lms

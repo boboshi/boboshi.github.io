@@ -896,7 +896,7 @@ class ThreeJsScene extends Component
                               lastheard: "test", 
                               status: STATUS.OFF, 
                               pvm: 0,
-                              mssens: "medium",
+                              mssens: "Medium",
                               syncclock: true,
                               maxbrightness: 100,
                               dimmedbrightness: 100,
@@ -1381,9 +1381,7 @@ class ThreeJsScene extends Component
             if (firmwareupdate)
             {
                 for (var o = 0; o < selectedlights.length; ++o)
-                {
                     this.FWUpdateRequest(this.FindLightByName(selectedlights[o]).userData.key);
-                }
 
                 firmwareupdate = null;
             }
