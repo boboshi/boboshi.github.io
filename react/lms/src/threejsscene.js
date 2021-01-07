@@ -43,7 +43,7 @@ var PlaneArray = [];
 // filename
 var filename = "";
 // text display
-var text, error, proggui;
+var text, msg, proggui;
 // gui
 var searchgui, textgui, lightgui, inputparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
@@ -268,16 +268,16 @@ class ThreeJsScene extends Component
 	    document.body.appendChild(text);
 
 	    // error display setup
-	    error = document.createElement("div");
-	    error.style.position = "absolute";
-	    error.style.backgroundColor = "black";
-	    error.style.color = "white";
-	    error.innerHTML = "";
-	    error.style.bottom = "0px";
-	    error.style.left = "0px";
-	    error.style.fontSize = 20 + "px";
-	    error.style.fontFamily = "Calibri";
-        document.body.appendChild(error);
+	    msg = document.createElement("div");
+	    msg.style.position = "absolute";
+	    msg.style.backgroundColor = "black";
+	    msg.style.color = "white";
+	    msg.innerHTML = "";
+	    msg.style.bottom = "0px";
+	    msg.style.left = "0px";
+	    msg.style.fontSize = 20 + "px";
+	    msg.style.fontFamily = "Calibri";
+        document.body.appendChild(msg);
         
         // firmware update progress
         proggui = document.createElement("div");
@@ -483,7 +483,7 @@ class ThreeJsScene extends Component
         // check for invalid input
         if (brightness < 0 || brightness > 100)
         {
-            this.ShowError("invalid brightness", 3000);
+            this.ShowMsg("Error: invalid brightness", 3000);
             return;
         }
         else
@@ -525,7 +525,7 @@ class ThreeJsScene extends Component
 
         if (brightness < 0 || brightness > 100)
         {
-            this.ShowError("invalid brightness", 3000);
+            this.ShowMsg("Error: invalid brightness", 3000);
             return;
         }
         else
@@ -592,7 +592,7 @@ class ThreeJsScene extends Component
 
         if (find.userData.firmwareupdate)
         {
-            this.ShowError("update in progress");
+            this.ShowError("Error: update in progress");
         }
         else
         {
@@ -642,8 +642,12 @@ class ThreeJsScene extends Component
         // check for existing trigger
         if (find.userData.triggerees.includes(triggereekey))
         {
-            this.ShowError("Trigger already exists", 3000);
+            this.ShowMsg("Error: Trigger already exists", 3000);
             return;
+        }
+        else
+        {
+            this.ShowMsg("Trigger added", 3000);
         }
 
         find.userData.triggerees.push(triggereekey);
@@ -659,9 +663,14 @@ class ThreeJsScene extends Component
         var triggererindex = findtrig.userData.triggerers.indexOf(key);
 
         if (triggereeindex !== -1)
+        {
+            this.ShowMsg("Trigger removed", 3000);
             find.userData.triggerees.splice(triggereeindex, 1);
+        }
         else
-            this.ShowError("Trigger does not exist", 3000);
+        {
+            this.ShowMsg("Error: Trigger does not exist", 3000);
+        }
 
         if (triggererindex !== -1)
             findtrig.userData.triggerers.splice(triggererindex, 1);
@@ -702,11 +711,11 @@ class ThreeJsScene extends Component
         }
     }
 
-    ShowError(msg, time)
+    ShowMsg(message, time)
     {
         console.log(msg);
-        error.innerHTML = "Error: " + msg;
-        setTimeout(this.ClearError, time);
+        msg.innerHTML = message;
+        setTimeout(this.ClearMsg, time);
     }
 
     SearchGUIHelper(value)
@@ -815,9 +824,9 @@ class ThreeJsScene extends Component
     	);
     }
 
-    ClearError()
+    ClearMsg()
     {
-    	error.innerHTML = "";
+    	msg.innerHTML = "";
     }
 
     AnyGUIOpen()
@@ -1037,9 +1046,9 @@ class ThreeJsScene extends Component
         else
         {
             if (mode)
-                this.ShowError("group empty", 3000);
+                this.ShowMsg("Error: group empty", 3000);
             else
-                this.ShowError("zone empty", 3000);
+                this.ShowMsg("Error: zone empty", 3000);
         }
     }
 
