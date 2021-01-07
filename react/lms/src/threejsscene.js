@@ -255,7 +255,7 @@ class ThreeJsScene extends Component
         // light data display setup
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
-	    text.style.width = "250px";
+	    text.style.width = "330px";
 	    text.style.height = "390px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
@@ -615,27 +615,39 @@ class ThreeJsScene extends Component
 
 
     // triggers =========================================================================
+    // sample activation is just turning it on for now
     Activate(key)
     {
         var find = this.FindLightByKey(key);
         console.log(key + " activated");
 
+        find.userData.status = STATUS.ON;
+
         for (var i = 0; i < find.userData.triggerees.length; ++i)
         {
             var triggeree = find.userData.triggerees[i];
-            this.Trigger(triggeree.userData.key);
+            var obj = this.FindLightByKey(triggeree);
+            this.Trigger(obj.userData.key, key);
         }
     }
 
-    Trigger(key)
+    Trigger(key, trigger)
     {
         var find = this.FindLightByKey(key);
+        
+        find.userData.status = STATUS.ON;
 
-        console.log(key + " triggered");
+        console.log(key + " triggered by " + trigger);
     }
 
     AddTrigger(key, triggereekey)
     {
+        if (key === triggereekey)
+        {
+            this.ShowMsg("Error: Light cannot add itself as trigger", 3000);
+            return;
+        }
+
         var find = this.FindLightByKey(key);
         var findtrig = this.FindLightByKey(triggereekey);
 
@@ -713,7 +725,7 @@ class ThreeJsScene extends Component
 
     ShowMsg(message, time)
     {
-        console.log(msg);
+        console.log(message);
         msg.innerHTML = message;
         setTimeout(this.ClearMsg, time);
     }
@@ -841,7 +853,7 @@ class ThreeJsScene extends Component
     // - updateprogress (bool for internal use)
     // - provisionprogress (bool for internal use)
     // - last heard (string)
-    // - last status (enum (int), 1:on, 2:off)
+    // - status (enum (int), 1:on, 2:off)
     // - pvm level (int)
     // - mssens (string)
     // - syncclock (bool)
@@ -1758,6 +1770,10 @@ class ThreeJsScene extends Component
             case "KeyC":
                 if (this.AnyGUIOpen() === false)
                     this.ResetCamera();
+                break;
+            case "KeyA":
+                if (selectedlights.length === 1)
+                    this.Activate(this.FindLightByName(selectedlights[0]).userData.key);
                 break;
             case "ControlLeft":
                 LCTRLdown = false;
