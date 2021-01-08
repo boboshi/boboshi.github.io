@@ -629,8 +629,9 @@ class ThreeJsScene extends Component
         var dir = new THREE.Vector3(end.x - start.x, end.y - start.y, end.z - start.z);
         dir.normalize();
         const arrow = new THREE.ArrowHelper(dir, start, length, RED, 0.5);
-        arrow.userData = {triggererkey: key};
+        arrow.userData = {triggererkey: key, triggereekey: triggereekey};
 
+        TriggerLineArray.push(arrow);
         scene.add(arrow);
     }
     
@@ -699,6 +700,24 @@ class ThreeJsScene extends Component
         var triggereeindex = find.userData.triggerees.indexOf(triggereekey);
         var triggererindex = findtrig.userData.triggerers.indexOf(key);
 
+        var index = null;
+
+        for (var i = 0; i < TriggerLineArray.length; ++i)
+        {
+            if (TriggerLineArray[i].userData.triggererkey === key && 
+                TriggerLineArray[i].userData.triggereekey === triggereekey)
+            {
+                index = i;
+                TriggerLineArray[i].parent.remove(TriggerLineArray[i]);
+                break;
+            }
+        }
+        
+        if (index !== null)
+        {
+            TriggerLineArray.splice(index, 1);
+        }
+
         if (triggereeindex !== -1)
         {
             this.ShowMsg("Trigger removed", 3000);
@@ -711,6 +730,14 @@ class ThreeJsScene extends Component
 
         if (triggererindex !== -1)
             findtrig.userData.triggerers.splice(triggererindex, 1);
+
+        //scene.traverse(function (object)
+        //{
+        //    if (object.userData.triggererkey === key && object.userData.triggereekey === triggereekey)
+        //    {
+        //        object.parent.remove(object);
+        //    }
+        //});
     }
     //===================================================================================
 
