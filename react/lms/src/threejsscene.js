@@ -51,7 +51,7 @@ var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
     changemssens, changesyncclock, changetriggers;
 var currname = "";
-
+var TriggerLineArray = [];
 // "enum" for light status
 const STATUS = 
 {
@@ -61,7 +61,7 @@ const STATUS =
 
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
-//const RED = 0xFF0000;
+const RED = 0xFF0000;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 //const YELLOW = 0xF8FF33;
@@ -77,7 +77,8 @@ const translucentMat = new THREE.MeshPhongMaterial(
 });
 const lineMat = new THREE.LineBasicMaterial(
 {
-    color: GREEN
+    color: RED,
+    linewidth: 1
 });
 
 // three.js scene component
@@ -101,6 +102,8 @@ class ThreeJsScene extends Component
         this.FindLightByName = this.FindLightByName.bind(this);
         this.FindLightByKey = this.FindLightByKey.bind(this);
         this.SetFWVersion = this.SetFWVersion.bind(this);
+        this.UpdateTriggers = this.UpdateTriggers.bind(this);
+        this.DrawTriggerLine = this.DrawTriggerLine.bind(this);
     }
 
     // initialisation ===================================================================
@@ -176,14 +179,6 @@ class ThreeJsScene extends Component
 
     InitOutline()
     {
-    	function Configuration()
-    	{
-    		this.visibleEdgeColor = "#F8FF33";
-    		this.hiddenEdgeColor = "#F8FF33";
-    	}
-    
-    	const conf = new Configuration();
-
     	// init postprocessing layers
     	composer = new EffectComposer(renderer);
     	renderPass = new RenderPass(scene, camera);
@@ -191,9 +186,11 @@ class ThreeJsScene extends Component
     	effectFXAA = new ShaderPass(FXAAShader);
 
     	// configure edge colours
-    	outlinePass.visibleEdgeColor.set(conf.visibleEdgeColor);
-    	outlinePass.hiddenEdgeColor.set(conf.hiddenEdgeColor);
-    	effectFXAA.uniforms["resolution"].value.set(1/width, 1/height);
+    	outlinePass.visibleEdgeColor.set("#F8FF33");
+    	outlinePass.hiddenEdgeColor.set("#F8FF33");
+        outlinePass.edgeStrength= 3.0;
+        outlinePass.edgeThickness = 1.0;
+        effectFXAA.uniforms["resolution"].value.set(1/width, 1/height);
 
     	// add postprocessing effects
     	composer.addPass(renderPass);
@@ -620,6 +617,23 @@ class ThreeJsScene extends Component
 
     // triggers =========================================================================
     // sample activation is just turning it on for now
+    DrawTriggerLine(key, triggereekey)
+    {
+        var find = this.FindLightByKey(key);
+        var findtrig = this.FindLightByKey(triggereekey);
+
+        var start = new THREE.Vector3(find.position.x, find.position.y + 0.2, find.position.z);
+        var end = new THREE.Vector3(findtrig.position.x, findtrig.position.y + 0.2, findtrig.position.z);
+
+        var length = start.distanceTo(end);
+        var dir = new THREE.Vector3(end.x - start.x, end.y - start.y, end.z - start.z);
+        dir.normalize();
+        const arrow = new THREE.ArrowHelper(dir, start, length, RED, 0.5);
+        arrow.userData = {triggererkey: key};
+
+        scene.add(arrow);
+    }
+    
     Activate(key)
     {
         var find = this.FindLightByKey(key);
@@ -662,13 +676,14 @@ class ThreeJsScene extends Component
             return;
         }
         // check for circular trigger
-        else if(findtrig.userData.triggerees.includes(key))
-        {
-            this.ShowMsg("Error: Circular trigger", 3000);
-            return;
-        }
+        //else if(findtrig.userData.triggerees.includes(key))
+        //{
+        //    this.ShowMsg("Error: Circular trigger", 3000);
+        //    return;
+        //}
         else
         {
+            this.DrawTriggerLine(key, triggereekey);
             this.ShowMsg("Trigger added", 3000);
         }
 
@@ -957,7 +972,7 @@ class ThreeJsScene extends Component
 
     	// find and remove light from LightArray
     	var index = LightArray.findIndex(light => light.userData.key === key);
-    
+        
     	// find and remove object from scene
     	LightArray[index].parent.remove(LightArray[index]);
     
@@ -1221,19 +1236,37 @@ class ThreeJsScene extends Component
     		if (object.userData.name)
     		{
                 object.material.opacity = 0.3 + object.maxbrightness / 100 * 0.7;
-    			LightArray.push(object);
+                LightArray.push(object);
     		}
     		else if (object.isMesh)
     		{
-    			// plane
-    			if (object.geometry.type === "PlaneBufferGeometry" || object.geometry.type === "PlaneGeometry")
+                if (object.geometry.type === "PlaneBufferGeometry" || object.geometry.type === "PlaneGeometry")
+                {
     				PlaneArray.push(object);
-    			// ghost light
-    			else if (object.geometry.type === "SphereBufferGeometry" || object.geometry.type === "SphereGeometry")
-    				ghost = object;
-    		}
+                }
+                else if (object.geometry.type === "SphereBufferGeometry" || object.geometry.type === "SphereGeometry")
+                {
+                    ghost = object;
+                }
+            }
+            else if (object.userData.triggererkey)
+            {
+                object.parent.remove(object);
+            }
     	});
     }
+
+    UpdateTriggers()
+    {
+        for (var i = 0; i < LightArray.length; ++i)
+        {
+            for (var j = 0; j < LightArray[i].userData.triggerees.length; ++j)
+            {
+                this.DrawTriggerLine(LightArray[i].userData.key, LightArray[i].userData.triggerees[j]);
+            }
+        }
+    }
+
     // load scene from json
     async LoadScene(s = "default")
     {
@@ -1256,7 +1289,8 @@ class ThreeJsScene extends Component
     				LightArray[i].parent.remove(LightArray[i]);
     		}
     		LightArray = [];
-    		PlaneArray = [];
+            PlaneArray = [];
+            TriggerLineArray = [];
 
     		// add objects from json
     		sceneloader.load(serverAddress + "resources/" + s + ".json", function(object) 
@@ -1269,7 +1303,8 @@ class ThreeJsScene extends Component
     		console.log("failed to load data");
     	}
 
-    	setTimeout(this.UpdateArrays, 1000);
+        setTimeout(this.UpdateArrays, 1000);
+        setTimeout(this.UpdateTriggers, 1200);
     }
     // save scene to json
     DownloadScene()
