@@ -22,6 +22,7 @@ Q - load c1basement1
 W - load c1basement2
 C - reset camera
 A - "Activate" command
+T - hide trigger arrows
 LCTRL + Space - toggle add/view mode
 LCTRL + F - toggle search mode
 1 - Select Group 1

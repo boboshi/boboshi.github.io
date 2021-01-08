@@ -635,6 +635,14 @@ class ThreeJsScene extends Component
         scene.add(arrow);
     }
     
+    ToggleTriggerLines()
+    {
+        for (var i = 0; i < TriggerLineArray.length; ++i)
+        {
+            TriggerLineArray[i].visible = !TriggerLineArray[i].visible;
+        }
+    }
+
     Activate(key)
     {
         var find = this.FindLightByKey(key);
@@ -730,14 +738,6 @@ class ThreeJsScene extends Component
 
         if (triggererindex !== -1)
             findtrig.userData.triggerers.splice(triggererindex, 1);
-
-        //scene.traverse(function (object)
-        //{
-        //    if (object.userData.triggererkey === key && object.userData.triggereekey === triggereekey)
-        //    {
-        //        object.parent.remove(object);
-        //    }
-        //});
     }
     //===================================================================================
 
@@ -1849,6 +1849,10 @@ class ThreeJsScene extends Component
             case "KeyA":
                 if (selectedlights.length === 1)
                     this.Activate(this.FindLightByName(selectedlights[0]).userData.key);
+                break;
+            case "KeyT":
+                if (this.AnyGUIOpen() === false)
+                    this.ToggleTriggerLines();
                 break;
             case "ControlLeft":
                 LCTRLdown = false;
