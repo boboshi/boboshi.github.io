@@ -1,5 +1,5 @@
 TODO:
-group/zone/trigger colour identification
+group/zone/ colour identification
 - distinction between zones and groups?
 - alright how to pick the colours????
     - dat.gui colour picker

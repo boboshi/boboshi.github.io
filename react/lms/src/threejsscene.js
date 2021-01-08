@@ -75,11 +75,6 @@ const translucentMat = new THREE.MeshPhongMaterial(
 	transparent: true,
 	side: THREE.DoubleSide,
 });
-const lineMat = new THREE.LineBasicMaterial(
-{
-    color: RED,
-    linewidth: 1
-});
 
 // three.js scene component
 class ThreeJsScene extends Component 
