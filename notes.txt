@@ -1,6 +1,15 @@
 TODO:
 group/zone/trigger colour identification
+- distinction between zones and groups?
 - alright how to pick the colours????
+    - dat.gui colour picker
+    - should groups/zones/triggers take priority?
+    - how to display all 3 at once
+    - use lines for trigger display?
+    - permanent outline effect for zones?
+        - performance issues?
+        - what about the rollover effect?
+            - recolour the entire light instead?
 
 documentation for json
 highlight technical document by end of month

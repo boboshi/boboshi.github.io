@@ -45,7 +45,7 @@ var filename = "";
 // text display
 var text, msg, proggui;
 // gui
-var searchgui, textgui, lightgui, inputparams;
+var searchgui, textgui, lightgui, colourgui, inputparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
     currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
@@ -67,14 +67,18 @@ const LIGHTBLUE = 0x7EC0EE;
 //const YELLOW = 0xF8FF33;
 const GREY = 0x808080;
 
-// translucent material
+// materials
 const translucentMat = new THREE.MeshPhongMaterial(
-	{
-		color: WHITE,
-		opacity: 0.5,
-		transparent: true,
-		side: THREE.DoubleSide,
-	});
+{
+	color: WHITE,
+	opacity: 0.5,
+	transparent: true,
+	side: THREE.DoubleSide,
+});
+const lineMat = new THREE.LineBasicMaterial(
+{
+    color: GREEN
+});
 
 // three.js scene component
 class ThreeJsScene extends Component 
@@ -657,6 +661,12 @@ class ThreeJsScene extends Component
             this.ShowMsg("Error: Trigger already exists", 3000);
             return;
         }
+        // check for circular trigger
+        else if(findtrig.userData.triggerees.includes(key))
+        {
+            this.ShowMsg("Error: Circular trigger", 3000);
+            return;
+        }
         else
         {
             this.ShowMsg("Trigger added", 3000);
@@ -933,6 +943,18 @@ class ThreeJsScene extends Component
     }
     RemoveLightHelper(key)
     {
+        // remove existing triggerers and triggerees
+        var find = this.FindLightByKey(key);
+        for (var i = 0; i < find.userData.triggerers; ++i)
+        {
+            this.RemoveTrigger(find.userData.triggerers[i], key);
+        }
+
+        for (var j = 0; j < find.userData.triggerees; ++i)
+        {
+            this.RemoveTrigger(key, find.userData.triggerees[j]);
+        }
+
     	// find and remove light from LightArray
     	var index = LightArray.findIndex(light => light.userData.key === key);
     
@@ -1484,16 +1506,9 @@ class ThreeJsScene extends Component
                 {
                     // check if in add mode
                     if(!textgui.closed)
-                    {
                         this.RemoveLight(LIGHTINTERSECTED.userData.key);
-                    }
-                    else
-                    {
-                        if (changetriggers)
-                        {
-                            this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
-                        }
-                    }
+                    else if (changetriggers)
+                        this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
                 }
             }
         }
