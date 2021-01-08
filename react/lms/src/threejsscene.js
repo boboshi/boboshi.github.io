@@ -28,11 +28,10 @@ let composer, renderPass, outlinePass, effectFXAA;
 // let box, grid, plane;
 let sphere;
 // raycasting and picking
-let mouse, raycaster, ghost, LIGHTINTERSECTED, PLANEINTERSECTED;
+let mouse, raycaster, ghost, lintersect, pintersect;
 var LCTRLdown = false;
 var toggle = false;
-var Lmouseup = false;
-var Rmouseup = false;
+var Lmouseup = false, Rmouseup = false;
 // selection box
 var selectedlights = [];
 var selectedStart = false;
@@ -46,10 +45,10 @@ var filename = "";
 var text, msg, proggui;
 // gui
 var searchgui, textgui, lightgui, colourgui, inputparams;
-var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, currholdtime,
-    currmssens, currsyncclock;
-var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, changemsbrightness, changeholdtime,
-    changemssens, changesyncclock, changetriggers;
+var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, 
+    currholdtime, currmssens, currsyncclock;
+var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
+    changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers;
 var currname = "";
 var TriggerLineArray = [];
 // "enum" for light status
@@ -196,7 +195,6 @@ class ThreeJsScene extends Component
     InitGeometry()
     {
 	    //box = new THREE.BoxBufferGeometry();
-
 	    sphere = new THREE.SphereBufferGeometry();
 
 	    //const size = 100;
@@ -226,14 +224,12 @@ class ThreeJsScene extends Component
         ghost.visible = false;
     
         // selection box
-        var styles = `
-            .selectBox
-            {
-                border: 1px solid #55aaff;
-                background-color: rgba(75, 160, 255, 0.3);
-                position: fixed;
-            }
-            `;
+        var styles = `.selectBox
+                      {
+                          border: 1px solid #55aaff;
+                          background-color: rgba(75, 160, 255, 0.3);
+                          position: fixed;
+                      }`;
         var styleSheet = document.createElement("style");
         styleSheet.type = "text/css"
         styleSheet.innerText = styles;
@@ -349,8 +345,8 @@ class ThreeJsScene extends Component
         lightgui.add(inputparams, "SyncClock").listen().onFinishChange(function(value){currsyncclock = value;
                                                                                        changesyncclock = true;});
         lightgui.add(inputparams, "MSSensitivity", ["Low", "Medium-Low", "Medium", "Medium-High", "High"]).listen()
-                                                                                .onFinishChange(function(value){currmssens = value;
-                                                                                                                changemssens = true;});
+                                                        .onFinishChange(function(value){currmssens = value;
+                                                                        changemssens = true;});
         lightgui.add(inputparams, "GroupID").onFinishChange(function(value){currgroupid = value});
         lightgui.add(inputparams, "ZoneID").onFinishChange(function(value){currzoneid = value});
         lightgui.add(inputparams, "EditTriggers").listen().onFinishChange(function(value){changetriggers = value;});
@@ -476,16 +472,11 @@ class ThreeJsScene extends Component
     SetMaxBrightnessResponse(key, brightness)
     {
         console.log("Received Set MaxBrightness response: key: " + key + " maxbrightness: " + brightness);
-        // check for invalid input
+
         if (brightness < 0 || brightness > 100)
-        {
             this.ShowMsg("Error: invalid brightness", 3000);
-            return;
-        }
         else
-        {
             this.SetBrightnessHelper(key, brightness, "max");
-        }
     }
 
     SetDimmedBrightnessRequest(key, brightness)
@@ -499,14 +490,9 @@ class ThreeJsScene extends Component
         console.log("Received Set DimmedBrightness response: key: " + key + " dimmedbrightness: " + brightness);
     
         if (brightness < 0 || brightness > 100)
-        {
             this.ShowError("invalid brightness", 3000);
-            return;
-        }
         else
-        {
             this.SetBrightnessHelper(key, brightness, "dimmed");
-        }
     }
 
     SetMSBrightnessRequest(key, brightness)
@@ -520,14 +506,9 @@ class ThreeJsScene extends Component
         console.log("Received Set MSBrightness response: key: " + key + " msbrightness: " + brightness);
 
         if (brightness < 0 || brightness > 100)
-        {
             this.ShowMsg("Error: invalid brightness", 3000);
-            return;
-        }
         else
-        {
             this.SetBrightnessHelper(key, brightness, "motion");
-        }
     }
 
     SetMSSensRequest(key, sens)
@@ -633,9 +614,7 @@ class ThreeJsScene extends Component
     ToggleTriggerLines()
     {
         for (var i = 0; i < TriggerLineArray.length; ++i)
-        {
             TriggerLineArray[i].visible = !TriggerLineArray[i].visible;
-        }
     }
 
     Activate(key)
@@ -658,7 +637,6 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         
         find.userData.status = STATUS.ON;
-
         console.log(key + " triggered by " + trigger);
     }
 
@@ -673,13 +651,11 @@ class ThreeJsScene extends Component
         var find = this.FindLightByKey(key);
         var findtrig = this.FindLightByKey(triggereekey);
 
-        // check for existing trigger
         if (find.userData.triggerees.includes(triggereekey))
         {
             this.ShowMsg("Error: Trigger already exists", 3000);
             return;
         }
-        // check for circular trigger
         //else if(findtrig.userData.triggerees.includes(key))
         //{
         //    this.ShowMsg("Error: Circular trigger", 3000);
@@ -717,9 +693,7 @@ class ThreeJsScene extends Component
         }
         
         if (index !== null)
-        {
             TriggerLineArray.splice(index, 1);
-        }
 
         if (triggereeindex !== -1)
         {
@@ -815,7 +789,6 @@ class ThreeJsScene extends Component
             textgui.hide();
             inputparams["EditTriggers"] = false;
             lightgui.closed = true;
-            //changetriggers = false;
             lightgui.hide();
     		text.innerHTML = "";
     	}
@@ -835,7 +808,6 @@ class ThreeJsScene extends Component
             searchgui.hide();
             inputparams["EditTriggers"] = false;
             lightgui.closed = true;
-            //changetriggers = false;
     		lightgui.hide();
     		text.innerHTML = "";
     	}
@@ -863,23 +835,16 @@ class ThreeJsScene extends Component
     			{
     				fbx.scale.set(xscale, yscale, zscale);
                 
-    				// apply transparent material to model
     				fbx.traverse(function(child)
     				{
     					if (child instanceof THREE.Mesh)
-    					{
-    						// use predefined translucent material
     						child.material = material;
-    					}
     				});
                 
     				scene.add(fbx);
     			}, 
     			undefined, 
-    			function (error ) 
-    			{
-    				console.error(error);
-    			}
+    			function (error) {console.error(error);}
     	);
     }
 
@@ -1262,11 +1227,13 @@ class ThreeJsScene extends Component
     		}
     		else if (object.isMesh)
     		{
-                if (object.geometry.type === "PlaneBufferGeometry" || object.geometry.type === "PlaneGeometry")
+                if (object.geometry.type === "PlaneBufferGeometry" || 
+                    object.geometry.type === "PlaneGeometry")
                 {
     				PlaneArray.push(object);
                 }
-                else if (object.geometry.type === "SphereBufferGeometry" || object.geometry.type === "SphereGeometry")
+                else if (object.geometry.type === "SphereBufferGeometry" || 
+                         object.geometry.type === "SphereGeometry")
                 {
                     ghost = object;
                 }
@@ -1412,7 +1379,8 @@ class ThreeJsScene extends Component
             if (changemaxbrightness)
             {
                 for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetMaxBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, currmaxbrightness);
+                    this.SetMaxBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, 
+                                                 currmaxbrightness);
 
                 changemaxbrightness = null;
             }
@@ -1420,7 +1388,8 @@ class ThreeJsScene extends Component
             if (changedimmedbrightness)
             {
                 for (var j = 0; i < selectedlights.length; ++j)
-                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[j]).userData.key, currdimmedbrightness);
+                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[j]).userData.key, 
+                                                    currdimmedbrightness);
 
                 changedimmedbrightness = null;
             }
@@ -1428,7 +1397,8 @@ class ThreeJsScene extends Component
             if (changemsbrightness)
             {
                 for (var k = 0; k < selectedlights.length; ++k)
-                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[k]).userData.key, currmsbrightness);
+                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[k]).userData.key, 
+                                                                    currmsbrightness);
 
                 changemsbrightness = null;
             }
@@ -1512,10 +1482,10 @@ class ThreeJsScene extends Component
         // light
         if(intersects.length > 0)
         {
-            if(LIGHTINTERSECTED !== intersects[0].object)
+            if(lintersect !== intersects[0].object)
             {
                 // select the intersected object
-                LIGHTINTERSECTED = intersects[0].object;
+                lintersect = intersects[0].object;
                 // onenter
                 // check if light has been clicked on
                 if (selectedlights.length > 0)
@@ -1540,7 +1510,8 @@ class ThreeJsScene extends Component
                     {
                         if (changetriggers)
                         {
-                            this.AddTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
+                            this.AddTrigger(this.FindLightByName(selectedlights[0]).userData.key, 
+                                            intersects[0].object.userData.key);
                         }
                         else
                         {
@@ -1549,7 +1520,7 @@ class ThreeJsScene extends Component
                             {
                                 // select this light
                                 selectedlights = [intersects[0].object.userData.name];
-                                this.MoveToLight(LIGHTINTERSECTED.userData.name);
+                                this.MoveToLight(lintersect.userData.name);
                             }
                             lightgui.closed = false;
                             inputparams["SyncClock"] = intersects[0].object.userData.syncclock;
@@ -1563,15 +1534,16 @@ class ThreeJsScene extends Component
                 {
                     // check if in add mode
                     if(!textgui.closed)
-                        this.RemoveLight(LIGHTINTERSECTED.userData.key);
+                        this.RemoveLight(lintersect.userData.key);
                     else if (changetriggers)
-                        this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, intersects[0].object.userData.key);
+                        this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, 
+                                           intersects[0].object.userData.key);
                 }
             }
         }
         else
         {
-            if(LIGHTINTERSECTED)
+            if(lintersect)
             {
                 // onexit
                 // clear display and outline if no light clicked
@@ -1581,9 +1553,9 @@ class ThreeJsScene extends Component
                     outlinePass.selectedObjects = [];
                 }
 
-                LIGHTINTERSECTED.userData.selected = false;
+                lintersect.userData.selected = false;
             }
-            LIGHTINTERSECTED = null;
+            lintersect = null;
         }
 
         // plane
@@ -1591,10 +1563,10 @@ class ThreeJsScene extends Component
         {
             if(planeintersects.length > 0)
             {
-                if (PLANEINTERSECTED !== planeintersects[0].object)
+                if (pintersect !== planeintersects[0].object)
                 {
                     // select the intersected object
-                    PLANEINTERSECTED = planeintersects[0].object;
+                    pintersect = planeintersects[0].object;
                     // onenter
                 }
                 else
@@ -1620,11 +1592,11 @@ class ThreeJsScene extends Component
             }
             else
             {
-                if(PLANEINTERSECTED)
+                if(pintersect)
                 {
                     // onexit
                 }
-                PLANEINTERSECTED = null;
+                pintersect = null;
             }
         }
 
@@ -1634,10 +1606,8 @@ class ThreeJsScene extends Component
 
         // update the global transform of the camera object
         camera.updateMatrixWorld();
-
         // camera controls update
         controls.update();
-
         // render (use composer.render if postprocessing is used)
         composer.render();
     }
@@ -1734,7 +1704,6 @@ class ThreeJsScene extends Component
                 {
                     if (!changetriggers)
                     {
-
                         searchgui.closed = true;
                         inputparams["EditTriggers"] = false;
                         lightgui.closed = true;
