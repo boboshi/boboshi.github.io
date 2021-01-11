@@ -1926,12 +1926,20 @@ class ThreeJsScene extends Component
                 break;
             case "Digit2":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectZone(1);
+                    this.SelectGroup(2);
                 break;
             case "Digit3":
                 if (this.AnyGUIOpen() === false)
-                    this.SelectGroup(255);
+                    this.SelectZone(1);
                 break;
+            case "Digit4":
+               if (this.AnyGUIOpen() === false)
+                   this.SelectZone(2);
+               break;
+            case "Digit5":
+             if (this.AnyGUIOpen() === false)
+                 this.SelectGroup(255);
+             break;
             default:
                 break;
         }

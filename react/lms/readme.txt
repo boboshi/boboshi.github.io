@@ -29,8 +29,10 @@ C - group/zone colour settings
 LCTRL + Space - toggle add/view mode
 LCTRL + F - toggle search mode
 1 - Select Group 1
-2 - Select Zone 1
-3 - Select All
+2 - Select Group 2
+3 - Select Zone 1
+4 - Select Zone 2
+5 - Select All
 
 Notes:
 - minor changes to SelectionHelper.js from three.js 
