@@ -1298,17 +1298,13 @@ class ThreeJsScene extends Component
                     ghost = object;
                 }
             }
-            else if (object.userData.triggererkey)
-            {
-                object.parent.remove(object);
-            }
             // load colours
             else if (object.name === "colours")
             {
                 GroupColourArray = object.userData.grouparray;
                 ZoneColourArray = object.userData.zonearray;
             }
-    	});
+        });
     }
 
     UpdateTriggers()
@@ -1345,7 +1341,7 @@ class ThreeJsScene extends Component
     		}
     		LightArray = [];
             PlaneArray = [];
-            TriggerLineArray = [];
+            //TriggerLineArray = [];
 
     		// add objects from json
     		sceneloader.load(serverAddress + "resources/" + s + ".json", function(object) 
@@ -1387,8 +1383,15 @@ class ThreeJsScene extends Component
                 object.userData = {grouparray: GroupColourArray, zonearray: ZoneColourArray};
         });
 
+        for (var i = 0; i < TriggerLineArray.length; ++i)
+            TriggerLineArray[i].parent.remove(TriggerLineArray[i]);
+
+        TriggerLineArray = [];
+
         var save = scene.toJSON();
-    	saveData(save, filename.replace(/\..+$/, '') + ".json");
+        saveData(save, filename.replace(/\..+$/, '') + ".json");
+        
+        this.UpdateTriggers();
     }
     // convert degrees to radians
     Rad(deg)
@@ -1780,8 +1783,10 @@ class ThreeJsScene extends Component
                         searchgui.closed = true;
                         inputparams["EditTriggers"] = false;
                         lightgui.closed = true;
+                        //colourgui.closed = true;
                         searchgui.hide();
                         lightgui.hide();
+                        //colourgui.hide();
                     }
                 }
                 break;
