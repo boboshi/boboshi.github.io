@@ -387,7 +387,7 @@ class ThreeJsScene extends Component
                 if (value >= 0 && value <= 255)
                     currcolourid = value;
             });
-        colourgui.addColor(palette, "color").onFinishChange(function(value)
+        colourgui.addColor(palette, "color").onChange(function(value)
             {
                 if (currcolourid >= 0 && currcolourid <= 255)
                 {
@@ -399,8 +399,8 @@ class ThreeJsScene extends Component
                         ZoneColourArray[currcolourid] = str;
                 }
             });
-        //colourgui.closed = true;
-        //colourgui.hide();
+        colourgui.closed = true;
+        colourgui.hide();
     }
     //===================================================================================
 
@@ -1341,12 +1341,12 @@ class ThreeJsScene extends Component
     		}
     		LightArray = [];
             PlaneArray = [];
-            //TriggerLineArray = [];
 
     		// add objects from json
     		sceneloader.load(serverAddress + "resources/" + s + ".json", function(object) 
     		{
                 scene.add(object);
+                scene = object;
     		});
     	}
     	else
@@ -1783,10 +1783,10 @@ class ThreeJsScene extends Component
                         searchgui.closed = true;
                         inputparams["EditTriggers"] = false;
                         lightgui.closed = true;
-                        //colourgui.closed = true;
+                        colourgui.closed = true;
                         searchgui.hide();
                         lightgui.hide();
-                        //colourgui.hide();
+                        colourgui.hide();
                     }
                 }
                 break;
@@ -1884,7 +1884,7 @@ class ThreeJsScene extends Component
                 if (this.AnyGUIOpen() === false)
                     this.LoadScene("c1basement2");
                 break;
-            case "KeyC":
+            case "KeyR":
                 if (this.AnyGUIOpen() === false)
                     this.ResetCamera();
                 break;
@@ -1902,6 +1902,13 @@ class ThreeJsScene extends Component
                     usegroupcolour = !usegroupcolour;
                     colourparams["GroupColour"] = usegroupcolour;
                     colourparams["ZoneColour"] = !usegroupcolour;
+                }
+                break;
+            case "KeyC":
+                if (this.AnyGUIOpen() === false)
+                {
+                    colourgui.closed = false;
+                    colourgui.show();
                 }
                 break;
             case "ControlLeft":

@@ -1,10 +1,6 @@
 TODO:
 group/zone/ colour identification
-- distinction between zones and groups?
-- alright how to pick the colours????
-    - dat.gui colour picker
-        - create object to hold arrays in userdata
-    - toggle show group/zone
+- testing, figure out control scheme
 
 documentation for json
 highlight technical document by end of month

@@ -20,10 +20,12 @@ RMB - remove light
 S - save and download data
 Q - load c1basement1
 W - load c1basement2
-C - reset camera
+R - reset camera
 A - "Activate" command
 T - hide trigger arrows
 G - toggle show group/zone
+C - group/zone colour settings
+
 LCTRL + Space - toggle add/view mode
 LCTRL + F - toggle search mode
 1 - Select Group 1
