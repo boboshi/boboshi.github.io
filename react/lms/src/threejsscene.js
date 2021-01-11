@@ -648,6 +648,14 @@ class ThreeJsScene extends Component
         const arrow = new THREE.ArrowHelper(dir, start, length, RED, 0.5);
         arrow.userData = {triggererkey: key, triggereekey: triggereekey};
 
+        //var tmp = this.HexToRGB(LIGHTBLUE.toString(16));
+        //arrow.children[0].material.color.r = tmp[0] / 255;
+        //arrow.children[0].material.color.g = tmp[1] / 255;
+        //arrow.children[0].material.color.b = tmp[2] / 255;
+        //arrow.children[1].material.color.r = tmp[0] / 255;
+        //arrow.children[1].material.color.g = tmp[1] / 255;
+        //arrow.children[1].material.color.b = tmp[2] / 255;
+
         TriggerLineArray.push(arrow);
         scene.add(arrow);
     }
@@ -1397,6 +1405,31 @@ class ThreeJsScene extends Component
     Rad(deg)
     {
 	    return deg * Math.PI / 180;
+    }
+
+    HexToRGB(hex)
+    {
+        var r = 0, g = 0, b = 0;
+        var result = [];
+        console.log(hex);
+        if (hex.length === 3) 
+        {
+            r = "0x" + hex[0] + hex[0];
+            g = "0x" + hex[1] + hex[1];
+            b = "0x" + hex[2] + hex[2];
+        } 
+        else if (hex.length === 6) 
+        {
+            r = "0x" + hex[0] + hex[1];
+            g = "0x" + hex[2] + hex[3];
+            b = "0x" + hex[4] + hex[5];
+        }
+
+        result.push(+r);
+        result.push(+g);
+        result.push(+b);
+
+        return result;
     }
 
     //===================================================================================

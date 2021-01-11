@@ -1,6 +1,8 @@
 TODO:
 group/zone/ colour identification
-- testing, figure out control scheme
+- changing colours of trigger arrows
+
+camel case for properties
 
 documentation for json
 highlight technical document by end of month
