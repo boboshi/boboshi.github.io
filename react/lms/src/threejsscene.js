@@ -44,7 +44,7 @@ var filename = "";
 // text display
 var text, msg, proggui;
 // gui
-var searchgui, textgui, lightgui, colourgui, inputparams;
+var searchgui, textgui, lightgui, colourgui, inputparams, colourparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, 
     currmsbrightness, currholdtime, currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
@@ -292,7 +292,7 @@ class ThreeJsScene extends Component
     	searchgui = new GUI();
         textgui = new GUI();
         lightgui = new GUI();
-        //colourgui = new GUI();
+        colourgui = new GUI();
 
     	// search field gui
     	const searchparam = {"Search": ""};
@@ -364,6 +364,22 @@ class ThreeJsScene extends Component
         lightgui.closed = true;
         changetriggers = false;
         lightgui.hide();
+
+        colourparams = {"GroupColour": true, "ZoneColour": false};
+        colourgui.add(colourparams, "GroupColour").listen().onFinishChange(
+            function(value)
+            {
+                colourparams["GroupColour"] = true;
+                colourparams["ZoneColour"] = false;
+                usegroupcolour = true;
+            });
+        colourgui.add(colourparams, "ZoneColour").listen().onFinishChange(
+            function(value)
+            {
+                colourparams["GroupColour"] = false;
+                colourparams["ZoneColour"] = true;
+                usegroupcolour = false;
+            });
     }
     //===================================================================================
 
@@ -1395,7 +1411,7 @@ class ThreeJsScene extends Component
         requestAnimationFrame(this.DrawScene);
         // update light data
         this.LightArrayUpdate();
-
+        
         // searchgui helper 
         if (currsearch)
         {
