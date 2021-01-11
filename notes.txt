@@ -3,12 +3,11 @@ group/zone/ colour identification
 - distinction between zones and groups?
 - alright how to pick the colours????
     - dat.gui colour picker
-    - should groups/zones/triggers take priority?
-    - how to display all 3 at once
-    - permanent outline effect for zones?
-        - performance issues?
-        - what about the rollover effect?
-            - recolour the entire light instead?
+        - how to store data?
+        - map? (key: group number, value: colour hex value)
+        - create object to hold map in userdata
+    - should groups/zones take priority?
+    - toggle show group/zone
 
 documentation for json
 highlight technical document by end of month

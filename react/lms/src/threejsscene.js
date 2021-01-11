@@ -45,11 +45,13 @@ var filename = "";
 var text, msg, proggui;
 // gui
 var searchgui, textgui, lightgui, colourgui, inputparams;
-var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, currmsbrightness, 
-    currholdtime, currmssens, currsyncclock;
+var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, 
+    currmsbrightness, currholdtime, currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
     changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers;
 var currname = "";
+var GroupColourArray = [];
+var ZoneColourArray = [];
 var TriggerLineArray = [];
 // "enum" for light status
 const STATUS = 
@@ -289,6 +291,7 @@ class ThreeJsScene extends Component
     	searchgui = new GUI();
         textgui = new GUI();
         lightgui = new GUI();
+        //colourgui = new GUI();
 
     	// search field gui
     	const searchparam = {"Search": ""};
@@ -1290,7 +1293,7 @@ class ThreeJsScene extends Component
     	else
     	{
     		console.log("failed to load data");
-    	}
+        }
 
         setTimeout(this.UpdateArrays, 1000);
         setTimeout(this.UpdateTriggers, 1200);
@@ -1298,6 +1301,12 @@ class ThreeJsScene extends Component
     // save scene to json
     DownloadScene()
     {
+        scene.traverse(function(object)
+        {
+            if (object.userData.colourmap)
+                console.log(object.userData.colourmap);
+        });
+
     	var saveData = (function () 
     	{
     		var a = document.createElement("a");
@@ -1347,6 +1356,7 @@ class ThreeJsScene extends Component
 
         // load default scene
         this.LoadScene();
+        
         // call render loop
 		this.DrawScene();
     }
@@ -1359,6 +1369,12 @@ class ThreeJsScene extends Component
         requestAnimationFrame(this.DrawScene);
         // update light data
         this.LightArrayUpdate();
+
+        scene.traverse(function(object)
+        {
+            if (object.name === "colours")
+                console.log("IMHERE");
+        });
 
         // searchgui helper 
         if (currsearch)
