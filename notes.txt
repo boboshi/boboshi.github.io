@@ -3,10 +3,7 @@ group/zone/ colour identification
 - distinction between zones and groups?
 - alright how to pick the colours????
     - dat.gui colour picker
-        - how to store data?
-        - map? (key: group number, value: colour hex value)
-        - create object to hold map in userdata
-    - should groups/zones take priority?
+        - create object to hold arrays in userdata
     - toggle show group/zone
 
 documentation for json

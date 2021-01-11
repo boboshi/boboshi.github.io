@@ -49,6 +49,7 @@ var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness
     currmsbrightness, currholdtime, currmssens, currsyncclock;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
     changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers;
+var usegroupcolour = true;
 var currname = "";
 var GroupColourArray = [];
 var ZoneColourArray = [];
@@ -1129,12 +1130,31 @@ class ThreeJsScene extends Component
     		var light = LightArray[i];
 
     		// status display (off/on/normal)
-    		if (light.userData.status === STATUS.OFF)
+            if (light.userData.status === STATUS.OFF)
+            {
     			light.material.color.setHex(GREY);
-    		else if (light.userData.status === STATUS.ON)
-    			light.material.color.setHex(LIGHTBLUE);
-    		else
+            }
+            else if (light.userData.status === STATUS.ON)
+            {
+                if (usegroupcolour)
+                {
+                    if (GroupColourArray.length > 0)
+                        light.material.color.setHex(GroupColourArray[light.userData.groupid]);
+                    else
+                        light.material.color.setHex(LIGHTBLUE);
+                }
+                else
+                {
+                    if (ZoneColourArray.length > 0)
+                        light.material.color.setHex(ZoneColourArray[light.userData.zoneid]);
+                    else
+                        light.material.color.setHex(LIGHTBLUE);
+                }
+            }
+            else
+            {
     			light.material.color.setHex(GREEN);
+            }
 
     		// data display
     		// check for currently clicked on light
@@ -1244,6 +1264,12 @@ class ThreeJsScene extends Component
             else if (object.userData.triggererkey)
             {
                 object.parent.remove(object);
+            }
+            // load colours
+            else if (object.name === "colours")
+            {
+                GroupColourArray = object.userData.grouparray;
+                ZoneColourArray = object.userData.zonearray;
             }
     	});
     }
@@ -1369,12 +1395,6 @@ class ThreeJsScene extends Component
         requestAnimationFrame(this.DrawScene);
         // update light data
         this.LightArrayUpdate();
-
-        scene.traverse(function(object)
-        {
-            if (object.name === "colours")
-                console.log("IMHERE");
-        });
 
         // searchgui helper 
         if (currsearch)
