@@ -46,7 +46,7 @@ var text, msg, proggui;
 // gui
 var searchgui, textgui, lightgui, colourgui, inputparams, colourparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, 
-    currmsbrightness, currholdtime, currmssens, currsyncclock;
+    currmsbrightness, currholdtime, currmssens, currsyncclock, currcolourid;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
     changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers;
 var usegroupcolour = true;
@@ -365,7 +365,9 @@ class ThreeJsScene extends Component
         changetriggers = false;
         lightgui.hide();
 
-        colourparams = {"GroupColour": true, "ZoneColour": false};
+        // colour picker
+        colourparams = {"GroupColour": true, "ZoneColour": false, "ID": ""};
+        var palette = {color: "#7EC0EE"};
         colourgui.add(colourparams, "GroupColour").listen().onFinishChange(
             function(value)
             {
@@ -380,6 +382,25 @@ class ThreeJsScene extends Component
                 colourparams["ZoneColour"] = true;
                 usegroupcolour = false;
             });
+        colourgui.add(colourparams, "ID").onFinishChange(function(value)
+            {
+                if (value >= 0 && value <= 255)
+                    currcolourid = value;
+            });
+        colourgui.addColor(palette, "color").onFinishChange(function(value)
+            {
+                if (currcolourid >= 0 && currcolourid <= 255)
+                {
+                    var str = "0x" + value.slice(1, 7);
+
+                    if (usegroupcolour)
+                        GroupColourArray[currcolourid] = str;
+                    else
+                        ZoneColourArray[currcolourid] = str;
+                }
+            });
+        //colourgui.closed = true;
+        //colourgui.hide();
     }
     //===================================================================================
 
@@ -875,7 +896,7 @@ class ThreeJsScene extends Component
 
     AnyGUIOpen()
     {
-        return !textgui.closed || !searchgui.closed || !lightgui.closed;
+        return !textgui.closed || !searchgui.closed || !lightgui.closed || !colourgui.closed;
     }
     // userData properties
     // - name (string)
@@ -1343,12 +1364,6 @@ class ThreeJsScene extends Component
     // save scene to json
     DownloadScene()
     {
-        scene.traverse(function(object)
-        {
-            if (object.userData.colourmap)
-                console.log(object.userData.colourmap);
-        });
-
     	var saveData = (function () 
     	{
     		var a = document.createElement("a");
@@ -1366,7 +1381,13 @@ class ThreeJsScene extends Component
     		};
     	}());
 
-    	var save = scene.toJSON();
+        scene.traverse(function(object)
+        {
+            if (object.name === "colours")
+                object.userData = {grouparray: GroupColourArray, zonearray: ZoneColourArray};
+        });
+
+        var save = scene.toJSON();
     	saveData(save, filename.replace(/\..+$/, '') + ".json");
     }
     // convert degrees to radians
@@ -1411,7 +1432,7 @@ class ThreeJsScene extends Component
         requestAnimationFrame(this.DrawScene);
         // update light data
         this.LightArrayUpdate();
-        
+
         // searchgui helper 
         if (currsearch)
         {
@@ -1869,6 +1890,14 @@ class ThreeJsScene extends Component
             case "KeyT":
                 if (this.AnyGUIOpen() === false)
                     this.ToggleTriggerLines();
+                break;
+            case "KeyG":
+                if (this.AnyGUIOpen() === false)
+                {
+                    usegroupcolour = !usegroupcolour;
+                    colourparams["GroupColour"] = usegroupcolour;
+                    colourparams["ZoneColour"] = !usegroupcolour;
+                }
                 break;
             case "ControlLeft":
                 LCTRLdown = false;
