@@ -53,6 +53,7 @@ var usegroupcolour = true;
 var currname = "";
 var GroupColourArray = [];
 var ZoneColourArray = [];
+var TriggerColour;
 var TriggerLineArray = [];
 // "enum" for light status
 const STATUS = 
@@ -63,7 +64,7 @@ const STATUS =
 
 // colour codes for quick access
 const WHITE = 0xFFFFFF;
-const RED = 0xFF0000;
+//const RED = 0xFF0000;
 const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 //const YELLOW = 0xF8FF33;
@@ -367,7 +368,8 @@ class ThreeJsScene extends Component
 
         // colour picker
         colourparams = {"GroupColour": true, "ZoneColour": false, "ID": ""};
-        var palette = {color: "#7EC0EE"};
+        var palette = {colour: "#7EC0EE"};
+        var triggerpalette = {triggercolour: "#FF0000"};
         colourgui.add(colourparams, "GroupColour").listen().onFinishChange(
             function(value)
             {
@@ -387,7 +389,7 @@ class ThreeJsScene extends Component
                 if (value >= 0 && value <= 255)
                     currcolourid = value;
             });
-        colourgui.addColor(palette, "color").onChange(function(value)
+        colourgui.addColor(palette, "colour").onChange(function(value)
             {
                 if (currcolourid >= 0 && currcolourid <= 255)
                 {
@@ -399,6 +401,16 @@ class ThreeJsScene extends Component
                         ZoneColourArray[currcolourid] = str;
                 }
             });
+        colourgui.addColor(triggerpalette, "triggercolour").onChange(function(value)
+        {
+            var str = "0x" + value.slice(1, 7);
+            TriggerColour = str;
+            for (var i = 0; i < TriggerLineArray.length; ++i)
+            {
+                TriggerLineArray[i].children[0].material.color.setHex(TriggerColour);
+                TriggerLineArray[i].children[1].material.color.setHex(TriggerColour);
+            }
+        });
         colourgui.closed = true;
         colourgui.hide();
     }
@@ -506,13 +518,13 @@ class ThreeJsScene extends Component
 
     SetMaxBrightnessRequest(key, brightness)
     {
-        console.log("Sent Set MaxBrightness request: key: " + key + " maxbrightness: " + brightness);
+        console.log("Sent Set MaxBrightness request: key: " + key + " maxBrightness: " + brightness);
         this.SetMaxBrightnessResponse(key, brightness);
     }
 
     SetMaxBrightnessResponse(key, brightness)
     {
-        console.log("Received Set MaxBrightness response: key: " + key + " maxbrightness: " + brightness);
+        console.log("Received Set MaxBrightness response: key: " + key + " maxBrightness: " + brightness);
 
         if (brightness < 0 || brightness > 100)
             this.ShowMsg("Error: invalid brightness", 3000);
@@ -522,13 +534,13 @@ class ThreeJsScene extends Component
 
     SetDimmedBrightnessRequest(key, brightness)
     {
-        console.log("Sent Set DimmedBrightness request: key: " + key + " dimmedbrightness: " + brightness);
+        console.log("Sent Set DimmedBrightness request: key: " + key + " dimmedBrightness: " + brightness);
         this.SetDimmedBrightnessResponse(key, brightness);
     }
 
     SetDimmedBrightnessResponse(key, brightness)
     {
-        console.log("Received Set DimmedBrightness response: key: " + key + " dimmedbrightness: " + brightness);
+        console.log("Received Set DimmedBrightness response: key: " + key + " dimmedBrightness: " + brightness);
     
         if (brightness < 0 || brightness > 100)
             this.ShowError("invalid brightness", 3000);
@@ -538,13 +550,13 @@ class ThreeJsScene extends Component
 
     SetMSBrightnessRequest(key, brightness)
     {
-        console.log("Sent Set MSBrightness request: key: " + key + " msbrightness: " + brightness);
+        console.log("Sent Set MSBrightness request: key: " + key + " msBrightness: " + brightness);
         this.SetMSBrightnessResponse(key, brightness);
     }
 
     SetMSBrightnessResponse(key, brightness)
     {
-        console.log("Received Set MSBrightness response: key: " + key + " msbrightness: " + brightness);
+        console.log("Received Set MSBrightness response: key: " + key + " msBrightness: " + brightness);
 
         if (brightness < 0 || brightness > 100)
             this.ShowMsg("Error: invalid brightness", 3000);
@@ -554,13 +566,13 @@ class ThreeJsScene extends Component
 
     SetMSSensRequest(key, sens)
     {
-        console.log("Sent Set MSSens request: key: " + key + " mssens: " + sens);
+        console.log("Sent Set MSSens request: key: " + key + " msSens: " + sens);
         this.SetMSSensResponse(key, sens);
     }
 
     SetMSSensResponse(key, sens)
     {
-        console.log("Received Set MSSens response: key: " + key + " mssens: " + sens);
+        console.log("Received Set MSSens response: key: " + key + " msSens: " + sens);
 
         var find = this.FindLightByKey(key);
         if (find)
@@ -645,11 +657,8 @@ class ThreeJsScene extends Component
         var length = start.distanceTo(end);
         var dir = new THREE.Vector3(end.x - start.x, end.y - start.y, end.z - start.z);
         dir.normalize();
-        const arrow = new THREE.ArrowHelper(dir, start, length, RED, 0.5);
+        const arrow = new THREE.ArrowHelper(dir, start, length, parseInt(TriggerColour), 0.5);
         arrow.userData = {triggererkey: key, triggereekey: triggereekey};
-
-        //arrow.children[0].material.color.setHex(LIGHTBLUE);
-        //arrow.children[1].material.color.setHex(LIGHTBLUE);
 
         TriggerLineArray.push(arrow);
         scene.add(arrow);
@@ -1306,6 +1315,7 @@ class ThreeJsScene extends Component
             {
                 GroupColourArray = object.userData.grouparray;
                 ZoneColourArray = object.userData.zonearray;
+                TriggerColour = object.userData.triggercolour;
             }
         });
     }
@@ -1383,7 +1393,8 @@ class ThreeJsScene extends Component
         scene.traverse(function(object)
         {
             if (object.name === "colours")
-                object.userData = {grouparray: GroupColourArray, zonearray: ZoneColourArray};
+                object.userData = {grouparray: GroupColourArray, zonearray: ZoneColourArray,
+                                   triggercolour: TriggerColour};
         });
 
         for (var i = 0; i < TriggerLineArray.length; ++i)
