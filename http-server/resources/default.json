@@ -226,7 +226,7 @@
         "type": "Object3D",
         "name": "colours",
         "userData": {
-          "grouparray": [
+          "groupArray": [
             8306926,
             8306926,
             8306926,
@@ -484,7 +484,7 @@
             8306926,
             8306926
           ],
-          "zonearray": [
+          "zoneArray": [
             8306926,
             8306926,
             8306926,
@@ -741,7 +741,7 @@
             8306926,
             8306926
           ],
-		  "triggercolour": 16711680
+		  "triggerColour": 16711680
         },
         "layers": 1,
         "matrix": [

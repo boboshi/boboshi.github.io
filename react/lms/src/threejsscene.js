@@ -396,9 +396,9 @@ class ThreeJsScene extends Component
                     var str = "0x" + value.slice(1, 7);
 
                     if (usegroupcolour)
-                        GroupColourArray[currcolourid] = str;
+                        GroupColourArray[currcolourid] = parseInt(str);
                     else
-                        ZoneColourArray[currcolourid] = str;
+                        ZoneColourArray[currcolourid] = parseInt(str);
                 }
             });
         colourgui.addColor(triggerpalette, "triggercolour").onChange(function(value)
@@ -1313,9 +1313,9 @@ class ThreeJsScene extends Component
             // load colours
             else if (object.name === "colours")
             {
-                GroupColourArray = object.userData.grouparray;
-                ZoneColourArray = object.userData.zonearray;
-                TriggerColour = object.userData.triggercolour;
+                GroupColourArray = object.userData.groupArray;
+                ZoneColourArray = object.userData.zoneArray;
+                TriggerColour = object.userData.triggerColour;
             }
         });
     }
@@ -1393,8 +1393,8 @@ class ThreeJsScene extends Component
         scene.traverse(function(object)
         {
             if (object.name === "colours")
-                object.userData = {grouparray: GroupColourArray, zonearray: ZoneColourArray,
-                                   triggercolour: TriggerColour};
+                object.userData = {groupArray: GroupColourArray, zoneArray: ZoneColourArray,
+                                   triggerColour: TriggerColour};
         });
 
         for (var i = 0; i < TriggerLineArray.length; ++i)
@@ -1470,7 +1470,6 @@ class ThreeJsScene extends Component
                 for (var i = 0; i < selectedlights.length; ++i)
                     this.SetMaxBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, 
                                                  currmaxbrightness);
-
                 changemaxbrightness = null;
             }
 
@@ -1479,7 +1478,6 @@ class ThreeJsScene extends Component
                 for (var j = 0; i < selectedlights.length; ++j)
                     this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[j]).userData.key, 
                                                     currdimmedbrightness);
-
                 changedimmedbrightness = null;
             }
 
@@ -1488,7 +1486,6 @@ class ThreeJsScene extends Component
                 for (var k = 0; k < selectedlights.length; ++k)
                     this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[k]).userData.key, 
                                                                     currmsbrightness);
-
                 changemsbrightness = null;
             }
 
@@ -1496,7 +1493,6 @@ class ThreeJsScene extends Component
             {
                 for (var l = 0; l < selectedlights.length; ++l)
                     this.SetHoldTimeRequest(this.FindLightByName(selectedlights[l]).userData.key, currholdtime);
-
                 changeholdtime = null;
             }
 
@@ -1504,7 +1500,6 @@ class ThreeJsScene extends Component
             {
                 for (var m = 0; m < selectedlights.length; ++m)
                     this.SetSyncClockRequest(this.FindLightByName(selectedlights[m]).userData.key, currsyncclock);
-
                 changesyncclock = null;
             }
 
@@ -1512,7 +1507,6 @@ class ThreeJsScene extends Component
             {
                 for (var n = 0; n < selectedlights.length; ++n)
                     this.SetMSSensRequest(this.FindLightByName(selectedlights[n]).userData.key, currmssens);
-
                     changemssens = null;
             }
 
@@ -1520,7 +1514,6 @@ class ThreeJsScene extends Component
             {
                 for (var o = 0; o < selectedlights.length; ++o)
                     this.FWUpdateRequest(this.FindLightByName(selectedlights[o]).userData.key);
-
                 firmwareupdate = null;
             }
 
@@ -1581,9 +1574,7 @@ class ThreeJsScene extends Component
                 {
                     // clear display
                     for (var p = 0; p < LightArray.length; ++p)
-                    {
                         LightArray[p].userData.selected = false;
-                    }
                 }
             }
             else
@@ -1654,7 +1645,6 @@ class ThreeJsScene extends Component
             {
                 if (pintersect !== planeintersects[0].object)
                 {
-                    // select the intersected object
                     pintersect = planeintersects[0].object;
                     // onenter
                 }
