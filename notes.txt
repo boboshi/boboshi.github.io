@@ -1,8 +1,4 @@
 TODO:
-group/zone/ colour identification
-- changing colours of trigger arrows
-- add ui and colour picker for it?
-
 documentation for json
 highlight technical document by end of month
 front-end simulation (react)
