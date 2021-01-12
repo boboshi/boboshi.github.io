@@ -564,7 +564,7 @@ class ThreeJsScene extends Component
 
         var find = this.FindLightByKey(key);
         if (find)
-            find.userData.mssens = sens;
+            find.userData.msSens = sens;
     }
 
     SetSyncClockRequest(key, sync)
@@ -579,7 +579,7 @@ class ThreeJsScene extends Component
 
         var find = this.FindLightByKey(key);
         if (find)
-            find.userData.syncclock = sync;
+            find.userData.syncClock = sync;
     }
 
     SetHoldTimeRequest(key, time)
@@ -594,7 +594,7 @@ class ThreeJsScene extends Component
 
         var find = this.FindLightByKey(key);
         if (find)
-            find.userData.holdtime = time;
+            find.userData.holdTime = time;
     }
 
     FWUpdateRequest(key)
@@ -762,7 +762,7 @@ class ThreeJsScene extends Component
     {
         var find = this.FindLightByKey(key);
         if (find)
-            find.userData.fwversion = fw;
+            find.userData.fwVersion = fw;
     }
 
     SetBrightnessHelper(key, brightness, type)
@@ -772,18 +772,18 @@ class ThreeJsScene extends Component
         {
             if (type === "max")
             {
-                find.userData.maxbrightness = brightness;
+                find.userData.maxBrightness = brightness;
                 find.material.transparent = true;
                 // range from 0.3 to 1.0
                 find.material.opacity = 0.3 + brightness / 100 * 0.7;
             }
             else if (type === "dimmed")
             {
-                find.userData.dimmedbrightness = brightness;
+                find.userData.dimmedBrightness = brightness;
             }
             else if (type === "motion")
             {
-                find.userData.msbrightness = brightness;
+                find.userData.msBrightness = brightness;
             }
         }
     }
@@ -809,7 +809,7 @@ class ThreeJsScene extends Component
     		selectedlights = [light.userData.name];
     		this.MoveToLight(light.userData.name);
             lightgui.closed = false;
-            inputparams["SyncClock"] = light.userData.syncclock;
+            inputparams["SyncClock"] = light.userData.syncClock;
     		lightgui.show();
         
     		this.DisplayLightData(light.userData.name);
@@ -904,21 +904,21 @@ class ThreeJsScene extends Component
     // userData properties
     // - name (string)
     // - key (string)
-    // - fwversion (string)
+    // - fwVersion (string)
     // - selected (bool for internal use)
-    // - updateprogress (bool for internal use)
-    // - provisionprogress (bool for internal use)
-    // - last heard (string)
+    // - updateProgress (bool for internal use)
+    // - provisionProgress (bool for internal use)
+    // - lastHeard (string)
     // - status (enum (int), 1:on, 2:off)
-    // - pvm level (int)
-    // - mssens (string)
-    // - syncclock (bool)
-    // - maxbrightness (int, 0-100)
-    // - dimmedbrightness (int, 0-100)
-    // - msbrightness (int, 0-100)
-    // - holdtime int
-    // - group id (int) 0xff (255) is default
-    // - zone id (int) 0xff (255) is default
+    // - pwm (int)
+    // - msSens (string)
+    // - syncClock (bool)
+    // - maxBrightness (int, 0-100)
+    // - dimmedBrightness (int, 0-100)
+    // - msBrightness (int, 0-100)
+    // - holdTime int
+    // - groupId (int) 0xff (255) is default
+    // - zoneId (int) 0xff (255) is default
     // - triggerers (array of strings)
     // - triggerees (array of strings)
     
@@ -945,21 +945,21 @@ class ThreeJsScene extends Component
     	// add lightdata into the three.js mesh
         lightmesh.userData = {name: name, 
                               key: key, 
-                              fwversion : "1.0",
+                              fwVersion : "1.0",
                               selected: false,
-                              updateprogress: false,
-                              provisionprogress: false,
-                              lastheard: "test", 
+                              updateProgress: false,
+                              provisionProgress: false,
+                              lastHeard: "test", 
                               status: STATUS.OFF, 
-                              pvm: 0,
-                              mssens: "Medium",
-                              syncclock: true,
-                              maxbrightness: 100,
-                              dimmedbrightness: 100,
-                              msbrightness: 100,
-                              holdtime: 0,
-                              groupid: 255,
-                              zoneid: 255,
+                              pwm: 0,
+                              msSens: "Medium",
+                              syncClock: true,
+                              maxBrightness: 100,
+                              dimmedBrightness: 100,
+                              msBrightness: 100,
+                              holdTime: 0,
+                              groupId: 255,
+                              zoneId: 255,
                               triggerers: [],
                               triggerees: []};
     
@@ -1091,13 +1091,13 @@ class ThreeJsScene extends Component
                 // group
                 if (mode)
                 {
-                    if (parseInt(light0.userData.groupid) === id)
+                    if (parseInt(light0.userData.groupId) === id)
                         push = true;
                 }
                 // zone
                 else
                 {
-                    if (parseInt(light0.userData.zoneid) === id)
+                    if (parseInt(light0.userData.zoneId) === id)
                         push = true;
                 }
 
@@ -1147,7 +1147,7 @@ class ThreeJsScene extends Component
         for (var i = 0; i < selectedlights.length; ++i)
         {
             var light = this.FindLightByName(selectedlights[i]);
-            light.userData.groupid = id;
+            light.userData.groupId = id;
         }
     }
 
@@ -1156,7 +1156,7 @@ class ThreeJsScene extends Component
         for (var i = 0; i < selectedlights.length; ++i)
         {
             var light = this.FindLightByName(selectedlights[i]);
-            light.userData.zoneid = id;
+            light.userData.zoneId = id;
         }
     }
 
@@ -1179,14 +1179,14 @@ class ThreeJsScene extends Component
                 if (usegroupcolour)
                 {
                     if (GroupColourArray.length > 0)
-                        light.material.color.setHex(GroupColourArray[light.userData.groupid]);
+                        light.material.color.setHex(GroupColourArray[light.userData.groupId]);
                     else
                         light.material.color.setHex(LIGHTBLUE);
                 }
                 else
                 {
                     if (ZoneColourArray.length > 0)
-                        light.material.color.setHex(ZoneColourArray[light.userData.zoneid]);
+                        light.material.color.setHex(ZoneColourArray[light.userData.zoneId]);
                     else
                         light.material.color.setHex(LIGHTBLUE);
                 }
@@ -1238,18 +1238,18 @@ class ThreeJsScene extends Component
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
-                         "FW Version: " + find.userData.fwversion + "<br/>" +
-                         "Group: " + find.userData.groupid + "<br/>" +
-                         "Zone: " + find.userData.zoneid + "<br/>" + 
-    					 "Last Heard: " + find.userData.lastheard + "<br/>" +
+                         "FW Version: " + find.userData.fwVersion + "<br/>" +
+                         "Group: " + find.userData.groupId + "<br/>" +
+                         "Zone: " + find.userData.zoneId + "<br/>" + 
+    					 "Last Heard: " + find.userData.lastHeard + "<br/>" +
     					 "Last Status: " + laststatus + "<br/>" +
-                         "PVM Level: " + find.userData.pvm + "<br/>" +
-                         "MS Sensitivity: " + find.userData.mssens + "<br/>" +
-                         "Sync Clock: " + find.userData.syncclock + "<br/>" +
-                         "Max Brightness: " + find.userData.maxbrightness + "<br/>" +
-                         "Dimmed Brightness: " + find.userData.dimmedbrightness + "<br/>" +
-                         "MS Brightness: " + find.userData.msbrightness + "<br/>" +
-                         "Hold Time: " + find.userData.holdtime + "<br/>" +
+                         "PWM Level: " + find.userData.pwm + "<br/>" +
+                         "MS Sensitivity: " + find.userData.msSens + "<br/>" +
+                         "Sync Clock: " + find.userData.syncClock + "<br/>" +
+                         "Max Brightness: " + find.userData.maxBrightness + "<br/>" +
+                         "Dimmed Brightness: " + find.userData.dimmedBrightness + "<br/>" +
+                         "MS Brightness: " + find.userData.msBrightness + "<br/>" +
+                         "Hold Time: " + find.userData.holdTime + "<br/>" +
                          "Triggerers: " + find.userData.triggerers + "<br/>" +
                          "Triggerees: " + find.userData.triggerees;
     	text.style.display = "block";
@@ -1285,7 +1285,7 @@ class ThreeJsScene extends Component
     		// lights
     		if (object.userData.name)
     		{
-                object.material.opacity = 0.3 + object.maxbrightness / 100 * 0.7;
+                object.material.opacity = 0.3 + object.maxBrightness / 100 * 0.7;
                 LightArray.push(object);
     		}
     		else if (object.isMesh)
@@ -1601,7 +1601,7 @@ class ThreeJsScene extends Component
                                 this.MoveToLight(lintersect.userData.name);
                             }
                             lightgui.closed = false;
-                            inputparams["SyncClock"] = intersects[0].object.userData.syncclock;
+                            inputparams["SyncClock"] = intersects[0].object.userData.syncClock;
                             lightgui.show();
                         }
                     }
