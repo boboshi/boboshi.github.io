@@ -1,5 +1,6 @@
 // imports
 import React, { Component } from "react";
+import LMSUtility from "./LMSUtility.js";
 import * as THREE from "../node_modules/three/build/three.module.js";
 import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
 import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
@@ -97,9 +98,6 @@ class ThreeJsScene extends Component
 
         this.DrawScene = this.DrawScene.bind(this);
         this.SearchGUIHelper = this.SearchGUIHelper.bind(this);
-        this.FindLightByName = this.FindLightByName.bind(this);
-        this.FindLightByKey = this.FindLightByKey.bind(this);
-        this.SetFWVersion = this.SetFWVersion.bind(this);
         this.UpdateTriggers = this.UpdateTriggers.bind(this);
         this.DrawTriggerLine = this.DrawTriggerLine.bind(this);
     }
@@ -139,7 +137,7 @@ class ThreeJsScene extends Component
         //controls.dampingFactor = 0.05;
         controls.rotateSpeed = 0.5;
         controls.screenSpacePanning = false;
-        controls.maxPolarAngle = this.Rad(86);
+        controls.maxPolarAngle = LMSUtility.Rad(86);
         // camera initial facing
         controls.target.set(0.0, 0.0, 0.0);
         camera.position.set(0.0, 45.4, 0.0);
@@ -473,7 +471,7 @@ class ThreeJsScene extends Component
     NewKeyResponse(oldkey, newkey)
     {
         console.log("Received new key response: oldkey: " + oldkey + " newkey: " + newkey);
-        this.SetKeyHelper(oldkey, newkey);
+        LMSUtility.SetKey(oldkey, newkey, LightArray);
     }
 
     ResetKeyRequest(key)
@@ -485,7 +483,7 @@ class ThreeJsScene extends Component
     ResetKeyResponse(oldkey, newkey)
     {
         console.log("Received reset key response: oldkey: " + oldkey + " newkey: " + newkey);
-        this.SetKeyHelper(oldkey, newkey);
+        LMSUtility.SetKey(oldkey, newkey, LightArray);
     }
 
     LEDOnRequest(key)
@@ -497,7 +495,7 @@ class ThreeJsScene extends Component
     LEDOnResponse(key)
     {
         console.log("Received LED On response: key: " + key);
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.status = STATUS.ON;
     }
@@ -511,7 +509,7 @@ class ThreeJsScene extends Component
     LEDOffResponse(key)
     {
         console.log("Received LED Off response: key: " + key);
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.status = STATUS.OFF;
     }
@@ -529,7 +527,7 @@ class ThreeJsScene extends Component
         if (brightness < 0 || brightness > 100)
             this.ShowMsg("Error: invalid brightness", 3000);
         else
-            this.SetBrightnessHelper(key, brightness, "max");
+        LMSUtility.SetBrightness(key, brightness, "max", LightArray);
     }
 
     SetDimmedBrightnessRequest(key, brightness)
@@ -545,7 +543,7 @@ class ThreeJsScene extends Component
         if (brightness < 0 || brightness > 100)
             this.ShowError("invalid brightness", 3000);
         else
-            this.SetBrightnessHelper(key, brightness, "dimmed");
+        LMSUtility.SetBrightness(key, brightness, "dimmed", LightArray);
     }
 
     SetMSBrightnessRequest(key, brightness)
@@ -561,7 +559,7 @@ class ThreeJsScene extends Component
         if (brightness < 0 || brightness > 100)
             this.ShowMsg("Error: invalid brightness", 3000);
         else
-            this.SetBrightnessHelper(key, brightness, "motion");
+        LMSUtility.SetBrightness(key, brightness, "motion", LightArray);
     }
 
     SetMSSensRequest(key, sens)
@@ -574,7 +572,7 @@ class ThreeJsScene extends Component
     {
         console.log("Received Set MSSens response: key: " + key + " msSens: " + sens);
 
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.msSens = sens;
     }
@@ -589,7 +587,7 @@ class ThreeJsScene extends Component
     {
         console.log("Received Set Sync Clock response: key: " + key + " sync: " + sync);
 
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.syncClock = sync;
     }
@@ -604,7 +602,7 @@ class ThreeJsScene extends Component
     {
         console.log("Received Set Hold Time response: key: " + key + " time: " + time);
 
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.holdTime = time;
     }
@@ -618,7 +616,7 @@ class ThreeJsScene extends Component
     FWUpdateResponse(key)
     {
         console.log("Received Firmware Update response: key: " + key);
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
 
         if (find.userData.firmwareupdate)
         {
@@ -636,7 +634,7 @@ class ThreeJsScene extends Component
 
             setTimeout(foo, 500);
             setTimeout(bar, 1000);            
-            setTimeout(this.SetFWVersion, 1000, key, "2.0");
+            setTimeout(LMSUtility.SetFWVersion, 1000, key, "2.0", LightArray);
             setTimeout(loo, 2000);
         }
     }
@@ -648,8 +646,8 @@ class ThreeJsScene extends Component
     // sample activation is just turning it on for now
     DrawTriggerLine(key, triggereekey)
     {
-        var find = this.FindLightByKey(key);
-        var findtrig = this.FindLightByKey(triggereekey);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
         var start = new THREE.Vector3(find.position.x, find.position.y + 0.2, find.position.z);
         var end = new THREE.Vector3(findtrig.position.x, findtrig.position.y + 0.2, findtrig.position.z);
@@ -663,16 +661,10 @@ class ThreeJsScene extends Component
         TriggerLineArray.push(arrow);
         scene.add(arrow);
     }
-    
-    ToggleTriggerLines()
-    {
-        for (var i = 0; i < TriggerLineArray.length; ++i)
-            TriggerLineArray[i].visible = !TriggerLineArray[i].visible;
-    }
 
     Activate(key)
     {
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         console.log(key + " activated");
 
         find.userData.status = STATUS.ON;
@@ -680,14 +672,14 @@ class ThreeJsScene extends Component
         for (var i = 0; i < find.userData.triggerees.length; ++i)
         {
             var triggeree = find.userData.triggerees[i];
-            var obj = this.FindLightByKey(triggeree);
+            var obj = LMSUtility.FindLightByKey(triggeree, LightArray);
             this.Trigger(obj.userData.key, key);
         }
     }
 
     Trigger(key, trigger)
     {
-        var find = this.FindLightByKey(key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
         
         find.userData.status = STATUS.ON;
         console.log(key + " triggered by " + trigger);
@@ -701,8 +693,8 @@ class ThreeJsScene extends Component
             return;
         }
 
-        var find = this.FindLightByKey(key);
-        var findtrig = this.FindLightByKey(triggereekey);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
         if (find.userData.triggerees.includes(triggereekey))
         {
@@ -726,8 +718,8 @@ class ThreeJsScene extends Component
 
     RemoveTrigger(key, triggereekey)
     {
-        var find = this.FindLightByKey(key);
-        var findtrig = this.FindLightByKey(triggereekey);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
         var triggereeindex = find.userData.triggerees.indexOf(triggereekey);
         var triggererindex = findtrig.userData.triggerers.indexOf(key);
@@ -766,37 +758,6 @@ class ThreeJsScene extends Component
 
 
     // helper functions =================================================================
-    // placeholder for firmware update
-    SetFWVersion(key, fw)
-    {
-        var find = this.FindLightByKey(key);
-        if (find)
-            find.userData.fwVersion = fw;
-    }
-
-    SetBrightnessHelper(key, brightness, type)
-    {
-        var find = this.FindLightByKey(key);
-        if (find)
-        {
-            if (type === "max")
-            {
-                find.userData.maxBrightness = brightness;
-                find.material.transparent = true;
-                // range from 0.3 to 1.0
-                find.material.opacity = 0.3 + brightness / 100 * 0.7;
-            }
-            else if (type === "dimmed")
-            {
-                find.userData.dimmedBrightness = brightness;
-            }
-            else if (type === "motion")
-            {
-                find.userData.msBrightness = brightness;
-            }
-        }
-    }
-
     ShowMsg(message, time)
     {
         console.log(message);
@@ -807,7 +768,7 @@ class ThreeJsScene extends Component
     SearchGUIHelper(value)
     {
         // find and select light
-    	var light = this.FindLightByName(value);
+    	var light = LMSUtility.FindLightByName(value, LightArray);
     	// deselect any current lights
     	selectedlights = [];
     	this.ClearDisplayLightData();
@@ -816,7 +777,7 @@ class ThreeJsScene extends Component
     	if (light)
     	{
     		selectedlights = [light.userData.name];
-    		this.MoveToLight(light.userData.name);
+    		LMSUtility.MoveToLight(light.userData.name, controls, camera, outlinePass, LightArray);
             lightgui.closed = false;
             inputparams["SyncClock"] = light.userData.syncClock;
     		lightgui.show();
@@ -872,13 +833,6 @@ class ThreeJsScene extends Component
     	ghost.visible = !textgui.closed;
     }
 
-    ResetCamera()
-    {
-    	controls.target.set(0.0, 0.0, 0.0);
-    	camera.position.set(0.0, 45.4, 0.0);
-    	controls.update();
-    }
-
     LoadModel(model, xscale, yscale, zscale, material = translucentMat)
     {
     	// load and add test model to scene
@@ -910,26 +864,6 @@ class ThreeJsScene extends Component
     {
         return !textgui.closed || !searchgui.closed || !lightgui.closed || !colourgui.closed;
     }
-    // userData properties
-    // - name (string)
-    // - key (string)
-    // - fwVersion (string)
-    // - selected (bool for internal use)
-    // - updateProgress (bool for internal use)
-    // - provisionProgress (bool for internal use)
-    // - lastHeard (string)
-    // - status (enum (int), 1:on, 2:off)
-    // - pwm (int)
-    // - msSens (string)
-    // - syncClock (bool)
-    // - maxBrightness (int, 0-100)
-    // - dimmedBrightness (int, 0-100)
-    // - msBrightness (int, 0-100)
-    // - holdTime int
-    // - groupId (int) 0xff (255) is default
-    // - zoneId (int) 0xff (255) is default
-    // - triggerers (array of strings)
-    // - triggerees (array of strings)
     
     AddLight(name, pos)
     {
@@ -941,36 +875,8 @@ class ThreeJsScene extends Component
     {
     	// init mesh and data
     	const lightmesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial ({color:GREY}));
-    
-    	// not sure why position.set doesn't work, this is okay though
-    	lightmesh.position.x = pos.x;
-    	lightmesh.position.y = pos.y;
-    	lightmesh.position.z = pos.z;
-    	lightmesh.scale.x = 0.35;
-    	lightmesh.scale.y = 0.35;
-    	lightmesh.scale.z = 0.35;
-
-        // keys are just same as name for now
-    	// add lightdata into the three.js mesh
-        lightmesh.userData = {name: name, 
-                              key: key, 
-                              fwVersion : "1.0",
-                              selected: false,
-                              updateProgress: false,
-                              provisionProgress: false,
-                              lastHeard: "test", 
-                              status: STATUS.OFF, 
-                              pwm: 0,
-                              msSens: "Medium",
-                              syncClock: true,
-                              maxBrightness: 100,
-                              dimmedBrightness: 100,
-                              msBrightness: 100,
-                              holdTime: 0,
-                              groupId: 255,
-                              zoneId: 255,
-                              triggerers: [],
-                              triggerees: []};
+        
+        LMSUtility.CreateLight(lightmesh, name, key, pos);
     
     	// add mesh to array (for raycasting/picking)
     	LightArray.push(lightmesh);
@@ -981,16 +887,6 @@ class ThreeJsScene extends Component
     	return lightmesh;
     }
 
-    // finding light in lightarray
-    FindLightByName(name)
-    {
-    	return LightArray.find(light => light.userData.name === name);
-    }
-    FindLightByKey(key)
-    {
-        return LightArray.find(light => light.userData.key === key);
-    }
-
     // removing light objects from the scene
     RemoveLight(key)
     {
@@ -999,16 +895,13 @@ class ThreeJsScene extends Component
     RemoveLightHelper(key)
     {
         // remove existing triggerers and triggerees
-        var find = this.FindLightByKey(key);
+       // var find = LMSUtility.FindLightByKey(key, LightArray);
+       var find = LMSUtility.FindLightByKey(key, LightArray);
         for (var i = 0; i < find.userData.triggerers; ++i)
-        {
             this.RemoveTrigger(find.userData.triggerers[i], key);
-        }
 
         for (var j = 0; j < find.userData.triggerees; ++i)
-        {
             this.RemoveTrigger(key, find.userData.triggerees[j]);
-        }
 
     	// find and remove light from LightArray
     	var index = LightArray.findIndex(light => light.userData.key === key);
@@ -1020,17 +913,12 @@ class ThreeJsScene extends Component
     		LightArray.splice(index, 1);
     }
 
-    SetKeyHelper(oldkey, newkey)
-    {
-        var index = LightArray.findIndex(light => light.userData.key === oldkey);
-        LightArray[index].userData.key = newkey;
-    }
     // setting light status
     SetSelectedLightStatus(selected, status)
     {
     	for (var i = 0; i < selected.length; ++i)
     	{
-            var find = this.FindLightByName(selected[i]);
+            var find = LMSUtility.FindLightByName(selected[i], LightArray);
             
     		if (find)
     		{
@@ -1046,84 +934,17 @@ class ThreeJsScene extends Component
     {
         for (var i = 0; i < selected.length; ++i)
     	{
-            var find = this.FindLightByName(selected[i]);
+            var find = LMSUtility.FindLightByName(selected[i], LightArray);
             
     		if (find)
-    		{
                 this.ResetKeyRequest(find.userData.key);
-    		}
-    	}
-    }
-    // move camera to selected light
-    MoveToLight(name)
-    {
-    	var find = this.FindLightByName(name);
-
-    	if (find)
-    	{
-    		find.userData.selected = true;
-    		controls.target.set(find.position.x, find.position.y, find.position.z);
-    		camera.position.set(find.position.x, find.position.y + 10, find.position.z);
-    		outlinePass.selectedObjects = [find];
-    		controls.update();
     	}
     }
 
     // mode - true for group, false for zone
     MultiSelectHelper(id, mode)
     {
-        var found = false;
-
-        if (id === 255)
-        {
-            for (var i = 0; i < LightArray.length; ++i)
-            {
-                if (!found)
-                {
-                    found = true;
-                    outlinePass.selectedObjects = [];
-                    selectedlights = [];
-                }
-
-                var light = LightArray[i];
-                outlinePass.selectedObjects.push(light);
-                selectedlights.push(light.userData.name);
-            }
-        }
-        else
-        {
-            for (var j = 0; j < LightArray.length; ++j)
-            {
-                var light0 = LightArray[j];
-                
-                var push = false;
-                // group
-                if (mode)
-                {
-                    if (parseInt(light0.userData.groupId) === id)
-                        push = true;
-                }
-                // zone
-                else
-                {
-                    if (parseInt(light0.userData.zoneId) === id)
-                        push = true;
-                }
-
-                if (push)
-                {
-                    if (!found)
-                    {
-                        found = true;
-                        outlinePass.selectedObjects = [];
-                        selectedlights = [];
-                    }
-    
-                    outlinePass.selectedObjects.push(light0);
-                    selectedlights.push(light0.userData.name);
-                }
-            }
-        }
+        var found = LMSUtility.MultiSelect(id, mode, outlinePass, selectedlights, LightArray)
 
         if (found)
         {
@@ -1149,24 +970,6 @@ class ThreeJsScene extends Component
     SelectZone(id)
     {
         this.MultiSelectHelper(id, false);
-    }
-
-    SetGroupID(id)
-    {
-        for (var i = 0; i < selectedlights.length; ++i)
-        {
-            var light = this.FindLightByName(selectedlights[i]);
-            light.userData.groupId = id;
-        }
-    }
-
-    SetZoneID(id)
-    {
-        for (var i = 0; i < selectedlights.length; ++i)
-        {
-            var light = this.FindLightByName(selectedlights[i]);
-            light.userData.zoneId = id;
-        }
     }
 
     LightArrayUpdate()
@@ -1235,7 +1038,7 @@ class ThreeJsScene extends Component
     // display data of light given name/ids
     DisplayLightData(name)
     {
-    	var find = this.FindLightByName(name);
+    	var find = LMSUtility.FindLightByName(name, LightArray);
     	var laststatus;
 
     	if (find.userData.status === STATUS.OFF)
@@ -1407,11 +1210,6 @@ class ThreeJsScene extends Component
         
         this.UpdateTriggers();
     }
-    // convert degrees to radians
-    Rad(deg)
-    {
-	    return deg * Math.PI / 180;
-    }
     //===================================================================================
 
 
@@ -1468,7 +1266,7 @@ class ThreeJsScene extends Component
             if (changemaxbrightness)
             {
                 for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetMaxBrightnessRequest(this.FindLightByName(selectedlights[i]).userData.key, 
+                    this.SetMaxBrightnessRequest(LMSUtility.FindLightByName(selectedlights[i], LightArray).userData.key, 
                                                  currmaxbrightness);
                 changemaxbrightness = null;
             }
@@ -1476,7 +1274,7 @@ class ThreeJsScene extends Component
             if (changedimmedbrightness)
             {
                 for (var j = 0; i < selectedlights.length; ++j)
-                    this.SetDimmedBrightnessRequest(this.FindLightByName(selectedlights[j]).userData.key, 
+                    this.SetDimmedBrightnessRequest(LMSUtility.FindLightByName(selectedlights[j], LightArray).userData.key, 
                                                     currdimmedbrightness);
                 changedimmedbrightness = null;
             }
@@ -1484,7 +1282,7 @@ class ThreeJsScene extends Component
             if (changemsbrightness)
             {
                 for (var k = 0; k < selectedlights.length; ++k)
-                    this.SetMSBrightnessRequest(this.FindLightByName(selectedlights[k]).userData.key, 
+                    this.SetMSBrightnessRequest(LMSUtility.FindLightByName(selectedlights[k], LightArray).userData.key, 
                                                                     currmsbrightness);
                 changemsbrightness = null;
             }
@@ -1492,28 +1290,28 @@ class ThreeJsScene extends Component
             if (changeholdtime)
             {
                 for (var l = 0; l < selectedlights.length; ++l)
-                    this.SetHoldTimeRequest(this.FindLightByName(selectedlights[l]).userData.key, currholdtime);
+                    this.SetHoldTimeRequest(LMSUtility.FindLightByName(selectedlights[l], LightArray).userData.key, currholdtime);
                 changeholdtime = null;
             }
 
             if (changesyncclock)
             {
                 for (var m = 0; m < selectedlights.length; ++m)
-                    this.SetSyncClockRequest(this.FindLightByName(selectedlights[m]).userData.key, currsyncclock);
+                    this.SetSyncClockRequest(LMSUtility.FindLightByName(selectedlights[m], LightArray).userData.key, currsyncclock);
                 changesyncclock = null;
             }
 
             if (changemssens)
             {
                 for (var n = 0; n < selectedlights.length; ++n)
-                    this.SetMSSensRequest(this.FindLightByName(selectedlights[n]).userData.key, currmssens);
+                    this.SetMSSensRequest(LMSUtility.FindLightByName(selectedlights[n], LightArray).userData.key, currmssens);
                     changemssens = null;
             }
 
             if (firmwareupdate)
             {
                 for (var o = 0; o < selectedlights.length; ++o)
-                    this.FWUpdateRequest(this.FindLightByName(selectedlights[o]).userData.key);
+                    this.FWUpdateRequest(LMSUtility.FindLightByName(selectedlights[o], LightArray).userData.key);
                 firmwareupdate = null;
             }
 
@@ -1526,13 +1324,13 @@ class ThreeJsScene extends Component
             // uses selectedlights array to set id
             if (currgroupid)
             {
-                this.SetGroupID(currgroupid);
+                LMSUtility.SetGroup(currgroupid, selectedlights, LightArray);
                 currgroupid = null;
             }
 
             if (currzoneid)
             {
-                this.SetZoneID(currzoneid);
+                LMSUtility.SetZone(currzoneid, selectedlights, LightArray);
                 currzoneid = null;
             }
         }
@@ -1590,7 +1388,7 @@ class ThreeJsScene extends Component
                     {
                         if (changetriggers)
                         {
-                            this.AddTrigger(this.FindLightByName(selectedlights[0]).userData.key, 
+                            this.AddTrigger(LMSUtility.FindLightByName(selectedlights[0], LightArray).userData.key, 
                                             intersects[0].object.userData.key);
                         }
                         else
@@ -1600,7 +1398,7 @@ class ThreeJsScene extends Component
                             {
                                 // select this light
                                 selectedlights = [intersects[0].object.userData.name];
-                                this.MoveToLight(lintersect.userData.name);
+                                LMSUtility.MoveToLight(lintersect.userData.name, controls, camera, outlinePass, LightArray);
                             }
                             lightgui.closed = false;
                             inputparams["SyncClock"] = intersects[0].object.userData.syncClock;
@@ -1616,7 +1414,7 @@ class ThreeJsScene extends Component
                     if(!textgui.closed)
                         this.RemoveLight(lintersect.userData.key);
                     else if (changetriggers)
-                        this.RemoveTrigger(this.FindLightByName(selectedlights[0]).userData.key, 
+                        this.RemoveTrigger(LMSUtility.FindLightByName(selectedlights[0], LightArray).userData.key, 
                                            intersects[0].object.userData.key);
                 }
             }
@@ -1758,7 +1556,7 @@ class ThreeJsScene extends Component
                 // deselect light if left clicked in view mode
                 if (textgui.closed && (selectedlights.length > 0) && !selectedStart && !changetriggers)
                 {
-                    var tmp = this.FindLightByName(selectedlights[0]);
+                    var tmp = LMSUtility.FindLightByName(selectedlights[0], LightArray);
                     if(tmp)
                     {
                         tmp.userData.selected = false;
@@ -1889,15 +1687,15 @@ class ThreeJsScene extends Component
                 break;
             case "KeyR":
                 if (this.AnyGUIOpen() === false)
-                    this.ResetCamera();
+                LMSUtility.ResetCamera(controls, camera);
                 break;
             case "KeyA":
                 if (selectedlights.length === 1)
-                    this.Activate(this.FindLightByName(selectedlights[0]).userData.key);
+                    this.Activate(LMSUtility.FindLightByName(selectedlights[0], LightArray).userData.key);
                 break;
             case "KeyT":
                 if (this.AnyGUIOpen() === false)
-                    this.ToggleTriggerLines();
+                    LMSUtility.ToggleTriggerLines(TriggerLineArray);
                 break;
             case "KeyG":
                 if (this.AnyGUIOpen() === false)
@@ -1918,10 +1716,6 @@ class ThreeJsScene extends Component
                 LCTRLdown = false;
                 controls.enablePan = true;
                 controls.enableRotate = true;
-                break;
-            case "KeyB":
-                //if(LightArray.find(light => light.userData.name == "lighttest0"))
-                //	MoveToLight("lighttest0");
                 break;
             case "Digit1":
                 if (this.AnyGUIOpen() === false)
