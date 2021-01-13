@@ -501,6 +501,15 @@ class ThreeJsScene extends Component
     LEDOnRequest(key)
     {
         console.log("Sent LED On request: key: " + key);
+
+        var json = {SenderId: "Frontend",
+                    SensorID: "LightingSystem-AZTECH-YY-" + key,
+                    EventId: "EV-YY-" + key + "-" + LMSUtility.Timestamp(),
+                    EventType: "LightingSystem/setLightingOverride",
+                    Parameters: {CommandType: "Set", LightingControl: "Force_On"}};
+        
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+
         this.LEDOnResponse(key);
     }
 

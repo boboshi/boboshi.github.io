@@ -15,14 +15,6 @@ export default class MQTTClient
         // subscribe to topic "mup" to listen for published messages
         console.log("onConnect");
         this.client.subscribe("mup");
-
-        //var json = {SenderId: "Backend",
-        //            SensorID: "LightingSystem-AZTECH-820421-1.2.3",
-        //            EventId: "EV-820421-1.2.3-20200530212050123",
-        //            EventType: "LightingSystem/setLightingOverride",
-        //            Parameters: {CommandType: "Set", LightingControl: "Auto"}};
-        //
-        //this.SendMessage(JSON.stringify(json), "mup");
     }
 
     onConnectionLost(responseObject)

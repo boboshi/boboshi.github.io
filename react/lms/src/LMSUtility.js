@@ -5,6 +5,31 @@ export default class LMSUtility
         return deg * Math.PI / 180;
     }
 
+    static Timestamp()
+    {
+        var date = new Date();
+        var year = date.getFullYear().toString();
+        var month = (date.getMonth() + 1).toString();
+        if (month.length === 1)
+            month = "0" + month;
+        var day = date.getDate().toString();
+        if (day.length === 1)
+            day = "0" + day;
+        var hour = date.getHours().toString();
+        if (hour.length === 1)
+            hour = "0" + hour;
+        var second = date.getSeconds().toString();
+        if (second.length === 1)
+            second = "0" + second;
+        var millisecond = date.getMilliseconds().toString();
+        if (millisecond.length === 1)
+            millisecond = "00" + millisecond;
+        else if (millisecond.length === 2)
+            millisecond = "0" + millisecond;
+
+        return year + month + day + hour + second + millisecond;
+    }
+
     static ResetCamera(controls, camera)
     {
     	controls.target.set(0.0, 0.0, 0.0);
