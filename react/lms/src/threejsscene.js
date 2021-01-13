@@ -1,6 +1,7 @@
 // imports
 import React, { Component } from "react";
 import LMSUtility from "./LMSUtility.js";
+import MQTTClient from "./MQTTClient.js";
 import * as THREE from "../node_modules/three/build/three.module.js";
 import {OrbitControls} from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
 import {FBXLoader} from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
@@ -56,6 +57,9 @@ var GroupColourArray = [];
 var ZoneColourArray = [];
 var TriggerColour;
 var TriggerLineArray = [];
+// mqtt
+var mqttClient;
+
 // "enum" for light status
 const STATUS = 
 {
@@ -411,6 +415,11 @@ class ThreeJsScene extends Component
         });
         colourgui.closed = true;
         colourgui.hide();
+    }
+
+    InitMQTT()
+    {
+        mqttClient = new MQTTClient("broker.hivemq.com", 8000, "clientId");
     }
     //===================================================================================
 
@@ -1230,10 +1239,11 @@ class ThreeJsScene extends Component
         this.InitPicking();
         this.InitTextDisplay();
         this.InitGUI();
+        this.InitMQTT();
 
         // load default scene
         this.LoadScene();
-        
+
         // call render loop
 		this.DrawScene();
     }
