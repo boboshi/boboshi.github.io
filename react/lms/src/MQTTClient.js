@@ -12,11 +12,17 @@ export default class MQTTClient
 
     onConnect()
     {
+        // subscribe to topic "mup" to listen for published messages
         console.log("onConnect");
-        this.client.subscribe("World");
-        var message = new Paho.Message("Hello");
-        message.destinationName = "World";
-        this.client.send(message);
+        this.client.subscribe("mup");
+
+        //var json = {SenderId: "Backend",
+        //            SensorID: "LightingSystem-AZTECH-820421-1.2.3",
+        //            EventId: "EV-820421-1.2.3-20200530212050123",
+        //            EventType: "LightingSystem/setLightingOverride",
+        //            Parameters: {CommandType: "Set", LightingControl: "Auto"}};
+        //
+        //this.SendMessage(JSON.stringify(json), "mup");
     }
 
     onConnectionLost(responseObject)
@@ -27,6 +33,15 @@ export default class MQTTClient
 
     onMessageArrived(message)
     {
-        console.log("onMessageArrived: "+ message.payloadString);
+        var obj = JSON.parse(message.payloadString);
+        console.log("onMessageArrived: ", obj);
+    }
+
+    SendMessage(str, dest)
+    {
+        // ignore actual destination for now, use "mup" for testing
+        var message = new Paho.Message(str);
+        message.destinationName = "mup";
+        this.client.send(message);
     }
 };

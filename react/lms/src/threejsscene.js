@@ -63,8 +63,9 @@ var mqttClient;
 // "enum" for light status
 const STATUS = 
 {
-	ON : 1,
-	OFF : 2
+	OFF : 0,
+    ON : 1,
+    NORMAL: 2
 }
 
 // colour codes for quick access
@@ -323,8 +324,9 @@ class ThreeJsScene extends Component
     	textgui.hide();
 
         // light gui
-        var onbutton = {On:function(){ledstatus = STATUS.ON;}};
         var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
+        var onbutton = {On:function(){ledstatus = STATUS.ON;}};
+        var normalbutton = {Normal:function(){ledstatus = STATUS.NORMAL}};
         inputparams = {"MaxBrightness": "100",
                        "DimmedBrightness": "100",
                        "MSBrightness": "100",
@@ -337,8 +339,9 @@ class ThreeJsScene extends Component
         var firmwarebutton = {FirmwareUpdate:function(){firmwareupdate = true;}};
         var resetkeybutton = {ResetKey:function(){resetkey = true;}};
 
-        lightgui.add(onbutton, "On");
         lightgui.add(offbutton, "Off");
+        lightgui.add(onbutton, "On");
+        lightgui.add(normalbutton, "Normal");
         lightgui.add(inputparams, "MaxBrightness").onFinishChange(function(value){currmaxbrightness = value;
                                                                                   changemaxbrightness = true;});
         lightgui.add(inputparams, "DimmedBrightness").onFinishChange(function(value){currdimmedbrightness = value;
@@ -521,6 +524,20 @@ class ThreeJsScene extends Component
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
             find.userData.status = STATUS.OFF;
+    }
+
+    LEDNormalRequest(key)
+    {
+        console.log("Sent LED Normal request: key: " + key);
+        this.LEDNormalResponse(key);
+    }
+
+    LEDNormalResponse(key)
+    {
+        console.log("Received LED Normal response: key: " + key);
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        if (find)
+            find.userData.status = STATUS.NORMAL;
     }
 
     SetMaxBrightnessRequest(key, brightness)
@@ -935,6 +952,8 @@ class ThreeJsScene extends Component
                     this.LEDOnRequest(find.userData.key);
                 else if (status === STATUS.OFF)
                     this.LEDOffRequest(find.userData.key);
+                else
+                    this.LEDNormalRequest(find.userData.key);
     		}
     	}
     }
@@ -995,7 +1014,7 @@ class ThreeJsScene extends Component
             {
     			light.material.color.setHex(GREY);
             }
-            else if (light.userData.status === STATUS.ON)
+            else
             {
                 if (usegroupcolour)
                 {
@@ -1011,10 +1030,6 @@ class ThreeJsScene extends Component
                     else
                         light.material.color.setHex(LIGHTBLUE);
                 }
-            }
-            else
-            {
-    			light.material.color.setHex(GREEN);
             }
 
     		// data display

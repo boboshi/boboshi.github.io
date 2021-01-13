@@ -1,5 +1,6 @@
 TODO:
-documentation for json
+mqtt payloads for commands
+
 highlight technical document by end of month
 front-end simulation (react)
 cpu overheating issue??????
