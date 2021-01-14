@@ -1,5 +1,13 @@
 TODO:
 mqtt payloads for commands
+triggerer/tiggeree command payloads
+add properties
+- PhotosensorGroup (string)
+    - HHmmHHmm start time, end time
+- BrightGroup (string)
+    - HHmmHHmm start time, end time
+- MotionSensing (bool)
+- LightIntensity (number)
 
 highlight technical document by end of month
 front-end simulation (react)

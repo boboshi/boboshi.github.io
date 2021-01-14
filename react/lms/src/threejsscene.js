@@ -60,18 +60,18 @@ var TriggerLineArray = [];
 // mqtt
 var mqttClient;
 
-// "enum" for light status
-const STATUS = 
-{
-	OFF : 0,
-    ON : 1,
-    NORMAL: 2
-}
+const MSSENS = {
+                    "Low": 1,
+                    "Medium-Low": 2,
+                    "Medium": 3,
+                    "Medium-High": 4,
+                    "High": 5
+               };
 
-// colour codes for quick access
+// colour
 const WHITE = 0xFFFFFF;
 //const RED = 0xFF0000;
-const GREEN = 0x00FF00;
+//const GREEN = 0x00FF00;
 const LIGHTBLUE = 0x7EC0EE;
 //const YELLOW = 0xF8FF33;
 const GREY = 0x808080;
@@ -324,9 +324,9 @@ class ThreeJsScene extends Component
     	textgui.hide();
 
         // light gui
-        var offbutton = {Off:function(){ledstatus = STATUS.OFF;}};
-        var onbutton = {On:function(){ledstatus = STATUS.ON;}};
-        var normalbutton = {Normal:function(){ledstatus = STATUS.NORMAL}};
+        var offbutton = {Off:function(){ledstatus = "Force_Off";}};
+        var onbutton = {On:function(){ledstatus = "Force_On";}};
+        var normalbutton = {Normal:function(){ledstatus = "Normal"}};
         inputparams = {"MaxBrightness": "100",
                        "DimmedBrightness": "100",
                        "MSBrightness": "100",
@@ -355,8 +355,8 @@ class ThreeJsScene extends Component
         lightgui.add(inputparams, "SyncClock").listen().onFinishChange(function(value){currsyncclock = value;
                                                                                        changesyncclock = true;});
         lightgui.add(inputparams, "MSSensitivity", ["Low", "Medium-Low", "Medium", "Medium-High", "High"]).listen()
-                                                        .onFinishChange(function(value){currmssens = value;
-                                                                        changemssens = true;});
+                                                        .onFinishChange(function(value){currmssens = MSSENS[value];
+                                                                                        changemssens = true;});
         lightgui.add(inputparams, "GroupID").onFinishChange(function(value){currgroupid = value});
         lightgui.add(inputparams, "ZoneID").onFinishChange(function(value){currzoneid = value});
         lightgui.add(inputparams, "EditTriggers").listen().onFinishChange(function(value){changetriggers = value;});
@@ -498,108 +498,60 @@ class ThreeJsScene extends Component
         LMSUtility.SetKey(oldkey, newkey, LightArray);
     }
 
-    LEDOnRequest(key)
+    LEDStatusRequest(key, mode)
     {
-        console.log("Sent LED On request: key: " + key);
+        console.log("Sent LED " + mode + " request: key: " + key);
 
-        var json = {SenderId: "Frontend",
-                    SensorID: "LightingSystem-AZTECH-YY-" + key,
-                    EventId: "EV-YY-" + key + "-" + LMSUtility.Timestamp(),
-                    EventType: "LightingSystem/setLightingOverride",
-                    Parameters: {CommandType: "Set", LightingControl: "Force_On"}};
-        
+        var json = mqttClient.CreateMessage(key, "setLightingOverride", "Set");
+        json.Parameters.LightingControl = mode;
+
         mqttClient.SendMessage(JSON.stringify(json), "mup");
-
-        this.LEDOnResponse(key);
+        this.LEDStatusResponse(key, mode);
     }
 
-    LEDOnResponse(key)
+    LEDStatusResponse(key, mode)
     {
-        console.log("Received LED On response: key: " + key);
+        console.log("Received LED " + mode + " response: key: " + key);
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.status = STATUS.ON;
+            find.userData.status = mode;
     }
 
-    LEDOffRequest(key)
+    SetBrightnessRequest(key, brightness, mode)
     {
-        console.log("Sent LED Off request: key: " + key);
-        this.LEDOffResponse(key);
+        console.log("Sent Set " + mode + " request: key: " + key);
+
+        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        
+        if (mode === "BrightLevel")
+            json.Parameters.BrightLevel = brightness;
+        else if (mode === "DimLevel")
+            json.Parameters.DimLevel = brightness;
+        else
+            json.Parameters.MotionLevel = brightness;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+        this.SetBrightnessResponse(key, brightness, mode);
     }
 
-    LEDOffResponse(key)
+    SetBrightnessResponse(key, brightness, mode)
     {
-        console.log("Received LED Off response: key: " + key);
-        var find = LMSUtility.FindLightByKey(key, LightArray);
-        if (find)
-            find.userData.status = STATUS.OFF;
-    }
-
-    LEDNormalRequest(key)
-    {
-        console.log("Sent LED Normal request: key: " + key);
-        this.LEDNormalResponse(key);
-    }
-
-    LEDNormalResponse(key)
-    {
-        console.log("Received LED Normal response: key: " + key);
-        var find = LMSUtility.FindLightByKey(key, LightArray);
-        if (find)
-            find.userData.status = STATUS.NORMAL;
-    }
-
-    SetMaxBrightnessRequest(key, brightness)
-    {
-        console.log("Sent Set MaxBrightness request: key: " + key + " maxBrightness: " + brightness);
-        this.SetMaxBrightnessResponse(key, brightness);
-    }
-
-    SetMaxBrightnessResponse(key, brightness)
-    {
-        console.log("Received Set MaxBrightness response: key: " + key + " maxBrightness: " + brightness);
+        console.log("Received Set " + mode + " response: key: " + key);
 
         if (brightness < 0 || brightness > 100)
             this.ShowMsg("Error: invalid brightness", 3000);
         else
-        LMSUtility.SetBrightness(key, brightness, "max", LightArray);
-    }
-
-    SetDimmedBrightnessRequest(key, brightness)
-    {
-        console.log("Sent Set DimmedBrightness request: key: " + key + " dimmedBrightness: " + brightness);
-        this.SetDimmedBrightnessResponse(key, brightness);
-    }
-
-    SetDimmedBrightnessResponse(key, brightness)
-    {
-        console.log("Received Set DimmedBrightness response: key: " + key + " dimmedBrightness: " + brightness);
-    
-        if (brightness < 0 || brightness > 100)
-            this.ShowError("invalid brightness", 3000);
-        else
-        LMSUtility.SetBrightness(key, brightness, "dimmed", LightArray);
-    }
-
-    SetMSBrightnessRequest(key, brightness)
-    {
-        console.log("Sent Set MSBrightness request: key: " + key + " msBrightness: " + brightness);
-        this.SetMSBrightnessResponse(key, brightness);
-    }
-
-    SetMSBrightnessResponse(key, brightness)
-    {
-        console.log("Received Set MSBrightness response: key: " + key + " msBrightness: " + brightness);
-
-        if (brightness < 0 || brightness > 100)
-            this.ShowMsg("Error: invalid brightness", 3000);
-        else
-        LMSUtility.SetBrightness(key, brightness, "motion", LightArray);
+            LMSUtility.SetBrightness(key, brightness, mode, LightArray);
     }
 
     SetMSSensRequest(key, sens)
     {
         console.log("Sent Set MSSens request: key: " + key + " msSens: " + sens);
+        
+        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        json.Parameters.MotionSensitivity = sens;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
         this.SetMSSensResponse(key, sens);
     }
 
@@ -615,6 +567,11 @@ class ThreeJsScene extends Component
     SetSyncClockRequest(key, sync)
     {
         console.log("Sent Set Sync Clock request: key: " + key + " sync: " + sync);
+
+        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        json.Parameters.ClockSync = sync;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
         this.SetSyncClockResponse(key, sync);
     }
 
@@ -630,6 +587,11 @@ class ThreeJsScene extends Component
     SetHoldTimeRequest(key, time)
     {
         console.log("Sent Set Hold Time request: key: " + key + " time: " + time);
+        
+        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        json.Parameters.HoldTime = time;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
         this.SetHoldTimeResponse(key, time);
     }
 
@@ -702,7 +664,7 @@ class ThreeJsScene extends Component
         var find = LMSUtility.FindLightByKey(key, LightArray);
         console.log(key + " activated");
 
-        find.userData.status = STATUS.ON;
+        find.userData.status = "Force_On";
 
         for (var i = 0; i < find.userData.triggerees.length; ++i)
         {
@@ -716,7 +678,7 @@ class ThreeJsScene extends Component
     {
         var find = LMSUtility.FindLightByKey(key, LightArray);
         
-        find.userData.status = STATUS.ON;
+        find.userData.status ="Force_On";
         console.log(key + " triggered by " + trigger);
     }
 
@@ -956,14 +918,7 @@ class ThreeJsScene extends Component
             var find = LMSUtility.FindLightByName(selected[i], LightArray);
             
     		if (find)
-    		{
-                if (status === STATUS.ON)
-                    this.LEDOnRequest(find.userData.key);
-                else if (status === STATUS.OFF)
-                    this.LEDOffRequest(find.userData.key);
-                else
-                    this.LEDNormalRequest(find.userData.key);
-    		}
+                this.LEDStatusRequest(find.userData.key, status);
     	}
     }
     // reset keys
@@ -1019,7 +974,7 @@ class ThreeJsScene extends Component
     		var light = LightArray[i];
 
     		// status display (off/on/normal)
-            if (light.userData.status === STATUS.OFF)
+            if (light.userData.status === "Force_Off")
             {
     			light.material.color.setHex(GREY);
             }
@@ -1071,15 +1026,8 @@ class ThreeJsScene extends Component
     // display data of light given name/ids
     DisplayLightData(name)
     {
-    	var find = LMSUtility.FindLightByName(name, LightArray);
-    	var laststatus;
-
-    	if (find.userData.status === STATUS.OFF)
-    		laststatus = "OFF";
-    	else if (find.userData.status === STATUS.ON)
-    		laststatus = "ON";
-    	else
-    		laststatus = "NORMAL";
+        var find = LMSUtility.FindLightByName(name, LightArray);
+        var sens = Object.keys(MSSENS).find(key => MSSENS[key] === find.userData.msSens);
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
@@ -1087,9 +1035,9 @@ class ThreeJsScene extends Component
                          "Group: " + find.userData.groupId + "<br/>" +
                          "Zone: " + find.userData.zoneId + "<br/>" + 
     					 "Last Heard: " + find.userData.lastHeard + "<br/>" +
-    					 "Last Status: " + laststatus + "<br/>" +
+    					 "Last Status: " + find.userData.status + "<br/>" +
                          "PWM Level: " + find.userData.pwm + "<br/>" +
-                         "MS Sensitivity: " + find.userData.msSens + "<br/>" +
+                         "MS Sensitivity: " + sens + "<br/>" +
                          "Sync Clock: " + find.userData.syncClock + "<br/>" +
                          "Max Brightness: " + find.userData.maxBrightness + "<br/>" +
                          "Dimmed Brightness: " + find.userData.dimmedBrightness + "<br/>" +
@@ -1300,24 +1248,24 @@ class ThreeJsScene extends Component
             if (changemaxbrightness)
             {
                 for (var i = 0; i < selectedlights.length; ++i)
-                    this.SetMaxBrightnessRequest(LMSUtility.FindLightByName(selectedlights[i], LightArray).userData.key, 
-                                                 currmaxbrightness);
+                    this.SetBrightnessRequest(LMSUtility.FindLightByName(selectedlights[i], LightArray).userData.key, 
+                                                                         currmaxbrightness, "BrightLevel");
                 changemaxbrightness = null;
             }
 
             if (changedimmedbrightness)
             {
-                for (var j = 0; i < selectedlights.length; ++j)
-                    this.SetDimmedBrightnessRequest(LMSUtility.FindLightByName(selectedlights[j], LightArray).userData.key, 
-                                                    currdimmedbrightness);
+                for (var j = 0; j < selectedlights.length; ++j)
+                    this.SetBrightnessRequest(LMSUtility.FindLightByName(selectedlights[j], LightArray).userData.key, 
+                                                                         currdimmedbrightness, "DimLevel");
                 changedimmedbrightness = null;
             }
 
             if (changemsbrightness)
             {
                 for (var k = 0; k < selectedlights.length; ++k)
-                    this.SetMSBrightnessRequest(LMSUtility.FindLightByName(selectedlights[k], LightArray).userData.key, 
-                                                                    currmsbrightness);
+                    this.SetBrightnessRequest(LMSUtility.FindLightByName(selectedlights[k], LightArray).userData.key, 
+                                                                         currmsbrightness, "MotionLevel");
                 changemsbrightness = null;
             }
 

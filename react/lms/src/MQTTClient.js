@@ -1,4 +1,5 @@
 import Paho from "paho-mqtt";
+import LMSUtility from "./LMSUtility.js";
 
 export default class MQTTClient
 {
@@ -13,20 +14,31 @@ export default class MQTTClient
     onConnect()
     {
         // subscribe to topic "mup" to listen for published messages
-        console.log("onConnect");
+        console.log("MQTT connected");
         this.client.subscribe("mup");
     }
 
     onConnectionLost(responseObject)
     {
         if (responseObject.errorCode !== 0)
-            console.log("onConnectionLost: " + responseObject.errorMessage);
+            console.log("Connection lost: " + responseObject.errorMessage);
     }
 
     onMessageArrived(message)
     {
         var obj = JSON.parse(message.payloadString);
-        console.log("onMessageArrived: ", obj);
+        console.log("Message Arrived:: ", obj);
+    }
+
+    CreateMessage(key, eventtype, commandtype)
+    {
+        var json = {SenderId: "Frontend",
+                    SensorID: "LightingSystem-AZTECH-YY-" + key,
+                    EventId: "EV-YY-" + key + "-" + LMSUtility.Timestamp(),
+                    EventType: "LightingSystem/" + eventtype,
+                    Parameters: {CommandType: commandtype}};
+
+        return json;
     }
 
     SendMessage(str, dest)

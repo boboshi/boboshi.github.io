@@ -7,6 +7,8 @@ export default class LMSUtility
 
     static Timestamp()
     {
+        // this function follows this format:
+        // yyyyMMddHH:mm:ss:SSS 
         var date = new Date();
         var year = date.getFullYear().toString();
         var month = (date.getMonth() + 1).toString();
@@ -169,18 +171,18 @@ export default class LMSUtility
         var find = LMSUtility.FindLightByKey(key, lightarray);
         if (find)
         {
-            if (type === "max")
+            if (type === "BrightLevel")
             {
                 find.userData.maxBrightness = brightness;
                 find.material.transparent = true;
                 // range from 0.3 to 1.0
                 find.material.opacity = 0.3 + brightness / 100 * 0.7;
             }
-            else if (type === "dimmed")
+            else if (type === "DimLevel")
             {
                 find.userData.dimmedBrightness = brightness;
             }
-            else if (type === "motion")
+            else if (type === "MotionLevel")
             {
                 find.userData.msBrightness = brightness;
             }
