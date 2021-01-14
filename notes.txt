@@ -1,8 +1,10 @@
 TODO:
-documentation for payloads
 
+aws login:
 sanjay.das@aztech.com
 P@ss2020
+
+setup mqtt broker on aws instance (docker)
 
 highlight technical document by end of month
 front-end simulation (react)
