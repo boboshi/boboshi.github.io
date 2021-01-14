@@ -93,12 +93,12 @@ export default class LMSUtility
                 // group
                 if (mode)
                 {
-                    if (parseInt(light0.userData.groupId) === id)
+                    if (parseInt(light0.userData.GroupId) === id)
                         push = true;
                 }
                 else
                 {
-                    if (parseInt(light0.userData.zoneId) === id)
+                    if (parseInt(light0.userData.ZoneId) === id)
                         push = true;
                 }
 
@@ -134,7 +134,7 @@ export default class LMSUtility
     	// add lightdata into the three.js mesh
         mesh.userData = {name: name, 
                          key: key, 
-                         fwVersion : "1.0",
+                         FWVersion : "1.0",
                          selected: false,
                          updateProgress: false,
                          provisionProgress: false,
@@ -142,19 +142,19 @@ export default class LMSUtility
                          status: "Force_Off", 
                          pwm: 0,
                          MotionSensing: "Enable",
-                         msSens: 3,
-                         syncClock: "Enable",
+                         MotionSensitivity: 3,
+                         ClockSync: "Enable",
                          LightIntensity: 1,
-                         maxBrightness: 100,
-                         dimmedBrightness: 100,
-                         msBrightness: 100,
-                         holdTime: 0,
+                         BrightLevel: 100,
+                         DimLevel: 100,
+                         MotionLevel: 100,
+                         HoldTime: 0,
                          PhotosensorGroup: "0",
                          BrightGroup: "0",
-                         groupId: 255,
-                         zoneId: 255,
-                         triggerers: [],
-                         triggerees: []};
+                         GroupId: 255,
+                         ZoneId: 255,
+                         Triggerers: [],
+                         Triggerees: []};
     }
 
     static SetKey(oldkey, newkey, lightarray)
@@ -167,7 +167,7 @@ export default class LMSUtility
     {
         var find = LMSUtility.FindLightByKey(key, lightarray);
         if (find)
-            find.userData.fwVersion = fw;
+            find.userData.FWVersion = fw;
     }
 
     static SetBrightness(key, brightness, type, lightarray)
@@ -177,18 +177,18 @@ export default class LMSUtility
         {
             if (type === "BrightLevel")
             {
-                find.userData.maxBrightness = brightness;
+                find.userData.BrightLevel = brightness;
                 find.material.transparent = true;
                 // range from 0.3 to 1.0
                 find.material.opacity = 0.3 + brightness / 100 * 0.7;
             }
             else if (type === "DimLevel")
             {
-                find.userData.dimmedBrightness = brightness;
+                find.userData.DimLevel = brightness;
             }
             else if (type === "MotionLevel")
             {
-                find.userData.msBrightness = brightness;
+                find.userData.MotionLevel = brightness;
             }
         }
     }
@@ -198,7 +198,7 @@ export default class LMSUtility
         for (var i = 0; i < selectedlights.length; ++i)
         {
             var light = LMSUtility.FindLightByName(selectedlights[i], lightarray);
-            light.userData.groupId = id;
+            light.userData.GroupId = id;
         }
     }
 
@@ -207,7 +207,7 @@ export default class LMSUtility
         for (var i = 0; i < selectedlights.length; ++i)
         {
             var light = LMSUtility.FindLightByName(selectedlights[i], lightarray);
-            light.userData.zoneId = id;
+            light.userData.ZoneId = id;
         }
     }
 

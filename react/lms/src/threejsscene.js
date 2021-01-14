@@ -556,7 +556,7 @@ class ThreeJsScene extends Component
 
     SetMSSensRequest(key, sens)
     {
-        console.log("Sent Set MSSens request: key: " + key + " msSens: " + sens);
+        console.log("Sent Set MotionSensitivity request: key: " + key + " MotionSensitivity: " + sens);
         
         var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
         json.Parameters.MotionSensitivity = sens;
@@ -567,11 +567,11 @@ class ThreeJsScene extends Component
 
     SetMSSensResponse(key, sens)
     {
-        console.log("Received Set MSSens response: key: " + key + " msSens: " + sens);
+        console.log("Received Set MotionSensitivity response: key: " + key + " MotionSensitivity: " + sens);
 
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.msSens = sens;
+            find.userData.MotionSensitivity = sens;
     }
 
     SetSyncClockRequest(key, sync)
@@ -591,7 +591,7 @@ class ThreeJsScene extends Component
 
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.syncClock = sync;
+            find.userData.ClockSync = sync;
     }
 
     SetSchedulingRequest(key, scheduling)
@@ -631,7 +631,7 @@ class ThreeJsScene extends Component
 
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.holdTime = time;
+            find.userData.HoldTime = time;
     }
 
     FWUpdateRequest(key)
@@ -671,7 +671,7 @@ class ThreeJsScene extends Component
         console.log("Sent Set Group request: key: " + key + " group: " + group);
 
         var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
-        json.Parameters.groupId = group;
+        json.Parameters.GroupId = group;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
         this.SetGroupResponse(key, group);
@@ -683,7 +683,7 @@ class ThreeJsScene extends Component
 
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.groupId = group;
+            find.userData.GroupId = group;
     }
 
     SetZoneRequest(key, zone)
@@ -691,7 +691,7 @@ class ThreeJsScene extends Component
         console.log("Sent Set Zone request: key: " + key + " zone: " + zone);
 
         var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
-        json.Parameters.zoneId = zone;
+        json.Parameters.ZoneId = zone;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
 
@@ -704,7 +704,7 @@ class ThreeJsScene extends Component
         
         var find = LMSUtility.FindLightByKey(key, LightArray);
         if (find)
-            find.userData.zoneId = zone;
+            find.userData.ZoneId = zone;
     }
     //===================================================================================
 
@@ -737,9 +737,9 @@ class ThreeJsScene extends Component
 
         find.userData.status = "Force_On";
 
-        for (var i = 0; i < find.userData.triggerees.length; ++i)
+        for (var i = 0; i < find.userData.Triggerees.length; ++i)
         {
-            var triggeree = find.userData.triggerees[i];
+            var triggeree = find.userData.Triggerees[i];
             var obj = LMSUtility.FindLightByKey(triggeree, LightArray);
             this.Trigger(obj.userData.key, key);
         }
@@ -764,12 +764,12 @@ class ThreeJsScene extends Component
         var find = LMSUtility.FindLightByKey(key, LightArray);
         var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
-        if (find.userData.triggerees.includes(triggereekey))
+        if (find.userData.Triggerees.includes(triggereekey))
         {
             this.ShowMsg("Error: Trigger already exists", 3000);
             return;
         }
-        //else if(findtrig.userData.triggerees.includes(key))
+        //else if(findtrig.userData.Triggerees.includes(key))
         //{
         //    this.ShowMsg("Error: Circular trigger", 3000);
         //    return;
@@ -780,16 +780,16 @@ class ThreeJsScene extends Component
             this.ShowMsg("Trigger added", 3000);
         }
 
-        find.userData.triggerees.push(triggereekey);
-        findtrig.userData.triggerers.push(key);
+        find.userData.Triggerees.push(triggereekey);
+        findtrig.userData.Triggerers.push(key);
 
         var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
                                             "Set");
-        json.Parameters.triggerees = find.userData.triggerees;
+        json.Parameters.Triggerees = find.userData.Triggerees;
 
         var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
                                              "setLightingConfiguration", "Set");
-        json0.Parameters.triggerers = findtrig.userData.triggerers;
+        json0.Parameters.Triggerers = findtrig.userData.Triggerers;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
         mqttClient.SendMessage(JSON.stringify(json0), "mup");
@@ -800,8 +800,8 @@ class ThreeJsScene extends Component
         var find = LMSUtility.FindLightByKey(key, LightArray);
         var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
-        var triggereeindex = find.userData.triggerees.indexOf(triggereekey);
-        var triggererindex = findtrig.userData.triggerers.indexOf(key);
+        var triggereeindex = find.userData.Triggerees.indexOf(triggereekey);
+        var triggererindex = findtrig.userData.Triggerers.indexOf(key);
 
         var index = null;
 
@@ -822,15 +822,15 @@ class ThreeJsScene extends Component
         if (triggereeindex !== -1)
         {
             this.ShowMsg("Trigger removed", 3000);
-            find.userData.triggerees.splice(triggereeindex, 1);
-            findtrig.userData.triggerers.splice(triggererindex, 1);
+            find.userData.Triggerees.splice(triggereeindex, 1);
+            findtrig.userData.Triggerers.splice(triggererindex, 1);
 
             var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
                                                 "Set");
-            json.Parameters.triggerees = find.userData.triggerees;
+            json.Parameters.Triggerees = find.userData.Triggerees;
             var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
                                                  "setLightingConfiguration", "Set");
-            json0.Parameters.triggerers = findtrig.userData.triggerers;
+            json0.Parameters.Triggerers = findtrig.userData.Triggerers;
 
             mqttClient.SendMessage(JSON.stringify(json), "mup");
             mqttClient.SendMessage(JSON.stringify(json0), "mup");
@@ -866,7 +866,7 @@ class ThreeJsScene extends Component
     		selectedlights = [light.userData.name];
     		LMSUtility.MoveToLight(light.userData.name, controls, camera, outlinePass, LightArray);
             lightgui.closed = false;
-            if (light.userData.syncClock === "Enable")
+            if (light.userData.ClockSync === "Enable")
                 inputparams["SyncClock"] = true;
             else
                 inputparams["SyncClock"] = false;
@@ -991,11 +991,11 @@ class ThreeJsScene extends Component
         // remove existing triggerers and triggerees
        // var find = LMSUtility.FindLightByKey(key, LightArray);
        var find = LMSUtility.FindLightByKey(key, LightArray);
-        for (var i = 0; i < find.userData.triggerers; ++i)
-            this.RemoveTrigger(find.userData.triggerers[i], key);
+        for (var i = 0; i < find.userData.Triggerers; ++i)
+            this.RemoveTrigger(find.userData.Triggerers[i], key);
 
-        for (var j = 0; j < find.userData.triggerees; ++i)
-            this.RemoveTrigger(key, find.userData.triggerees[j]);
+        for (var j = 0; j < find.userData.Triggerees; ++i)
+            this.RemoveTrigger(key, find.userData.Triggerees[j]);
 
     	// find and remove light from LightArray
     	var index = LightArray.findIndex(light => light.userData.key === key);
@@ -1080,14 +1080,14 @@ class ThreeJsScene extends Component
                 if (usegroupcolour)
                 {
                     if (GroupColourArray.length > 0)
-                        light.material.color.setHex(GroupColourArray[light.userData.groupId]);
+                        light.material.color.setHex(GroupColourArray[light.userData.GroupId]);
                     else
                         light.material.color.setHex(LIGHTBLUE);
                 }
                 else
                 {
                     if (ZoneColourArray.length > 0)
-                        light.material.color.setHex(ZoneColourArray[light.userData.zoneId]);
+                        light.material.color.setHex(ZoneColourArray[light.userData.ZoneId]);
                     else
                         light.material.color.setHex(LIGHTBLUE);
                 }
@@ -1124,29 +1124,29 @@ class ThreeJsScene extends Component
     DisplayLightData(name)
     {
         var find = LMSUtility.FindLightByName(name, LightArray);
-        var sens = Object.keys(MSSENS).find(key => MSSENS[key] === find.userData.msSens);
+        var sens = Object.keys(MSSENS).find(key => MSSENS[key] === find.userData.MotionSensitivity);
     	// <br/> is a newline
         text.innerHTML = "Name: " + find.userData.name + "<br/>" +
                          "Key: " + find.userData.key + "<br/>" +
-                         "FW Version: " + find.userData.fwVersion + "<br/>" +
-                         "Group: " + find.userData.groupId + "<br/>" +
-                         "Zone: " + find.userData.zoneId + "<br/>" + 
+                         "FW Version: " + find.userData.FWVersion + "<br/>" +
+                         "Group: " + find.userData.GroupId + "<br/>" +
+                         "Zone: " + find.userData.ZoneId + "<br/>" + 
     					 "Last Heard: " + find.userData.lastHeard + "<br/>" +
     					 "Last Status: " + find.userData.status + "<br/>" +
                          "PWM Level: " + find.userData.pwm + "<br/>" +
                          "MotionSensing: " + find.userData.MotionSensing + "<br/>" +
                          "MS Sensitivity: " + sens + "<br/>" +
-                         "Sync Clock: " + find.userData.syncClock + "<br/>" +
+                         "Sync Clock: " + find.userData.ClockSync + "<br/>" +
                          "Scheduling: " + find.userData.Scheduling + "<br/>" +
                          "Light Intensity: " + find.userData.LightIntensity + "<br/>" +
-                         "Max Brightness: " + find.userData.maxBrightness + "<br/>" +
-                         "Dimmed Brightness: " + find.userData.dimmedBrightness + "<br/>" +
-                         "MS Brightness: " + find.userData.msBrightness + "<br/>" +
-                         "Hold Time: " + find.userData.holdTime + "<br/>" +
+                         "Max Brightness: " + find.userData.BrightLevel + "<br/>" +
+                         "Dimmed Brightness: " + find.userData.DimLevel + "<br/>" +
+                         "MS Brightness: " + find.userData.MotionLevel + "<br/>" +
+                         "Hold Time: " + find.userData.HoldTime + "<br/>" +
                          "Photosensor Group: " + find.userData.PhotosensorGroup + "<br/>" +
                          "Bright Group: " + find.userData.BrightGroup + "<br/>" +
-                         "Triggerers: " + find.userData.triggerers + "<br/>" +
-                         "Triggerees: " + find.userData.triggerees;
+                         "Triggerers: " + find.userData.Triggerers + "<br/>" +
+                         "Triggerees: " + find.userData.Triggerees;
     	text.style.display = "block";
     	// top and left specifies the position of the data
     	//text.style.top = window.innerHeight - 100 + "px";
@@ -1180,7 +1180,7 @@ class ThreeJsScene extends Component
     		// lights
     		if (object.userData.name)
     		{
-                object.material.opacity = 0.3 + object.maxBrightness / 100 * 0.7;
+                object.material.opacity = 0.3 + object.BrightLevel / 100 * 0.7;
                 LightArray.push(object);
     		}
     		else if (object.isMesh)
@@ -1209,12 +1209,8 @@ class ThreeJsScene extends Component
     UpdateTriggers()
     {
         for (var i = 0; i < LightArray.length; ++i)
-        {
-            for (var j = 0; j < LightArray[i].userData.triggerees.length; ++j)
-            {
-                this.DrawTriggerLine(LightArray[i].userData.key, LightArray[i].userData.triggerees[j]);
-            }
-        }
+            for (var j = 0; j < LightArray[i].userData.Triggerees.length; ++j)
+                this.DrawTriggerLine(LightArray[i].userData.key, LightArray[i].userData.Triggerees[j]);
     }
 
     // load scene from json
@@ -1494,7 +1490,7 @@ class ThreeJsScene extends Component
                                 LMSUtility.MoveToLight(lintersect.userData.name, controls, camera, outlinePass, LightArray);
                             }
                             lightgui.closed = false;
-                            if (intersects[0].object.userData.syncClock === "Enable")
+                            if (intersects[0].object.userData.ClockSync === "Enable")
                                 inputparams["SyncClock"] = true;
                             else
                                 inputparams["SyncClock"] = false;
