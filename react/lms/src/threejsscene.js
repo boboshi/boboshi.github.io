@@ -409,7 +409,7 @@ class ThreeJsScene extends Component
                 if (currcolourid >= 0 && currcolourid <= 255)
                 {
                     var str = "0x" + value.slice(1, 7);
-
+                    
                     if (usegroupcolour)
                         GroupColourArray[currcolourid] = parseInt(str);
                     else
@@ -989,7 +989,6 @@ class ThreeJsScene extends Component
     RemoveLightHelper(key)
     {
         // remove existing triggerers and triggerees
-       // var find = LMSUtility.FindLightByKey(key, LightArray);
        var find = LMSUtility.FindLightByKey(key, LightArray);
         for (var i = 0; i < find.userData.Triggerers; ++i)
             this.RemoveTrigger(find.userData.Triggerers[i], key);
@@ -1044,10 +1043,8 @@ class ThreeJsScene extends Component
         }
         else
         {
-            if (mode)
-                this.ShowMsg("Error: group empty", 3000);
-            else
-                this.ShowMsg("Error: zone empty", 3000);
+            var str = mode ? "group" : "zone";
+            this.ShowMsg("Error: " + str + " empty", 3000);
         }
     }
 
