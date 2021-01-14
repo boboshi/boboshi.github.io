@@ -1,12 +1,8 @@
 TODO:
-triggerer/tiggeree command payloads
-add properties (and commands/payloads)
-- PhotosensorGroup (string)
-    - HHmmHHmm start time, end time
-- BrightGroup (string)
-    - HHmmHHmm start time, end time
-- MotionSensing (bool)
-- LightIntensity (number)
+documentation for payloads
+
+sanjay.das@aztech.com
+P@ss2020
 
 highlight technical document by end of month
 front-end simulation (react)

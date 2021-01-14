@@ -30,9 +30,9 @@ export default class MQTTClient
         console.log("Message Arrived:: ", obj);
     }
 
-    CreateMessage(key, eventtype, commandtype)
+    CreateMessage(sender, key, eventtype, commandtype)
     {
-        var json = {SenderId: "Frontend",
+        var json = {SenderId: sender,
                     SensorID: "LightingSystem-AZTECH-YY-" + key,
                     EventId: "EV-YY-" + key + "-" + LMSUtility.Timestamp(),
                     EventType: "LightingSystem/" + eventtype,

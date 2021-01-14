@@ -48,9 +48,10 @@ var text, msg, proggui;
 // gui
 var searchgui, textgui, lightgui, colourgui, inputparams, colourparams;
 var currsearch, currgroupid, currzoneid, currmaxbrightness, currdimmedbrightness, 
-    currmsbrightness, currholdtime, currmssens, currsyncclock, currcolourid;
+    currmsbrightness, currholdtime, currmssens, currsyncclock, currcolourid, currscheduling;
 var ledstatus, resetkey, firmwareupdate, changemaxbrightness, changedimmedbrightness, 
-    changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers;
+    changemsbrightness, changeholdtime, changemssens, changesyncclock, changetriggers,
+    changescheduling;
 var usegroupcolour = true;
 var currname = "";
 var GroupColourArray = [];
@@ -60,13 +61,7 @@ var TriggerLineArray = [];
 // mqtt
 var mqttClient;
 
-const MSSENS = {
-                    "Low": 1,
-                    "Medium-Low": 2,
-                    "Medium": 3,
-                    "Medium-High": 4,
-                    "High": 5
-               };
+const MSSENS = {"Low": 1, "Medium-Low": 2, "Medium": 3, "Medium-High": 4, "High": 5};
 
 // colour
 const WHITE = 0xFFFFFF;
@@ -255,7 +250,7 @@ class ThreeJsScene extends Component
 	    text = document.createElement("div");
 	    text.style.position = "absolute";
 	    text.style.width = "330px";
-	    text.style.height = "390px";
+	    text.style.height = "510px";
 	    text.style.backgroundColor = "black";
 	    text.style.color = "white";
 	    text.innerHTML = "";
@@ -332,6 +327,7 @@ class ThreeJsScene extends Component
                        "MSBrightness": "100",
                        "HoldTime": "0",
                        "SyncClock": true,
+                       "Scheduling": true,
                        "MSSensitivity": "Medium",
                        "GroupID": "",
                        "ZoneID": "",
@@ -352,8 +348,22 @@ class ThreeJsScene extends Component
                                                                              changeholdtime = true;});
         lightgui.add(firmwarebutton, "FirmwareUpdate");
         lightgui.add(resetkeybutton, "ResetKey");
-        lightgui.add(inputparams, "SyncClock").listen().onFinishChange(function(value){currsyncclock = value;
-                                                                                       changesyncclock = true;});
+        lightgui.add(inputparams, "SyncClock").listen().onFinishChange(function(value)
+                                                                      {
+                                                                          if(value)
+                                                                              currsyncclock = "Enable";
+                                                                          else
+                                                                              currsyncclock = "Disable";
+                                                                          changesyncclock = true;
+                                                                        });
+        lightgui.add(inputparams, "Scheduling").listen().onFinishChange(function(value)
+                                                                        {
+                                                                            if(value)
+                                                                                currscheduling = "Enable";
+                                                                            else
+                                                                                currscheduling = "Disable";
+                                                                            changescheduling = true;
+                                                                          });
         lightgui.add(inputparams, "MSSensitivity", ["Low", "Medium-Low", "Medium", "Medium-High", "High"]).listen()
                                                         .onFinishChange(function(value){currmssens = MSSENS[value];
                                                                                         changemssens = true;});
@@ -502,7 +512,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent LED " + mode + " request: key: " + key);
 
-        var json = mqttClient.CreateMessage(key, "setLightingOverride", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingOverride", "Set");
         json.Parameters.LightingControl = mode;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -521,7 +531,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set " + mode + " request: key: " + key);
 
-        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
         
         if (mode === "BrightLevel")
             json.Parameters.BrightLevel = brightness;
@@ -548,7 +558,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set MSSens request: key: " + key + " msSens: " + sens);
         
-        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
         json.Parameters.MotionSensitivity = sens;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -568,7 +578,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Sync Clock request: key: " + key + " sync: " + sync);
 
-        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
         json.Parameters.ClockSync = sync;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -584,11 +594,31 @@ class ThreeJsScene extends Component
             find.userData.syncClock = sync;
     }
 
+    SetSchedulingRequest(key, scheduling)
+    {
+        console.log("Sent Set Scheduling request: key: " + key + " scheduling: " + scheduling);
+
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        json.Parameters.Scheduling = scheduling;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+        this.SetSchedulingResponse(key, scheduling);
+    }
+
+    SetSchedulingResponse(key, scheduling)
+    {
+        console.log("Received Set Scheduling response: key: " + key + " scheduling: " + scheduling);
+
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        if (find)
+            find.userData.Scheduling = scheduling;
+    }
+
     SetHoldTimeRequest(key, time)
     {
         console.log("Sent Set Hold Time request: key: " + key + " time: " + time);
         
-        var json = mqttClient.CreateMessage(key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
         json.Parameters.HoldTime = time;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -711,6 +741,17 @@ class ThreeJsScene extends Component
 
         find.userData.triggerees.push(triggereekey);
         findtrig.userData.triggerers.push(key);
+
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
+                                            "Set");
+        json.Parameters.triggerees = find.userData.triggerees;
+
+        var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
+                                             "setLightingConfiguration", "Set");
+        json0.Parameters.triggerers = findtrig.userData.triggerers;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+        mqttClient.SendMessage(JSON.stringify(json0), "mup");
     }
 
     RemoveTrigger(key, triggereekey)
@@ -741,14 +782,22 @@ class ThreeJsScene extends Component
         {
             this.ShowMsg("Trigger removed", 3000);
             find.userData.triggerees.splice(triggereeindex, 1);
+            findtrig.userData.triggerers.splice(triggererindex, 1);
+
+            var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
+                                                "Set");
+            json.Parameters.triggerees = find.userData.triggerees;
+            var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
+                                                 "setLightingConfiguration", "Set");
+            json0.Parameters.triggerers = findtrig.userData.triggerers;
+
+            mqttClient.SendMessage(JSON.stringify(json), "mup");
+            mqttClient.SendMessage(JSON.stringify(json0), "mup");
         }
         else
         {
             this.ShowMsg("Error: Trigger does not exist", 3000);
         }
-
-        if (triggererindex !== -1)
-            findtrig.userData.triggerers.splice(triggererindex, 1);
     }
     //===================================================================================
 
@@ -776,7 +825,14 @@ class ThreeJsScene extends Component
     		selectedlights = [light.userData.name];
     		LMSUtility.MoveToLight(light.userData.name, controls, camera, outlinePass, LightArray);
             lightgui.closed = false;
-            inputparams["SyncClock"] = light.userData.syncClock;
+            if (light.userData.syncClock === "Enable")
+                inputparams["SyncClock"] = true;
+            else
+                inputparams["SyncClock"] = false;
+            if (light.userData.Scheduling === "Enable")
+                inputparams["Scheduling"] = true;
+            else
+                inputparams["Scheduling"] = false;
     		lightgui.show();
         
     		this.DisplayLightData(light.userData.name);
@@ -1037,12 +1093,17 @@ class ThreeJsScene extends Component
     					 "Last Heard: " + find.userData.lastHeard + "<br/>" +
     					 "Last Status: " + find.userData.status + "<br/>" +
                          "PWM Level: " + find.userData.pwm + "<br/>" +
+                         "MotionSensing: " + find.userData.MotionSensing + "<br/>" +
                          "MS Sensitivity: " + sens + "<br/>" +
                          "Sync Clock: " + find.userData.syncClock + "<br/>" +
+                         "Scheduling: " + find.userData.Scheduling + "<br/>" +
+                         "Light Intensity: " + find.userData.LightIntensity + "<br/>" +
                          "Max Brightness: " + find.userData.maxBrightness + "<br/>" +
                          "Dimmed Brightness: " + find.userData.dimmedBrightness + "<br/>" +
                          "MS Brightness: " + find.userData.msBrightness + "<br/>" +
                          "Hold Time: " + find.userData.holdTime + "<br/>" +
+                         "Photosensor Group: " + find.userData.PhotosensorGroup + "<br/>" +
+                         "Bright Group: " + find.userData.BrightGroup + "<br/>" +
                          "Triggerers: " + find.userData.triggerers + "<br/>" +
                          "Triggerees: " + find.userData.triggerees;
     	text.style.display = "block";
@@ -1283,6 +1344,13 @@ class ThreeJsScene extends Component
                 changesyncclock = null;
             }
 
+            if (changescheduling)
+            {
+                for (var m = 0; m < selectedlights.length; ++m)
+                    this.SetSchedulingRequest(LMSUtility.FindLightByName(selectedlights[m], LightArray).userData.key, currscheduling);
+                changescheduling = null;
+            }
+
             if (changemssens)
             {
                 for (var n = 0; n < selectedlights.length; ++n)
@@ -1383,7 +1451,14 @@ class ThreeJsScene extends Component
                                 LMSUtility.MoveToLight(lintersect.userData.name, controls, camera, outlinePass, LightArray);
                             }
                             lightgui.closed = false;
-                            inputparams["SyncClock"] = intersects[0].object.userData.syncClock;
+                            if (intersects[0].object.userData.syncClock === "Enable")
+                                inputparams["SyncClock"] = true;
+                            else
+                                inputparams["SyncClock"] = false;
+                            if (intersects[0].object.userData.Scheduling === "Enable")
+                                inputparams["Scheduling"] = true;
+                            else
+                                inputparams["Scheduling"] = false;
                             lightgui.show();
                         }
                     }
