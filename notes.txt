@@ -1,7 +1,6 @@
 TODO:
-mqtt payloads for commands
 triggerer/tiggeree command payloads
-add properties
+add properties (and commands/payloads)
 - PhotosensorGroup (string)
     - HHmmHHmm start time, end time
 - BrightGroup (string)
