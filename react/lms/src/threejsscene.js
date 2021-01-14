@@ -665,6 +665,47 @@ class ThreeJsScene extends Component
             setTimeout(loo, 2000);
         }
     }
+
+    SetGroupRequest(key, group)
+    {
+        console.log("Sent Set Group request: key: " + key + " group: " + group);
+
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        json.Parameters.groupId = group;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+        this.SetGroupResponse(key, group);
+    }
+
+    SetGroupResponse(key, group)
+    {
+        console.log("Received Set Group response: key: " + key + " group: " + group);
+
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        if (find)
+            find.userData.groupId = group;
+    }
+
+    SetZoneRequest(key, zone)
+    {
+        console.log("Sent Set Zone request: key: " + key + " zone: " + zone);
+
+        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        json.Parameters.zoneId = zone;
+
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+
+        this.SetZoneResponse(key, zone);
+    }
+
+    SetZoneResponse(key, zone)
+    {
+        console.log("Received Set Zone response: key: " + key + " zone: " + zone);
+        
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+        if (find)
+            find.userData.zoneId = zone;
+    }
     //===================================================================================
 
 
@@ -1346,22 +1387,22 @@ class ThreeJsScene extends Component
 
             if (changescheduling)
             {
-                for (var m = 0; m < selectedlights.length; ++m)
-                    this.SetSchedulingRequest(LMSUtility.FindLightByName(selectedlights[m], LightArray).userData.key, currscheduling);
+                for (var n = 0; n < selectedlights.length; ++n)
+                    this.SetSchedulingRequest(LMSUtility.FindLightByName(selectedlights[n], LightArray).userData.key, currscheduling);
                 changescheduling = null;
             }
 
             if (changemssens)
             {
-                for (var n = 0; n < selectedlights.length; ++n)
-                    this.SetMSSensRequest(LMSUtility.FindLightByName(selectedlights[n], LightArray).userData.key, currmssens);
-                    changemssens = null;
+                for (var o = 0; o < selectedlights.length; ++o)
+                    this.SetMSSensRequest(LMSUtility.FindLightByName(selectedlights[o], LightArray).userData.key, currmssens);
+                changemssens = null;
             }
 
             if (firmwareupdate)
             {
-                for (var o = 0; o < selectedlights.length; ++o)
-                    this.FWUpdateRequest(LMSUtility.FindLightByName(selectedlights[o], LightArray).userData.key);
+                for (var p = 0; p < selectedlights.length; ++p)
+                    this.FWUpdateRequest(LMSUtility.FindLightByName(selectedlights[p], LightArray).userData.key);
                 firmwareupdate = null;
             }
 
@@ -1374,13 +1415,15 @@ class ThreeJsScene extends Component
             // uses selectedlights array to set id
             if (currgroupid)
             {
-                LMSUtility.SetGroup(currgroupid, selectedlights, LightArray);
+                for (var q = 0; q < selectedlights.length; ++q)
+                    this.SetGroupRequest(LMSUtility.FindLightByName(selectedlights[q], LightArray).userData.key, currgroupid);
                 currgroupid = null;
             }
 
             if (currzoneid)
             {
-                LMSUtility.SetZone(currzoneid, selectedlights, LightArray);
+                for (var r = 0; r < selectedlights.length; ++r)
+                    this.SetZoneRequest(LMSUtility.FindLightByName(selectedlights[r], LightArray).userData.key, currzoneid);
                 currzoneid = null;
             }
         }
@@ -1421,8 +1464,8 @@ class ThreeJsScene extends Component
                 if (selectedlights.length > 0)
                 {
                     // clear display
-                    for (var p = 0; p < LightArray.length; ++p)
-                        LightArray[p].userData.selected = false;
+                    for (var s = 0; s < LightArray.length; ++s)
+                        LightArray[s].userData.selected = false;
                 }
             }
             else
