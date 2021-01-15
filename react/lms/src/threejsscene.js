@@ -756,6 +756,47 @@ class ThreeJsScene extends Component
         console.log(key + " triggered by " + trigger);
     }
 
+    OverrideTrigger(key, triggereekeys)
+    {
+        var find = LMSUtility.FindLightByKey(key, LightArray);
+
+        for (var i = 0; i < find.userData.Triggerees.length; ++i)
+        {
+            var findtrig = LMSUtility.FindLightByKey(find.userData.Triggerees[i], LightArray);
+            var triggererindex = findtrig.userData.Triggerers.indexOf(key);
+
+            if (triggererindex === -1)
+            {
+                this.ShowMsg("Error: Trigger does not exist", 3000);
+                return;
+            }
+
+            LMSUtility.RemoveTriggerLine(key, find.userData.Triggerees[i], TriggerLineArray);
+            findtrig.userData.Triggerers.splice(triggererindex, 1);
+        }
+
+        find.userData.Triggerees.length = 0;
+
+        for (var j = 0; j < triggereekeys.length; ++j)
+        {
+            var t = triggereekeys[j];
+            var findtrig0 = LMSUtility.FindLightByKey(t, LightArray);
+
+            this.DrawTriggerLine(key, t);
+            this.ShowMsg("Trigger added", 3000);
+            find.userData.Triggerees.push(t);
+            findtrig0.userData.Triggerers.push(key);
+
+            var json0 = mqttClient.CreateMessage("Frontend", t, "addTriggerers", "Set");
+            json0.Parameters.Triggerers = [key];
+            mqttClient.SendMessage(JSON.stringify(json0), "mup");
+        }
+
+        var json = mqttClient.CreateMessage("Frontend", key, "overrideTriggerees", "Set");
+        json.Parameters.Triggerees = triggereekeys;
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
+    }
+
     AddTrigger(key, triggereekeys)
     {
         var find = LMSUtility.FindLightByKey(key, LightArray);
@@ -809,21 +850,7 @@ class ThreeJsScene extends Component
                 return;
             }
 
-            var index = null;
-
-            for (var j = 0; j < TriggerLineArray.length; ++j)
-            {
-                if (TriggerLineArray[j].userData.triggererkey === key &&
-                    TriggerLineArray[j].userData.triggereekey === t)
-                {
-                    index = j;
-                    TriggerLineArray[j].parent.remove(TriggerLineArray[j]);
-                    break;
-                }
-            }
-
-            if (index !== null)
-                TriggerLineArray.splice(index, 1);
+            LMSUtility.RemoveTriggerLine(key, t, TriggerLineArray);
 
             this.ShowMsg("Trigger removed", 3000);
             find.userData.Triggerees.splice(triggereeindex, 1);

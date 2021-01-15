@@ -216,4 +216,23 @@ export default class LMSUtility
         for (var i = 0; i < array.length; ++i)
             array[i].visible = !array[i].visible;
     }
+
+    static RemoveTriggerLine(key, triggereekey, triggerlinearray)
+    {
+        var index = null;
+
+        for (var i = 0; i < triggerlinearray.length; ++i)
+        {
+            if (triggerlinearray[i].userData.triggererkey === key &&
+                triggerlinearray[i].userData.triggereekey === triggereekey)
+            {
+                index = i;
+                triggerlinearray[i].parent.remove(triggerlinearray[i]);
+                break;
+            }
+        }
+
+        if (index !== null)
+            triggerlinearray.splice(index, 1);
+    }
 };
