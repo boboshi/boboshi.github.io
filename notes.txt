@@ -4,7 +4,18 @@ aws login:
 sanjay.das@aztech.com
 P@ss2020
 
-setup mqtt broker on aws instance (docker)
+putty:
+cd ../..
+cd etc/mosquitto
+mosquitto -d -v -c mosquittows.conf
+
+change event types
+- on frontend
+- on documentation
+
+do GET for commands
+So web will send a get request, server will respond with 
+get_ack, with the values requested
 
 highlight technical document by end of month
 front-end simulation (react)

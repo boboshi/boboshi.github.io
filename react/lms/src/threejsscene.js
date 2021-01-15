@@ -432,7 +432,9 @@ class ThreeJsScene extends Component
 
     InitMQTT()
     {
-        mqttClient = new MQTTClient("broker.hivemq.com", 8000, "clientId");
+        mqttClient = new MQTTClient("ec2-18-136-44-143.ap-southeast-1.compute.amazonaws.com", 
+                                    8080, "clientId");
+        //mqttClient = new MQTTClient("broker.hivemq.com", 8000, "clientId");
     }
     //===================================================================================
 
@@ -531,7 +533,8 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set " + mode + " request: key: " + key);
 
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var event = "set" + mode;
+        var json = mqttClient.CreateMessage("Frontend", key, event, "Set");
         
         if (mode === "BrightLevel")
             json.Parameters.BrightLevel = brightness;
@@ -558,7 +561,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set MotionSensitivity request: key: " + key + " MotionSensitivity: " + sens);
         
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setMotionSensitivity", "Set");
         json.Parameters.MotionSensitivity = sens;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -578,7 +581,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Sync Clock request: key: " + key + " sync: " + sync);
 
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setClockSync", "Set");
         json.Parameters.ClockSync = sync;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -598,7 +601,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Scheduling request: key: " + key + " scheduling: " + scheduling);
 
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setScheduling", "Set");
         json.Parameters.Scheduling = scheduling;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -618,7 +621,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Hold Time request: key: " + key + " time: " + time);
         
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setHoldTime", "Set");
         json.Parameters.HoldTime = time;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -670,7 +673,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Group request: key: " + key + " group: " + group);
 
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setGroup", "Set");
         json.Parameters.GroupId = group;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -690,7 +693,7 @@ class ThreeJsScene extends Component
     {
         console.log("Sent Set Zone request: key: " + key + " zone: " + zone);
 
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration", "Set");
+        var json = mqttClient.CreateMessage("Frontend", key, "setZone", "Set");
         json.Parameters.ZoneId = zone;
 
         mqttClient.SendMessage(JSON.stringify(json), "mup");
@@ -753,92 +756,87 @@ class ThreeJsScene extends Component
         console.log(key + " triggered by " + trigger);
     }
 
-    AddTrigger(key, triggereekey)
+    AddTrigger(key, triggereekeys)
     {
-        if (key === triggereekey)
-        {
-            this.ShowMsg("Error: Light cannot add itself as trigger", 3000);
-            return;
-        }
-
         var find = LMSUtility.FindLightByKey(key, LightArray);
-        var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
-        if (find.userData.Triggerees.includes(triggereekey))
+        for (var i = 0; i < triggereekeys.length; ++i)
         {
-            this.ShowMsg("Error: Trigger already exists", 3000);
-            return;
-        }
-        //else if(findtrig.userData.Triggerees.includes(key))
-        //{
-        //    this.ShowMsg("Error: Circular trigger", 3000);
-        //    return;
-        //}
-        else
-        {
-            this.DrawTriggerLine(key, triggereekey);
+            var t = triggereekeys[i];
+
+            if (key === t)
+            {
+                this.ShowMsg("Error: Light cannot add itself as trigger", 3000);
+                return;
+            }
+            if (find.userData.Triggerees.includes(t))
+            {
+                this.ShowMsg("Error: Trigger already exists", 3000);
+                return;
+            }
+
+            var findtrig = LMSUtility.FindLightByKey(t, LightArray);
+
+            this.DrawTriggerLine(key, t);
             this.ShowMsg("Trigger added", 3000);
+            find.userData.Triggerees.push(t);
+            findtrig.userData.Triggerers.push(key);
+
+            var json0 = mqttClient.CreateMessage("Frontend", t, "addTriggerers", "Set");
+            json0.Parameters.Triggerers = [key];
+            mqttClient.SendMessage(JSON.stringify(json0), "mup");
         }
 
-        find.userData.Triggerees.push(triggereekey);
-        findtrig.userData.Triggerers.push(key);
-
-        var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
-                                            "Set");
-        json.Parameters.Triggerees = find.userData.Triggerees;
-
-        var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
-                                             "setLightingConfiguration", "Set");
-        json0.Parameters.Triggerers = findtrig.userData.Triggerers;
-
+        var json = mqttClient.CreateMessage("Frontend", key, "addTriggerees", "Set");
+        json.Parameters.Triggerees = triggereekeys;
         mqttClient.SendMessage(JSON.stringify(json), "mup");
-        mqttClient.SendMessage(JSON.stringify(json0), "mup");
     }
 
-    RemoveTrigger(key, triggereekey)
+    RemoveTrigger(key, triggereekeys)
     {
         var find = LMSUtility.FindLightByKey(key, LightArray);
-        var findtrig = LMSUtility.FindLightByKey(triggereekey, LightArray);
 
-        var triggereeindex = find.userData.Triggerees.indexOf(triggereekey);
-        var triggererindex = findtrig.userData.Triggerers.indexOf(key);
-
-        var index = null;
-
-        for (var i = 0; i < TriggerLineArray.length; ++i)
+        for (var i = 0; i < triggereekeys.length; ++i)
         {
-            if (TriggerLineArray[i].userData.triggererkey === key && 
-                TriggerLineArray[i].userData.triggereekey === triggereekey)
+            var t = triggereekeys[i];
+            var findtrig = LMSUtility.FindLightByKey(t, LightArray);
+            var triggereeindex = find.userData.Triggerees.indexOf(t);
+            var triggererindex = findtrig.userData.Triggerers.indexOf(key);
+
+            if (triggereeindex === -1)
             {
-                index = i;
-                TriggerLineArray[i].parent.remove(TriggerLineArray[i]);
-                break;
+                this.ShowMsg("Error: Trigger does not exist", 3000);
+                return;
             }
-        }
-        
-        if (index !== null)
-            TriggerLineArray.splice(index, 1);
 
-        if (triggereeindex !== -1)
-        {
+            var index = null;
+
+            for (var j = 0; j < TriggerLineArray.length; ++j)
+            {
+                if (TriggerLineArray[j].userData.triggererkey === key &&
+                    TriggerLineArray[j].userData.triggereekey === t)
+                {
+                    index = j;
+                    TriggerLineArray[j].parent.remove(TriggerLineArray[j]);
+                    break;
+                }
+            }
+
+            if (index !== null)
+                TriggerLineArray.splice(index, 1);
+
             this.ShowMsg("Trigger removed", 3000);
             find.userData.Triggerees.splice(triggereeindex, 1);
             findtrig.userData.Triggerers.splice(triggererindex, 1);
 
-            var json = mqttClient.CreateMessage("Frontend", key, "setLightingConfiguration",
-                                                "Set");
-            json.Parameters.Triggerees = find.userData.Triggerees;
-            var json0 = mqttClient.CreateMessage("LightingSystem-AZTECH-YY-" + key, triggereekey,
-                                                 "setLightingConfiguration", "Set");
-            json0.Parameters.Triggerers = findtrig.userData.Triggerers;
-
-            mqttClient.SendMessage(JSON.stringify(json), "mup");
+            var json0 = mqttClient.CreateMessage("Frontend", key, "removeTriggerers", "Set");
+            json0.Parameters.Triggerers = [key];
             mqttClient.SendMessage(JSON.stringify(json0), "mup");
         }
-        else
-        {
-            this.ShowMsg("Error: Trigger does not exist", 3000);
-        }
+
+        var json = mqttClient.CreateMessage("Frontend", key, "removeTriggerees", "Set");
+        json.Parameters.Triggerees = triggereekeys;
+        mqttClient.SendMessage(JSON.stringify(json), "mup");
     }
     //===================================================================================
 
@@ -991,10 +989,10 @@ class ThreeJsScene extends Component
         // remove existing triggerers and triggerees
        var find = LMSUtility.FindLightByKey(key, LightArray);
         for (var i = 0; i < find.userData.Triggerers; ++i)
-            this.RemoveTrigger(find.userData.Triggerers[i], key);
+            this.RemoveTrigger(find.userData.Triggerers[i], [key]);
 
         for (var j = 0; j < find.userData.Triggerees; ++i)
-            this.RemoveTrigger(key, find.userData.Triggerees[j]);
+            this.RemoveTrigger(key, [find.userData.Triggerees[j]]);
 
     	// find and remove light from LightArray
     	var index = LightArray.findIndex(light => light.userData.key === key);
@@ -1475,7 +1473,7 @@ class ThreeJsScene extends Component
                         if (changetriggers)
                         {
                             this.AddTrigger(LMSUtility.FindLightByName(selectedlights[0], LightArray).userData.key, 
-                                            intersects[0].object.userData.key);
+                                            [intersects[0].object.userData.key]);
                         }
                         else
                         {
@@ -1508,7 +1506,7 @@ class ThreeJsScene extends Component
                         this.RemoveLight(lintersect.userData.key);
                     else if (changetriggers)
                         this.RemoveTrigger(LMSUtility.FindLightByName(selectedlights[0], LightArray).userData.key, 
-                                           intersects[0].object.userData.key);
+                                           [intersects[0].object.userData.key]);
                 }
             }
         }
