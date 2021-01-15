@@ -1092,6 +1092,10 @@ class ThreeJsScene extends Component
     	{
     		var light = LightArray[i];
 
+            // data updates (get from server)
+            // PLACEHOLDERFUNC(light, serverdataforlight);
+
+            // visual/front-end updates
     		// status display (off/on/normal)
             if (light.userData.status === "Force_Off")
             {
