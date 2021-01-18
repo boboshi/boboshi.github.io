@@ -9,6 +9,8 @@ cd ../..
 cd etc/mosquitto
 mosquitto -d -v -c mosquittows.conf
 
+change format for payloads and test with broker
+
 do GET for configs
 So web will send a get request, server will respond with 
 get_ack, with the values requested
