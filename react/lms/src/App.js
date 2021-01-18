@@ -57,6 +57,7 @@ function App(props)
             {
                 if (id === task.id)
                     return {...task, name: newName};
+                return task;
             });
         setTasks(editedTaskList);
     }
