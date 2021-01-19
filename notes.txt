@@ -19,6 +19,11 @@ highlight technical document by end of month
 front-end simulation (react)
 cpu overheating issue??????
 
+front-end:
+    pages:
+        -login/forgot password/sign up
+            - lms (single page)
+
 running steps:
 npm start in lms/react/lms
 http-server -p 8080 --cors -c10 in http-server folder
