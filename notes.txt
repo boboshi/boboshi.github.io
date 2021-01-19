@@ -5,8 +5,7 @@ sanjay.das@aztech.com
 P@ss2020
 
 putty:
-cd ../..
-cd etc/mosquitto
+cd ../..etc/mosquitto
 mosquitto -d -v -c mosquittows.conf
 
 change format for payloads and test with broker
@@ -23,6 +22,26 @@ front-end:
     pages:
         -login/forgot password/sign up
             - lms (single page)
+
+zindex for render layers
+
+====================================================
+                   PAYLOAD STUFF
+====================================================
+unicast/multicast/broadcast payloads
+groups become zones only?
+    - multiple zones per light
+trigger zone
+    - only set zones instead of specific lights?
+missing properties
+    - profiles etc.
+
+4.5.2 onwards in document
+features not included but implemented in frontend:
+- groups
+- triggerer/triggeree
+====================================================
+
 
 running steps:
 npm start in lms/react/lms

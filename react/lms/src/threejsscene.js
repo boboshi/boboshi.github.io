@@ -1852,13 +1852,13 @@ class ThreeJsScene extends Component
                     this.SelectZone(1);
                 break;
             case "Digit4":
-               if (this.AnyGUIOpen() === false)
-                   this.SelectZone(2);
-               break;
+                if (this.AnyGUIOpen() === false)
+                    this.SelectZone(2);
+                break;
             case "Digit5":
-             if (this.AnyGUIOpen() === false)
-                 this.SelectGroup(255);
-             break;
+                if (this.AnyGUIOpen() === false)
+                    this.SelectGroup(255);
+                break;
             default:
                 break;
         }
