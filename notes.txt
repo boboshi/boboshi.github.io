@@ -36,6 +36,10 @@ one more document to modify it into our structure
 as per the attached excel (JSON sheet)
 ====================================================
 
+change dimensions of login page to relative (calculate if needed)
+    - make it resizable?
+    - reposition all elements
+    - holy shit dude
 
 running steps:
 npm start in lms/react/lms

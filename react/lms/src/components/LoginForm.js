@@ -30,7 +30,7 @@ function LoginForm(props)
                     <input
                         type = "text"
                         id = "login-email"
-                        className = "login-input"
+                        className = "login-input-email"
                         name = "email"
                         value = {email}
                         placeholder = "EMAIL"
@@ -41,7 +41,7 @@ function LoginForm(props)
                     <input
                         type = "text"
                         id = "login-password"
-                        className = "login-input"
+                        className = "login-input-password"
                         name = "password"
                         value = {password}
                         placeholder = "PASSWORD"
