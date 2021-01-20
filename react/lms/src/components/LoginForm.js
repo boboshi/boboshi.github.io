@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import LoginRect from "../resources/login/Rectangle 2.png"
 
 function LoginForm(props)
 {
@@ -23,6 +24,7 @@ function LoginForm(props)
 
     return (
         <div className = "login-form">
+            <img src = {LoginRect} className = "login-form-rect"></img>
             <form onSubmit = {handleSubmit}>
                 <div>
                     <input

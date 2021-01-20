@@ -15,7 +15,6 @@ So web will send a get request, server will respond with
 get_ack, with the values requested
 
 highlight technical document by end of month
-front-end simulation (react)
 cpu overheating issue??????
 
 front-end:
@@ -28,18 +27,13 @@ zindex for render layers
 ====================================================
                    PAYLOAD STUFF
 ====================================================
-unicast/multicast/broadcast payloads
-groups become zones only?
-    - multiple zones per light
-trigger zone
-    - only set zones instead of specific lights?
-missing properties
-    - profiles etc.
-
 4.5.2 onwards in document
 features not included but implemented in frontend:
 - groups
 - triggerer/triggeree
+
+one more document to modify it into our structure 
+as per the attached excel (JSON sheet)
 ====================================================
 
 
