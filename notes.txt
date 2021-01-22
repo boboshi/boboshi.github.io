@@ -41,6 +41,10 @@ change dimensions of login page to relative (calculate if needed)
     - reposition all elements
     - holy shit dude
 
+1 device - 4 bytes
+6 base
+total 10
+
 running steps:
 npm start in lms/react/lms
 http-server -p 8080 --cors -c10 in http-server folder
