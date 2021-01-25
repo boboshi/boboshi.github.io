@@ -17,13 +17,6 @@ get_ack, with the values requested
 highlight technical document by end of month
 cpu overheating issue??????
 
-front-end:
-    pages:
-        -login/forgot password/sign up
-            - lms (single page)
-
-zindex for render layers
-
 ====================================================
                    PAYLOAD STUFF
 ====================================================
@@ -32,18 +25,13 @@ features not included but implemented in frontend:
 - groups
 - triggerer/triggeree
 
-one more document to modify it into our structure 
-as per the attached excel (JSON sheet)
+1 device - 4 bytes each
+6 base
+total 10 bytes (1 device)
 ====================================================
 
-change dimensions of login page to relative (calculate if needed)
-    - make it resizable?
-    - reposition all elements
-    - holy shit dude
-
-1 device - 4 bytes
-6 base
-total 10
+frontend notes:
+hashrouter for multiple pages
 
 running steps:
 npm start in lms/react/lms
