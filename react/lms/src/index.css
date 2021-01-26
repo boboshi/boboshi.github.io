@@ -60,6 +60,34 @@ body, ul
   margin-left: 80%;
 }
 
+/* ------------------ */
+
+/* input placeholders */
+
+::placeholder /* Chrome, Firefox, Opera, Safari 10.1+ */
+{ 
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+  
+:-ms-input-placeholder /* Internet Explorer 10-11 */
+{ 
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+  
+::-ms-input-placeholder /* Microsoft Edge */
+{ 
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+
 /* ----------------- */
 
 /* --- login form -- */
@@ -232,32 +260,190 @@ body, ul
   opacity: 0.6;
 }
 
-/* login placeholder */
-
-::placeholder /* Chrome, Firefox, Opera, Safari 10.1+ */
-{ 
-  color: #6D6E71;
-  font-family: "work sans", sans-serif;
-  opacity: 0.4;
-  text-align: center;
-}
-  
-:-ms-input-placeholder /* Internet Explorer 10-11 */
-{ 
-  color: #6D6E71;
-  font-family: "work sans", sans-serif;
-  opacity: 0.4;
-  text-align: center;
-}
-  
-::-ms-input-placeholder /* Microsoft Edge */
-{ 
-  color: #6D6E71;
-  font-family: "work sans", sans-serif;
-  opacity: 0.4;
-  text-align: center;
-}
-
 /* ----------------- */
+
+/* -- signup form -- */
+
+.signup-page-form
+{
+  position: absolute;
+  width: 28.8%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.signup-page-form-rect
+{
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.signup-page-form-welcome
+{
+  color: #FFFFFF;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.6vw, 23.04px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 1.0;
+  z-index: 0;
+  position: absolute;
+  top: 4%;
+  left: 7.3%;
+}
+
+.signup-page-form-logo
+{
+  position: absolute;
+  top: 16.6%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 66%;
+  height: 8.937%;
+}
+
+.signup-page-form-signuptext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.4vw, 20.16px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.signup-page-form-lmstext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.05vw, 15.12px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 37%;
+  left: 68.5%;
+  transform: translate(-50%, 0%);
+  width: 100%;
+}
+
+.signup-page-form-email
+{
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-password
+{
+  position: absolute;
+  top: 56.5%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-verifypassword
+{
+  position: absolute;
+  top: 67%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-nextbtn
+{
+  background: url("./resources/login/NEXT button.png") 0% 0% no-repeat padding-box;
+  background-size: contain;
+  position: absolute;
+  top: 80.3%;
+  left: 65%;
+  border: none;
+  outline: none;
+  width: 32.5%;
+  height: 6.5%;
+}
+
+.signup-page-form-logintext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  position: absolute;
+  top: 79.7%;
+  left: 4.8%;
+}
+
+.signup-page-form-loginbtn
+{
+  background: none;
+  border: none;
+  outline: none;
+  top: 82.3%;
+  left: 4.8%;
+  width: 100%;
+}
+
+.signup-page-form-loginbtntext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  background: none;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  position: absolute;
+  border: none;
+  outline: none;
+  top: 82.3%;
+  left: 4.8%;
+}
+
+.signup-page-form-line
+{
+  position: absolute;
+  opacity: 0.7;
+  width: 100%;
+  height: 0.2%;
+  top: 91%;
+}
+
+.signup-page-form-agreetext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.76vw, 11px);
+  position: absolute;
+  text-align: center;
+  top: 92%;
+  left: 5%;
+  width: 90%;
+  opacity: 0.6;
+}
 
 /* ----------------- */

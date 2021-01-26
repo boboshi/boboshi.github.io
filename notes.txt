@@ -20,14 +20,7 @@ cpu overheating issue??????
 ====================================================
                    PAYLOAD STUFF
 ====================================================
-4.5.2 onwards in document
-features not included but implemented in frontend:
-- groups
-- triggerer/triggeree
-
-1 device - 4 bytes each
-6 base
-total 10 bytes (1 device)
+what in the fucks going on
 ====================================================
 
 frontend notes:

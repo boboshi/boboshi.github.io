@@ -1,14 +1,14 @@
-import React, {useState} from "react";
-import {Route, useHistory, HashRouter, Redirect} from "react-router-dom"
+import React, {useEffect} from "react";
+import {Route, HashRouter, Redirect} from "react-router-dom"
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 
 function Main(props)
 {
-    function changePage(page)
-    {
-        console.log(page);
-    }
+    // called every render
+    useEffect(() => {
+        //console.log("effect");
+      });
 
     return (
         <HashRouter>
@@ -21,7 +21,7 @@ function Main(props)
                     <Route exact path = "/"><Redirect to = "/login" /></Route>
                     <Route 
                         path = "/login" 
-                        render = {(props) => <LoginForm changePage = {changePage} {...props} />}>
+                        render = {(props) => <LoginForm {...props} />}>
                     </Route>
                     <Route path = "/signup" component = {SignUpForm}></Route>
                 </div>
@@ -31,3 +31,5 @@ function Main(props)
 }
 
 export default Main;
+
+//  render = {(props) => <LoginForm changePage = {changePage} {...props} />}>

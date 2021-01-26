@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {useHistory} from "react-router-dom"
 import BG from "../resources/login/nastuh-abootalebi-284883-unsplash.png";
 import LoginRect from "../resources/login/Rectangle 2.png"
 import Line from "../resources/login/Path 1.png"
@@ -6,6 +7,7 @@ import Logo from "../resources/login/Aztech logo 2020-WH.png"
 
 function LoginForm(props)
 {
+    const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +21,7 @@ function LoginForm(props)
     function handleForgotPW(e)
     {
         e.preventDefault();
-        props.changePage("/signup");
+        history.push("/signup");
     }
 
     function handleChangeEmail(e)
