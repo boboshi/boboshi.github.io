@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom"
 import BG from "../resources/login/nastuh-abootalebi-284883-unsplash.png";
 import LoginRect from "../resources/login/Rectangle 2.png"
 import Line from "../resources/login/Path 1.png"
-import Logo from "../resources/login/Aztech logo 2020-WH.png"
+import Logo from "../resources/login/Aztech logo 2020-WH@2x.png"
 
 function LoginForm(props)
 {
@@ -16,6 +16,7 @@ function LoginForm(props)
         e.preventDefault();
         console.log({email});
         console.log({password});
+        history.push("/dashboard")
     }
 
     function handleForgotPW(e)
@@ -37,6 +38,10 @@ function LoginForm(props)
     return (
         <div>
             <img src = {BG} className = "main-page-bg"></img>
+            <div className = "main-page-footer">
+                <h1 className = "main-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                <h2 className = "main-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+            </div>
             <div className = "login-page-form">
                 <img src = {LoginRect} className = "login-page-form-rect"></img>
                 <h1 className = "login-page-form-welcome">Welcome Back!</h1>

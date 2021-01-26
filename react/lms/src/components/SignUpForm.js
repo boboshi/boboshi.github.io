@@ -44,6 +44,10 @@ function SignUpForm(props)
     return (
         <div>
             <img src = {BG} className = "main-page-bg"></img>
+            <div className = "main-page-footer">
+                <h1 className = "main-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                <h2 className = "main-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+            </div>
             <div className = "signup-page-form">
                 <img src = {LoginRect} className = "signup-page-form-rect"></img>
                 <h1 className = "signup-page-form-welcome">Welcome to</h1>

@@ -24,7 +24,9 @@ what in the fucks going on
 ====================================================
 
 frontend notes:
-hashrouter for multiple pages
+sliding menu on left
+    - conditional rendering of components for path 
+      history and links
 
 running steps:
 npm start in lms/react/lms

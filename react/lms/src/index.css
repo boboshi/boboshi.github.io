@@ -26,7 +26,6 @@ body, ul
 
 .main-page-footer
 {
-  z-index: -1;
   position: absolute;
   background: #F7F7F7 0% 0% no-repeat padding-box;
   opacity: 1;
@@ -58,6 +57,160 @@ body, ul
   z-index: 0;
   margin-top: -1.23%;
   margin-left: 80%;
+}
+
+/* ------------------ */
+
+/* ---- dashboard --- */
+
+.placeholderbtn
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+}
+
+.dashboard-page
+{
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard-page-header
+{
+  position: absolute;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-bottom: 1px solid #C6C6C6;
+  opacity: 1;
+  width: 100%;
+  height: 7%;
+  top: 0vh;
+}
+
+.dashboard-page-sidebar
+{
+  z-index: 2;
+  position: absolute;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-right: 1px solid #C6C6C6;
+  left: 0;
+  top: 0;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+  transition-duration: .3s;
+  transform: translate3d(0%, 0px, 0px);
+  width: 6.7%;
+  height: 100%;
+}
+
+.dashboard-page-sidebar-togglebtn
+{
+  background: url("./resources/dashboard/menu_icon@2x.png") 0% 0% no-repeat padding-box;
+  background-size: contain;
+  position: absolute;
+  border: none;
+  outline: none;
+  width: 19.5%;
+  height: 1.6%;
+  left: 134%;
+  top: 3.1%;
+}
+
+.dashboard-page-sidebar-logo
+{
+  position: absolute;
+  top: 3.2%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 60.7%;
+  height: 1.5%;
+}
+
+.dashboard-page-sidebar-bottomtext
+{
+  position: absolute;
+  bottom: 10px;
+}
+
+.dashboard-page-sidebar-bottomtext-datetext
+{
+  z-index: -1;
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  opacity: 1.0;
+}
+
+.dashboard-page-sidebar-bottomtext-timetext
+{
+  z-index: -1;
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  opacity: 1.0;
+}
+
+.dashboard-page-sidebar-bottomtext-versiontext
+{
+  z-index: -1;
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  opacity: 1.0;
+}
+
+.dashboard-page-footer
+{
+  position: absolute;
+  background: #F7F7F7 0% 0% no-repeat padding-box;
+  opacity: 1;
+  width: 100%;
+  height: 4%;
+  bottom: 0%;
+}
+
+.dashboard-page-footer-copyright
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  text-align: center;
+  opacity: 1.0;
+  z-index: 0;
+  padding-top: 0.1%;
+}
+
+.dashboard-page-footer-privacy
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  opacity: 1.0;
+  z-index: 0;
+  margin-top: -1.23%;
+  margin-left: 80%;
+}
+
+/* ------------------ */
+
+/* -- dashboard map - */
+
+.dashboard-page-map
+{
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 /* ------------------ */
