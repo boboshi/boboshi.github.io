@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Route, HashRouter, Redirect} from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
-import DashboardLanding from "./components/DashboardLanding";
+import Dashboard from "./components/Dashboard";
 
 function Main(props)
 {
@@ -20,7 +20,7 @@ function Main(props)
                     <Route path = "/signup" component = {SignUpForm}></Route>
                     <Route 
                         path = "/dashboard" 
-                        render = {(props) => <DashboardLanding {...props} />}>
+                        render = {(props) => <Dashboard {...props} />}>
                     </Route>
                 </div>
             </div>

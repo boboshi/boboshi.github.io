@@ -24,9 +24,15 @@ what in the fucks going on
 ====================================================
 
 frontend notes:
-sliding menu on left
-    - conditional rendering of components for path 
-      history and links
+blank dashboard
+  - location selection (country)
+    - display country map
+    - area selection
+      - block selection
+        - remove country map
+        - show config/map (threejs)
+
+use map to populate list
 
 running steps:
 npm start in lms/react/lms
