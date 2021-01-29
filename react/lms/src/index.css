@@ -181,6 +181,43 @@ body, ul
   cursor: pointer;
 }
 
+.dashboard-page-header-notification
+{
+  z-index: 3;
+  position: absolute;
+  top: 45%;
+  transform: translate(0%, -45%);
+  margin-left: 86%;
+  cursor: pointer;
+  width: 1.7%;
+  height: 43.2%;
+}
+
+.what
+{
+  z-index: 3;
+  position: absolute;
+  width: 10%;
+  height: 41px;
+  background: #000E1B 0% 0% no-repeat padding-box;
+  border: 3px solid #000000;
+  opacity: 0.9;
+  top: 20%;
+  left: 50%;
+}
+
+.dashboard-page-header-divider
+{
+  z-index: 3;
+  position: absolute;
+  background-color: #C6C6C6;
+  top: 50%;
+  transform: translate(0%, -50%);
+  margin-left: 88.5%;
+  width: 0.05%;
+  height: 52.63%;
+}
+
 .dashboard-page-sidebar
 {
   z-index: 2;

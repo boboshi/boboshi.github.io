@@ -4,12 +4,6 @@ import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 
 const Dropdown = forwardRef((props, ref) =>
 {
-    useImperativeHandle(ref, () => ({
-        clearChoice()
-        {
-            setChoice("");
-        }
-    }));
 
     const node = useRef();
     const [choice, setChoice] = useState("");
@@ -28,12 +22,17 @@ const Dropdown = forwardRef((props, ref) =>
         </li>
     );
 
-    const handleClickOutside = e => {
-        if (node.current.contains(e.target)) {
-          // inside click
-          return;
+    useImperativeHandle(ref, () => ({
+        clearChoice()
+        {
+            setChoice("");
         }
-        // outside click
+    }));
+
+    const handleClickOutside = e => 
+    {
+        if (node.current.contains(e.target)) 
+            return;
         setIsOpen(false);
     };
 

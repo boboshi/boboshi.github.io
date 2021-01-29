@@ -15,6 +15,7 @@ function Dashboard(props)
     const locationDDRef = useRef();
     const areaDDRef = useRef();
     const blockDDRef = useRef();
+    const notificationRef = useRef();
     const arrowVar = ">";
     const [version, setVersion] = useState("3.0.0");
     const [selectedLocation, setSelectedLocation] = useState("");
@@ -93,7 +94,8 @@ function Dashboard(props)
             <div className = "dashboard-page">
                 <div className = "dashboard-page-header">
                     <SearchBar handleSearch = {handleSearch}/>
-                    <Notification />
+                    <Notification ref = {notificationRef} notifications = {["hello"]}/>
+                    <div className = "dashboard-page-header-divider"></div>
                 </div>
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}
@@ -150,6 +152,7 @@ function Dashboard(props)
                     </div>
                     {/* sidebar toggle button */}
                     <img
+                        alt = ""
                         src = {SidebarToggleButton} 
                         className = "dashboard-page-sidebar-togglebtnimg">
                     </img>
@@ -158,7 +161,7 @@ function Dashboard(props)
                         className = "dashboard-page-sidebar-togglebtn">
                     </button>
                     {/* logo */}
-                    <img src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
+                    <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
                     {/* bottom text */}
                     <div className = "dashboard-page-sidebar-bottomtext">
                         <Timestamp />
@@ -200,7 +203,7 @@ function Dashboard(props)
                     }
                     {selectedLocation && !selectedBlock &&
                         <div>
-                            <img src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
+                            <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
                         </div>
                     }
                 </div>
