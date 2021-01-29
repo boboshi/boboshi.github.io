@@ -67,6 +67,7 @@ const Dropdown = forwardRef((props, ref) =>
                 {choice}
             </h1>
             <img 
+                alt = ""
                 src = {isOpen ? UpArrow : DownArrow} 
                 className = "dashboard-page-dropdown-arrow">
             </img>

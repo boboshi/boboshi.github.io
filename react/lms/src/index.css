@@ -91,6 +91,33 @@ body, ul
   top: 0vh;
 }
 
+.dashboard-page-header-searchiconimg
+{
+  z-index: 3;
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  transform: translate(0%, -50%);
+  width: 1.13%;
+  height: 28.4%;
+}
+
+.dashboard-page-header-searchbar
+{
+  z-index: 3;
+  position: absolute;
+  background-color: #F8F9FA;
+  top: 50%;
+  margin-left: 50.98%;
+  border: none;
+  outline: none;
+  border-radius: 24px;
+  transform: translate(0%, -50%);
+  width: 30.36%;
+  height: 52.6%;
+  padding-left: 3%;
+}
+
 .dashboard-page-header-paths
 {
   position: absolute;
@@ -123,10 +150,27 @@ body, ul
   cursor: pointer;
 }
 
+.dashboard-page-header-dashboardtext:last-child
+{
+  color: #005570;
+}
 
 .dashboard-page-header-buttontext
 {
   color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  background: none;
+  font-size: max(1vw, 14.4px);
+  font-weight: 600;
+  text-align: left;
+  display: inline;
+  margin-left: 1%;
+  cursor: pointer;
+}
+
+.dashboard-page-header-buttontext-selected
+{
+  color: #005570;
   font-family: "work sans", sans-serif;
   background: none;
   font-size: max(1vw, 14.4px);
@@ -385,13 +429,13 @@ li:hover
 /* input placeholders */
 
 ::placeholder /* Chrome, Firefox, Opera, Safari 10.1+ */
-{ 
+{
   color: #6D6E71;
   font-family: "work sans", sans-serif;
   opacity: 0.4;
   text-align: center;
 }
-  
+
 :-ms-input-placeholder /* Internet Explorer 10-11 */
 { 
   color: #6D6E71;
@@ -399,13 +443,37 @@ li:hover
   opacity: 0.4;
   text-align: center;
 }
-  
+
 ::-ms-input-placeholder /* Microsoft Edge */
 { 
   color: #6D6E71;
   font-family: "work sans", sans-serif;
   opacity: 0.4;
   text-align: center;
+}
+
+#searchbar::placeholder /* Chrome, Firefox, Opera, Safari 10.1+ */
+{ 
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: left;
+}
+  
+#searchbar:-ms-input-placeholder /* Internet Explorer 10-11 */
+{ 
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: left;
+}
+  
+#searchbar::-ms-input-placeholder /* Microsoft Edge */
+{ 
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: left;
 }
 
 /* ----------------- */

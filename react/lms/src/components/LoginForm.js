@@ -37,15 +37,15 @@ function LoginForm(props)
 
     return (
         <div>
-            <img src = {BG} className = "main-page-bg"></img>
+            <img alt = "" src = {BG} className = "main-page-bg"></img>
             <div className = "main-page-footer">
                 <h1 className = "main-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
                 <h2 className = "main-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
             </div>
             <div className = "login-page-form">
-                <img src = {LoginRect} className = "login-page-form-rect"></img>
+                <img alt = "" src = {LoginRect} className = "login-page-form-rect"></img>
                 <h1 className = "login-page-form-welcome">Welcome Back!</h1>
-                <img src = {Logo} className = "login-page-form-logo"></img>
+                <img alt = "" src = {Logo} className = "login-page-form-logo"></img>
                 <h2 className = "login-page-form-logintext">LOGIN</h2>
                 <h3 className = "login-page-form-lmstext">Lighting Management System (LMS)</h3>
                 <form onSubmit = {handleSubmitNext}>
@@ -81,7 +81,7 @@ function LoginForm(props)
                         <h1 className = "login-page-form-pwbtntext">CHECK HERE</h1>
                     </button>
                 </form>
-                <img src = {Line} className = "login-page-form-line"></img>
+                <img alt = "" src = {Line} className = "login-page-form-line"></img>
                 <h1 className = "login-page-form-agreetext">
                     By clicking on next, you acknowledge that you have read and accepted the Terms of Service and the Privacy Policy.
                 </h1>

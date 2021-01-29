@@ -1,10 +1,13 @@
 import React, {useState, useRef} from "react";
 import {Route, HashRouter, useHistory, Redirect} from "react-router-dom";
-import Dropdown from "../components/Dropdown";
 import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
 import SidebarToggleButton from "../resources/dashboard/menu_icon@2x.png";
-import Timestamp from "../components/Timestamp"
+
+import Timestamp from "../components/Timestamp";
+import Dropdown from "../components/Dropdown";
+import SearchBar from "../components/SearchBar";
+import Notification from "../components/Notification";
 
 function Dashboard(props)
 {
@@ -80,11 +83,17 @@ function Dashboard(props)
         console.log(selectedBlock);
     }
 
+    function handleSearch(search)
+    {
+        console.log(search);
+    }
+
     return(
         <HashRouter>
             <div className = "dashboard-page">
                 <div className = "dashboard-page-header">
-
+                    <SearchBar handleSearch = {handleSearch}/>
+                    <Notification />
                 </div>
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}
@@ -98,10 +107,16 @@ function Dashboard(props)
                                 <span className = "dashboard-page-header-patharrows">
                                     {arrowVar}
                                 </span>
-                                <div className = "dashboard-page-header-buttontext"
-                                    onClick = {handleLocationButton}>
-                                    {selectedLocation}
-                                </div>
+                                {!selectedArea ? 
+                                    <div className = "dashboard-page-header-buttontext-selected"
+                                             onClick = {handleLocationButton}>
+                                            {selectedLocation}
+                                        </div> : 
+                                        <div className = "dashboard-page-header-buttontext"
+                                             onClick = {handleLocationButton}>
+                                            {selectedLocation}
+                                    </div>
+                                }
                             </span>
                         }
                         {selectedArea &&
@@ -109,10 +124,16 @@ function Dashboard(props)
                                 <span className = "dashboard-page-header-patharrows">
                                     {arrowVar}
                                 </span>
-                                <div className = "dashboard-page-header-buttontext"
-                                     onClick = {handleAreaButton}>
-                                    {selectedArea}
-                                </div>
+                                {!selectedBlock ? 
+                                    <div className = "dashboard-page-header-buttontext-selected"
+                                         onClick = {handleAreaButton}>
+                                        {selectedArea}
+                                    </div> : 
+                                    <div className = "dashboard-page-header-buttontext"
+                                         onClick = {handleAreaButton}>
+                                        {selectedArea}
+                                    </div>
+                                }
                             </span>
                         }
                         {selectedBlock &&
@@ -120,7 +141,7 @@ function Dashboard(props)
                                 <span className = "dashboard-page-header-patharrows">
                                     {arrowVar}
                                 </span>
-                                <div className = "dashboard-page-header-buttontext"
+                                <div className = "dashboard-page-header-buttontext-selected"
                                      onClick = {handleBlockButton}>
                                     {selectedBlock.toUpperCase()}
                                 </div>
