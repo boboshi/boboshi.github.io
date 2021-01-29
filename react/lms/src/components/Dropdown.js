@@ -1,15 +1,23 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 
-function Dropdown(props)
+const Dropdown = forwardRef((props, ref) =>
 {
+    useImperativeHandle(ref, () => ({
+        clearChoice()
+        {
+            setChoice("");
+        }
+    }));
+
     const node = useRef();
     const [choice, setChoice] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
     const optionsList = props.options.map(option =>
         <li 
+             key = {option}
              onClick = {() => {
                                 props.selectOption(option);
                                 setChoice(option);
@@ -32,16 +40,6 @@ function Dropdown(props)
     function handleDropdownClick()
     {
         setIsOpen(!isOpen);
-
-        // !isOpen is intentional
-        if (!isOpen)
-        {
-            // open
-        }
-        else
-        {
-            // closed
-        }
     }
 
     useEffect(() => 
@@ -79,6 +77,6 @@ function Dropdown(props)
             {isOpen && openMenuTemplate}
         </div>
     );
-}
+})
 
 export default Dropdown;

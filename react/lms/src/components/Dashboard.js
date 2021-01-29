@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import {Route, HashRouter, useHistory, Redirect} from "react-router-dom";
-import DashboardSelect from "../components/DashboardSelect";
+import Dropdown from "../components/Dropdown";
+import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
 import SidebarToggleButton from "../resources/dashboard/menu_icon@2x.png";
 import Timestamp from "../components/Timestamp"
@@ -8,6 +9,10 @@ import Timestamp from "../components/Timestamp"
 function Dashboard(props)
 {
     const history = useHistory();
+    const locationDDRef = useRef();
+    const areaDDRef = useRef();
+    const blockDDRef = useRef();
+    const arrowVar = ">";
     const [version, setVersion] = useState("3.0.0");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
@@ -25,12 +30,54 @@ function Dashboard(props)
 
     function handleDashboardButton()
     {
-        history.push("/dashboard");
+        setSelectedLocation("");
+        setSelectedArea("");
+        setSelectedBlock("");
+        if (locationDDRef.current)
+            locationDDRef.current.clearChoice();
+        if (areaDDRef.current)
+            areaDDRef.current.clearChoice();
+        if (blockDDRef.current)
+            blockDDRef.current.clearChoice();
     }
 
     function handleLocationButton()
     {
+        setSelectedArea("");
+        setSelectedBlock("");
+        if (areaDDRef.current)
+            areaDDRef.current.clearChoice();
+        if (blockDDRef.current)
+            blockDDRef.current.clearChoice();
+    }
 
+    function handleAreaButton()
+    {
+        setSelectedBlock("");
+        if (blockDDRef.current)
+            blockDDRef.current.clearChoice();
+    }
+
+    function setSelectedLocationHelper(location)
+    {
+        setSelectedLocation(location);
+        handleLocationButton();
+    }
+
+    function setSelectedAreaHelper(area)
+    {
+        setSelectedArea(area);
+        handleAreaButton();
+    }
+
+    function setSelectedBlockHelper(block)
+    {
+        setSelectedBlock(block);
+    }
+
+    function handleBlockButton()
+    {
+        console.log(selectedBlock);
     }
 
     return(
@@ -42,21 +89,42 @@ function Dashboard(props)
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}
                     <div className = "dashboard-page-header-paths">
-                        <div className = "dashboard-page-header-dashboardtext">
+                        <div className = "dashboard-page-header-dashboardtext"
+                             onClick = {handleDashboardButton}>
                             DASHBOARD
-                            <button 
-                                className = "dashboard-page-header-dashboardbtn"
-                                onClick = {handleDashboardButton}
-                            ></button>
                         </div>
                         {selectedLocation &&
-                            <div className = "dashboard-page-header-locationtext">
-                                qweqweqwewqeqweqweqwe
-                                <button
-                                    className = "dashboard-page-header-locationbtn"
-                                    onClick = {handleLocationButton}
-                                ></button>
-                            </div>
+                            <span>
+                                <span className = "dashboard-page-header-patharrows">
+                                    {arrowVar}
+                                </span>
+                                <div className = "dashboard-page-header-buttontext"
+                                    onClick = {handleLocationButton}>
+                                    {selectedLocation}
+                                </div>
+                            </span>
+                        }
+                        {selectedArea &&
+                            <span>
+                                <span className = "dashboard-page-header-patharrows">
+                                    {arrowVar}
+                                </span>
+                                <div className = "dashboard-page-header-buttontext"
+                                     onClick = {handleAreaButton}>
+                                    {selectedArea}
+                                </div>
+                            </span>
+                        }
+                        {selectedBlock &&
+                            <span>
+                                <span className = "dashboard-page-header-patharrows">
+                                    {arrowVar}
+                                </span>
+                                <div className = "dashboard-page-header-buttontext"
+                                     onClick = {handleBlockButton}>
+                                    {selectedBlock.toUpperCase()}
+                                </div>
+                            </span>
                         }
                     </div>
                     {/* sidebar toggle button */}
@@ -76,19 +144,48 @@ function Dashboard(props)
                         <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>
                     </div>
                 </div>
-                <div className = "pages">
-                    {/*
-                    <Route exact path = "/dashboard"><Redirect to = "/dashboard/map" /></Route>
-                    <Route path = "/dashboard/map" component = {DashboardLocationSelect}></Route>
-                    */}
-                    <Route 
-                        path = "/dashboard" 
-                        render = {(props) => <DashboardSelect 
-                                                setLocation = {setSelectedLocation}
-                                                setArea = {setSelectedArea}
-                                                setBlock = {setSelectedBlock}
-                                            {...props}/>}>
-                    </Route>
+                <div className = "dashboard-page-selector">
+                    <div className = "dashboard-page-selector-locationdropdown">
+                        <Dropdown 
+                            ref = {locationDDRef}
+                            title = "LOCATION"
+                            options = {["SINGAPORE"]}
+                            selectOption = {setSelectedLocationHelper}
+                        ></Dropdown>
+                    </div>
+                    {selectedLocation && 
+                        <div>
+                            <div className = "dashboard-page-selector-areadropdown">
+                                <Dropdown
+                                    ref = {areaDDRef}
+                                    title = "AREA"
+                                    options = {["GEYLANG"]}
+                                    selectOption = {setSelectedAreaHelper}
+                                ></Dropdown>
+                            </div>
+                        </div>
+                    }
+                    {selectedLocation && selectedArea &&
+                        <div>
+                            <div className = "dashboard-page-selector-blockdropdown">
+                                <Dropdown
+                                    ref = {blockDDRef}
+                                    title = "BLOCK"
+                                    options = {["Office_Lights"]}
+                                    selectOption = {setSelectedBlockHelper}
+                                ></Dropdown>
+                            </div>
+                        </div>
+                    }
+                    {selectedLocation && !selectedBlock &&
+                        <div>
+                            <img src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
+                        </div>
+                    }
+                </div>
+                <div className = "dashboard-page-footer">
+                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
                 </div>
             </div>
         </HashRouter>
