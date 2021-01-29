@@ -32,7 +32,7 @@ blank dashboard
         - remove country map
         - show config/map (threejs)
 
-use map to populate list
+start working on notification dropdown
 
 running steps:
 npm start in lms/react/lms

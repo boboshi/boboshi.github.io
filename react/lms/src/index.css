@@ -93,7 +93,7 @@ body, ul
 
 .dashboard-page-header-searchiconimg
 {
-  z-index: 3;
+  z-index: 4;
   position: absolute;
   top: 50%;
   left: 52%;
@@ -113,7 +113,7 @@ body, ul
   outline: none;
   border-radius: 24px;
   transform: translate(0%, -50%);
-  width: 30.36%;
+  width: 26%;
   height: 52.6%;
   padding-left: 3%;
 }
@@ -187,7 +187,7 @@ body, ul
   position: absolute;
   top: 45%;
   transform: translate(0%, -45%);
-  margin-left: 86%;
+  margin-left: 82%;
   cursor: pointer;
   width: 1.7%;
   height: 43.2%;
@@ -197,13 +197,13 @@ body, ul
 {
   z-index: 3;
   position: absolute;
-  width: 10%;
-  height: 41px;
   background: #000E1B 0% 0% no-repeat padding-box;
-  border: 3px solid #000000;
   opacity: 0.9;
-  top: 20%;
-  left: 50%;
+  border-radius: 3px;
+  top: 130%;
+  left: 81.5%;
+  width: 17.18%;
+  height: 58%;
 }
 
 .dashboard-page-header-divider
@@ -213,7 +213,7 @@ body, ul
   background-color: #C6C6C6;
   top: 50%;
   transform: translate(0%, -50%);
-  margin-left: 88.5%;
+  margin-left: 84.5%;
   width: 0.05%;
   height: 52.63%;
 }
