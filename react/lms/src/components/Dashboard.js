@@ -40,13 +40,13 @@ function Dashboard(props)
     {
         let notification0 = new NotificationObject("Alert For Light Offline", 
                                                    "Light 1.2.8 AC Failure",
-                                                   true);
+                                                   "true");
         let notification1 = new NotificationObject("Alert For Light 1.2.7", 
                                                    "Light 1.2.7 AC Failure",
-                                                   false);
+                                                   "false");
         let notification2 = new NotificationObject("Alert For Light 1.2.11", 
                                                    "Light 1.2.11 AC Failure",
-                                                   false);
+                                                   "false");
         setAlerts([notification0, notification1, notification2]);
     }, []);
 

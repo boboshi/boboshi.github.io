@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} fro
 import NotificationIcon from "../resources/dashboard/Component 14 – 3(plain)@2x.png";
 import NotificationIconAlert from "../resources/dashboard/Component 14 – 3(no number)@2x.png"
 import NotificationPoylgon from "../resources/dashboard/polygon.png";
+import NotificationNotRectifiedIcon from "../resources/dashboard/icon-mateiral-perm-scan-wifi.png";
+import NotificationRectifiedIcon from "../resources/dashboard/icon-material-security.png";
 
 const Notification = forwardRef((props, ref) =>
 {
@@ -10,11 +12,39 @@ const Notification = forwardRef((props, ref) =>
     const [isOpen, setIsOpen] = useState(false);
 
     const notificationsList = notifications.map(notif =>
-        <li
-            key = {notif.title}
-        >
-            {notif.title}
-        </li>
+        <div key = {notif.title}>
+            {notif.rectified == "true" ?
+                <div>
+                    <li>
+                        <img 
+                            alt = ""
+                            src = {NotificationNotRectifiedIcon}
+                            className = "dashboard-page-header-notification-dropdown-li-icon"
+                        ></img>
+                        <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
+                        <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
+                        <div 
+                            className =  "dashboard-page-header-notification-dropdown-li-button"
+                            onClick = {handleNotificationCheckButton}
+                        >CHECK</div>
+                    </li>
+                </div> :
+                <div>
+                    <li style={{backgroundColor: "#FF6A1B", border: "1px solid #FF6A1B"}}>
+                        <img 
+                            alt = ""
+                            src = {NotificationRectifiedIcon}
+                            className = "dashboard-page-header-notification-dropdown-li-icon"
+                        ></img>
+                        <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
+                        <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
+                        <div 
+                            className =  "dashboard-page-header-notification-dropdown-li-button"
+                        >RECTIFIED</div>
+                    </li>
+                </div>
+            }
+        </div>
     );
 
     useImperativeHandle(ref, () => ({
@@ -41,6 +71,11 @@ const Notification = forwardRef((props, ref) =>
     function handleNotificationClearButton()
     {
         setNotifications([]);
+    }
+
+    function handleNotificationCheckButton()
+    {
+        console.log("CHECK");
     }
 
     useEffect(() => 
