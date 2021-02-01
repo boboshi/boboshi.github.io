@@ -75,7 +75,7 @@ const Notification = forwardRef((props, ref) =>
 
     return(
         <div>
-            {notifications ?
+            {notifications.length ?
                 <img 
                     alt = "" 
                     src = {NotificationIconAlert} 
