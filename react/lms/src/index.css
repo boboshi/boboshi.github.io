@@ -356,6 +356,17 @@ body, ul
   height: 52.63%;
 }
 
+.dashboard-page-header-user
+{
+  z-index: 3;
+  position: absolute;
+  width: 15.4%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.5;
+  right: 0%;
+}
+
 .dashboard-page-sidebar
 {
   z-index: 2;

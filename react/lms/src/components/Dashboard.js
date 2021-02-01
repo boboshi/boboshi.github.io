@@ -8,6 +8,7 @@ import Timestamp from "../components/Timestamp";
 import Dropdown from "../components/Dropdown";
 import SearchBar from "../components/SearchBar";
 import Notification from "../components/Notification";
+import UserDropdown from "../components/UserDropdown";
 
 class NotificationObject
 {
@@ -35,7 +36,10 @@ function Dashboard(props)
     const [selectedArea, setSelectedArea] = useState("");
     const [selectedBlock, setSelectedBlock] = useState("");
     const [alerts, setAlerts] = useState(null);
+    const [username, setUsername] = useState(null);
+    const [role, setRole] = useState(null);
 
+    // simulate getting notifications and user info
     useEffect(() =>
     {
         let notification0 = new NotificationObject("Alert For Light Offline", 
@@ -48,6 +52,8 @@ function Dashboard(props)
                                                    "Light 1.2.11 AC Failure",
                                                    "false");
         setAlerts([notification0, notification1, notification2]);
+        setUsername("office_admin");
+        setRole("Project Manager");
     }, []);
 
     function sidebarToggle()
@@ -124,6 +130,7 @@ function Dashboard(props)
                     <SearchBar handleSearch = {handleSearch}/>
                     {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
                     <div className = "dashboard-page-header-divider"></div>
+                    {username != null && role != null && <UserDropdown />}
                 </div>
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}
