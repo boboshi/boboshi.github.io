@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {Route, HashRouter, useHistory, Redirect} from "react-router-dom";
 import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
@@ -9,18 +9,46 @@ import Dropdown from "../components/Dropdown";
 import SearchBar from "../components/SearchBar";
 import Notification from "../components/Notification";
 
+class NotificationObject
+{
+    constructor(title, description, rectified)
+    {
+        this.title = title;
+        this.description = description;
+        this.rectified = rectified;
+    }
+}
+
 function Dashboard(props)
 {
     const history = useHistory();
+
     const locationDDRef = useRef();
     const areaDDRef = useRef();
     const blockDDRef = useRef();
     const notificationRef = useRef();
+
     const arrowVar = ">";
+
     const [version, setVersion] = useState("3.0.0");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
     const [selectedBlock, setSelectedBlock] = useState("");
+    const [alerts, setAlerts] = useState(null);
+
+    useEffect(() =>
+    {
+        let notification0 = new NotificationObject("Alert For Light Offline", 
+                                                   "Light 1.2.8 AC Failure",
+                                                   true);
+        let notification1 = new NotificationObject("Alert For Light 1.2.7", 
+                                                   "Light 1.2.7 AC Failure",
+                                                   false);
+        let notification2 = new NotificationObject("Alert For Light 1.2.11", 
+                                                   "Light 1.2.11 AC Failure",
+                                                   false);
+        setAlerts([notification0, notification1, notification2]);
+    }, []);
 
     function sidebarToggle()
     {
@@ -94,7 +122,7 @@ function Dashboard(props)
             <div className = "dashboard-page">
                 <div className = "dashboard-page-header">
                     <SearchBar handleSearch = {handleSearch}/>
-                    <Notification ref = {notificationRef} notifications = {["hello"]}/>
+                    {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
                     <div className = "dashboard-page-header-divider"></div>
                 </div>
                 <div className = "dashboard-page-sidebar">
