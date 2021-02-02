@@ -2,8 +2,11 @@ import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} fro
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 import DefaultUser from "../resources/dashboard/blank_user.png";
+import AddUser from "../resources/dashboard/blank_user.png";
+import UserSettings from "../resources/dashboard/blank_user.png";
+import Logout from "../resources/dashboard/blank_user.png";
 
-const UserDropdown = forwardRef((props, ref) =>
+function UserDropdown(props)
 {
     const node = useRef();
     const [isOpen, setIsOpen] = useState(false);
@@ -12,16 +15,22 @@ const UserDropdown = forwardRef((props, ref) =>
 
     const userList = props.userList.map(user =>
         <div key = {user.name}>
-
+            <li onClick = {handleClick.bind(this, user.name)}>
+                <div className = "dashboard-page-header-user-dropdown-li-name">{user.name}</div>
+                <div className = "dashboard-page-header-user-dropdown-li-role">{user.role}</div>
+                <img
+                    alt = ""
+                    src = {user.image === "default" ? DefaultUser : DefaultUser}
+                    className = "dashboard-page-header-user-dropdown-li-image">
+                </img>
+            </li>
         </div>
     );
 
-    useImperativeHandle(ref, () => ({
-        placeholderFunc()
-        {
-            console.log("why are you here");
-        }
-    }));
+    function handleClick(str)
+    {
+        props.changeUser(str);
+    }
 
     const handleClickOutside = e => 
     {
@@ -47,12 +56,36 @@ const UserDropdown = forwardRef((props, ref) =>
 
     const openTemplate =
     (
-        <div>
-            <div className = "dashboard-page-header-user-dropdown-list">
-                <ul className = "dashboard-page-header-user-dropdown-ul">
-                    {userList}
-                </ul>
-            </div>
+        <div className = "dashboard-page-header-user-dropdown-list">
+            <ul className = "dashboard-page-header-user-dropdown-ul">
+                {userList}
+                <li onClick = {props.addUser}>
+                    <div className = "dashboard-page-header-user-dropdown-li-misctext">ADD USER</div>
+                    <img
+                        alt = ""
+                        src = {AddUser}
+                        className = "dashboard-page-header-user-dropdown-li-image">
+                    </img>
+                </li>
+                <li onClick = {props.userSettings}>
+                    <div className = "dashboard-page-header-user-dropdown-li-misctext">USER SETTINGS</div>
+                    <img
+                        alt = ""
+                        src = {UserSettings}
+                        className = "dashboard-page-header-user-dropdown-li-image">
+                    </img>
+                </li>
+                <li onClick = {props.logout}>
+                    <div className = "dashboard-page-header-user-dropdown-li-logout">LOGOUT</div>
+                    {lastLogin != null && 
+                    <div className = "dashboard-page-header-user-dropdown-li-logouttime">{lastLogin}</div>}
+                    <img
+                        alt = ""
+                        src = {Logout}
+                        className = "dashboard-page-header-user-dropdown-li-image">
+                    </img>
+                </li>
+            </ul>
         </div>
     );
 
@@ -73,6 +106,6 @@ const UserDropdown = forwardRef((props, ref) =>
             {isOpen && openTemplate}
         </div>
     );
-})
+}
 
 export default UserDropdown;

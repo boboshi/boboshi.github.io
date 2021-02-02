@@ -38,7 +38,6 @@ function Dashboard(props)
     const areaDDRef = useRef();
     const blockDDRef = useRef();
     const notificationRef = useRef();
-    const userDDRef = useRef();
 
     const arrowVar = ">";
 
@@ -139,6 +138,26 @@ function Dashboard(props)
         console.log(search);
     }
 
+    function changeUser(str)
+    {
+        console.log("change to user " + str);
+    }
+
+    function addUser()
+    {
+        console.log("add user clicked");
+    }
+
+    function userSettings(str)
+    {
+        console.log("user settings clicked");
+    }
+
+    function logout()
+    {
+        history.push("/login");
+    }
+
     return(
         <HashRouter>
             <div className = "dashboard-page">
@@ -147,7 +166,14 @@ function Dashboard(props)
                     {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
                     <div className = "dashboard-page-header-divider"></div>
                     {currUser != null && userList != null && 
-                    <UserDropdown ref = {userDDRef} currUser = {currUser} userList = {userList}/>}
+                    <UserDropdown 
+                        currUser = {currUser} 
+                        userList = {userList}
+                        changeUser = {changeUser}
+                        addUser = {addUser}
+                        userSettings = {userSettings}
+                        logout = {logout}
+                    />}
                 </div>
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}

@@ -14,35 +14,31 @@ const Notification = forwardRef((props, ref) =>
     const notificationsList = notifications.map(notif =>
         <div key = {notif.title}>
             {notif.rectified === "true" ?
-                <div>
-                    <li>
-                        <img 
-                            alt = ""
-                            src = {NotificationNotRectifiedIcon}
-                            className = "dashboard-page-header-notification-dropdown-li-icon"
-                        ></img>
-                        <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
-                        <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
-                        <div 
-                            className =  "dashboard-page-header-notification-dropdown-li-button"
-                            onClick = {handleNotificationCheckButton}
-                        >CHECK</div>
-                    </li>
-                </div> :
-                <div>
-                    <li style={{backgroundColor: "#FF6A1B", border: "1px solid #FF6A1B"}}>
-                        <img 
-                            alt = ""
-                            src = {NotificationRectifiedIcon}
-                            className = "dashboard-page-header-notification-dropdown-li-icon"
-                        ></img>
-                        <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
-                        <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
-                        <div 
-                            className =  "dashboard-page-header-notification-dropdown-li-button"
-                        >RECTIFIED</div>
-                    </li>
-                </div>
+                <li>
+                    <img 
+                        alt = ""
+                        src = {NotificationNotRectifiedIcon}
+                        className = "dashboard-page-header-notification-dropdown-li-icon"
+                    ></img>
+                    <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
+                    <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
+                    <div 
+                        className =  "dashboard-page-header-notification-dropdown-li-button"
+                        onClick = {handleNotificationCheckButton}
+                    >CHECK</div>
+                </li> :
+                <li style={{backgroundColor: "#FF6A1B", border: "1px solid #FF6A1B"}}>
+                    <img 
+                        alt = ""
+                        src = {NotificationRectifiedIcon}
+                        className = "dashboard-page-header-notification-dropdown-li-icon"
+                    ></img>
+                    <div className = "dashboard-page-header-notification-dropdown-li-title">{notif.title}</div>
+                    <div className = "dashboard-page-header-notification-dropdown-li-description">{notif.description}</div>
+                    <div 
+                        className =  "dashboard-page-header-notification-dropdown-li-button"
+                    >RECTIFIED</div>
+                </li>
             }
         </div>
     );
