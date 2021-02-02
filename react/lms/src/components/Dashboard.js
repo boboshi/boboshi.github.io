@@ -158,140 +158,190 @@ function Dashboard(props)
         history.push("/login");
     }
 
+    function handleSidebarOverview()
+    {
+        console.log("dashboard overview");
+    }
+
+    function handleSidebarConfig()
+    {
+        console.log("config");
+    }
+
+    function handleSidebarUser()
+    {
+        console.log("user management");
+    }
+
+    function handleSidebarAdd()
+    {
+        console.log("add");
+    }
+
     return(
-        <HashRouter>
-            <div className = "dashboard-page">
-                <div className = "dashboard-page-header">
-                    <SearchBar handleSearch = {handleSearch}/>
-                    {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
-                    <div className = "dashboard-page-header-divider"></div>
-                    {currUser != null && userList != null && 
-                    <UserDropdown 
-                        currUser = {currUser} 
-                        userList = {userList}
-                        changeUser = {changeUser}
-                        addUser = {addUser}
-                        userSettings = {userSettings}
-                        logout = {logout}
-                    />}
-                </div>
-                <div className = "dashboard-page-sidebar">
-                    {/* path buttons */}
-                    <div className = "dashboard-page-header-paths">
-                        <div className = "dashboard-page-header-dashboardtext"
-                             onClick = {handleDashboardButton}>
-                            DASHBOARD
-                        </div>
-                        {selectedLocation &&
-                            <span>
-                                <span className = "dashboard-page-header-patharrows">
-                                    {arrowVar}
-                                </span>
-                                {!selectedArea ? 
-                                    <div className = "dashboard-page-header-buttontext-selected"
-                                             onClick = {handleLocationButton}>
-                                            {selectedLocation}
-                                        </div> : 
-                                        <div className = "dashboard-page-header-buttontext"
-                                             onClick = {handleLocationButton}>
-                                            {selectedLocation}
-                                    </div>
-                                }
+        <div className = "dashboard-page">
+            <div className = "dashboard-page-header">
+                <SearchBar handleSearch = {handleSearch}/>
+                {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
+                <div className = "dashboard-page-header-divider"></div>
+                {currUser != null && userList != null && 
+                <UserDropdown 
+                    currUser = {currUser} 
+                    userList = {userList}
+                    changeUser = {changeUser}
+                    addUser = {addUser}
+                    userSettings = {userSettings}
+                    logout = {logout}
+                />}
+            </div>
+            <div className = "dashboard-page-sidebar">
+                {/* path buttons */}
+                <div className = "dashboard-page-header-paths">
+                    <div className = "dashboard-page-header-dashboardtext"
+                         onClick = {handleDashboardButton}>
+                        DASHBOARD
+                    </div>
+                    {selectedLocation &&
+                        <span>
+                            <span className = "dashboard-page-header-patharrows">
+                                {arrowVar}
                             </span>
-                        }
-                        {selectedArea &&
-                            <span>
-                                <span className = "dashboard-page-header-patharrows">
-                                    {arrowVar}
-                                </span>
-                                {!selectedBlock ? 
-                                    <div className = "dashboard-page-header-buttontext-selected"
-                                         onClick = {handleAreaButton}>
-                                        {selectedArea}
-                                    </div> : 
-                                    <div className = "dashboard-page-header-buttontext"
-                                         onClick = {handleAreaButton}>
-                                        {selectedArea}
-                                    </div>
-                                }
-                            </span>
-                        }
-                        {selectedBlock &&
-                            <span>
-                                <span className = "dashboard-page-header-patharrows">
-                                    {arrowVar}
-                                </span>
+                            {!selectedArea ? 
                                 <div className = "dashboard-page-header-buttontext-selected"
-                                     onClick = {handleBlockButton}>
-                                    {selectedBlock.toUpperCase()}
+                                     onClick = {handleLocationButton}>
+                                     {selectedLocation}
+                                </div> : 
+                                <div className = "dashboard-page-header-buttontext"
+                                     onClick = {handleLocationButton}>
+                                    {selectedLocation}
                                 </div>
+                            }
+                        </span>
+                    }
+                    {selectedArea &&
+                        <span>
+                            <span className = "dashboard-page-header-patharrows">
+                                {arrowVar}
                             </span>
-                        }
-                    </div>
-                    {/* sidebar toggle button */}
-                    <img
-                        alt = ""
-                        src = {SidebarToggleButton} 
-                        className = "dashboard-page-sidebar-togglebtnimg">
-                    </img>
-                    <button 
-                        onClick = {sidebarToggle} 
-                        className = "dashboard-page-sidebar-togglebtn">
-                    </button>
-                    {/* logo */}
-                    <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
-                    {/* bottom text */}
-                    <div className = "dashboard-page-sidebar-bottomtext">
-                        <Timestamp />
-                        {version != null && 
-                        <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>}
-                    </div>
-                </div>
-                <div className = "dashboard-page-selector">
-                    <div className = "dashboard-page-selector-locationdropdown">
-                        <Dropdown 
-                            ref = {locationDDRef}
-                            title = "LOCATION"
-                            options = {["SINGAPORE"]}
-                            selectOption = {setSelectedLocationHelper}
-                        ></Dropdown>
-                    </div>
-                    {selectedLocation && 
-                        <div>
-                            <div className = "dashboard-page-selector-areadropdown">
-                                <Dropdown
-                                    ref = {areaDDRef}
-                                    title = "AREA"
-                                    options = {["GEYLANG"]}
-                                    selectOption = {setSelectedAreaHelper}
-                                ></Dropdown>
-                            </div>
-                        </div>
+                            {!selectedBlock ? 
+                                <div className = "dashboard-page-header-buttontext-selected"
+                                     onClick = {handleAreaButton}>
+                                    {selectedArea}
+                                </div> : 
+                                <div className = "dashboard-page-header-buttontext"
+                                     onClick = {handleAreaButton}>
+                                    {selectedArea}
+                                </div>
+                            }
+                        </span>
                     }
-                    {selectedLocation && selectedArea &&
-                        <div>
-                            <div className = "dashboard-page-selector-blockdropdown">
-                                <Dropdown
-                                    ref = {blockDDRef}
-                                    title = "BLOCK"
-                                    options = {["Office_Lights"]}
-                                    selectOption = {setSelectedBlockHelper}
-                                ></Dropdown>
+                    {selectedBlock &&
+                        <span>
+                            <span className = "dashboard-page-header-patharrows">
+                                {arrowVar}
+                            </span>
+                            <div className = "dashboard-page-header-buttontext-selected"
+                                 onClick = {handleBlockButton}>
+                                {selectedBlock.toUpperCase()}
                             </div>
-                        </div>
-                    }
-                    {selectedLocation && !selectedBlock &&
-                        <div>
-                            <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
-                        </div>
+                        </span>
                     }
                 </div>
-                <div className = "dashboard-page-footer">
-                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
-                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+                {/* sidebar toggle button */}
+                <img
+                    alt = ""
+                    src = {SidebarToggleButton} 
+                    className = "dashboard-page-sidebar-togglebtnimg">
+                </img>
+                <button 
+                    onClick = {sidebarToggle} 
+                    className = "dashboard-page-sidebar-togglebtn">
+                </button>
+                {/* logo */}
+                <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
+                {/* sidebar buttons */}
+                <div className = "dashboard-page-sidebar-icon-container">
+                    <div 
+                        className = "dashboard-page-sidebar-icon"
+                        onClick = {handleSidebarOverview}
+                    >
+
+                    </div>
+                    <div 
+                        className = "dashboard-page-sidebar-icon"
+                        onClick = {handleSidebarConfig}
+                    >
+
+                    </div>
+                    <div 
+                        className = "dashboard-page-sidebar-icon"
+                        onClick = {handleSidebarUser}
+                    >
+
+                    </div>
+                    <div 
+                        className = "dashboard-page-sidebar-icon"
+                        onClick = {handleSidebarAdd}
+                    >
+
+                    </div>
+                </div>
+                {/* bottom text */}
+                <div className = "dashboard-page-sidebar-bottomtext">
+                    <Timestamp />
+                    {version != null && 
+                    <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>}
                 </div>
             </div>
-        </HashRouter>
+            <div className = "dashboard-page-selector">
+                <div className = "dashboard-page-selector-locationdropdown">
+                    <Dropdown 
+                        ref = {locationDDRef}
+                        title = "LOCATION"
+                        options = {["SINGAPORE"]}
+                        selectOption = {setSelectedLocationHelper}
+                    ></Dropdown>
+                </div>
+                {selectedLocation && 
+                    <div>
+                        <div className = "dashboard-page-selector-areadropdown">
+                            <Dropdown
+                                ref = {areaDDRef}
+                                title = "AREA"
+                                options = {["GEYLANG"]}
+                                selectOption = {setSelectedAreaHelper}
+                            ></Dropdown>
+                        </div>
+                    </div>
+                }
+                {selectedLocation && selectedArea &&
+                    <div>
+                        <div className = "dashboard-page-selector-blockdropdown">
+                            <Dropdown
+                                ref = {blockDDRef}
+                                title = "BLOCK"
+                                options = {["Office_Lights"]}
+                                selectOption = {setSelectedBlockHelper}
+                            ></Dropdown>
+                        </div>
+                    </div>
+                }
+                {selectedLocation && !selectedBlock &&
+                    <div>
+                        <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
+                    </div>
+                }
+                <HashRouter>
+                    <div className = "pages">
+
+                    </div>
+                </HashRouter>
+            </div>
+            <div className = "dashboard-page-footer">
+                <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+            </div>
+        </div>
     );
 }
 

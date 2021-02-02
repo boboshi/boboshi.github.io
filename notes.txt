@@ -32,7 +32,11 @@ blank dashboard
         - remove country map
         - show config/map (threejs)
 
-start working on notification dropdown
+icons on sidebar to add:
+- overview
+- config
+- user management
+- add
 
 running steps:
 npm start in lms/react/lms
