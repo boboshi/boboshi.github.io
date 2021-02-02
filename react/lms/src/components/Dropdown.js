@@ -31,7 +31,7 @@ const Dropdown = forwardRef((props, ref) =>
 
     const handleClickOutside = e => 
     {
-        if (node.current.contains(e.target)) 
+        if (node.current.contains(e.target))
             return;
         setIsOpen(false);
     };
@@ -58,7 +58,7 @@ const Dropdown = forwardRef((props, ref) =>
     );
 
     return(
-        <div ref={node} className = "dashboard-page-dropdown">
+        <div ref={node} className = "dashboard-page-dropdown" onClick = {handleDropdownClick}>
             <h1 className = "dashboard-page-dropdown-titletext">
                 {props.title}
             </h1>
@@ -70,10 +70,6 @@ const Dropdown = forwardRef((props, ref) =>
                 src = {isOpen ? UpArrow : DownArrow} 
                 className = "dashboard-page-dropdown-arrow">
             </img>
-            <button 
-                className = "dashboard-page-dropdownbtn"
-                onClick = {handleDropdownClick}
-            ></button>
             {isOpen && openMenuTemplate}
         </div>
     );

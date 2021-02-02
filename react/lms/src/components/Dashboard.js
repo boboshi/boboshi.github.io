@@ -20,6 +20,16 @@ class NotificationObject
     }
 }
 
+class UserObject
+{
+    constructor(name, role, image)
+    {
+        this.name = name;
+        this.role = role;
+        this.image = image;
+    }
+}
+
 function Dashboard(props)
 {
     const history = useHistory();
@@ -28,18 +38,19 @@ function Dashboard(props)
     const areaDDRef = useRef();
     const blockDDRef = useRef();
     const notificationRef = useRef();
+    const userDDRef = useRef();
 
     const arrowVar = ">";
 
-    const [version, setVersion] = useState("3.0.0");
+    const [version, setVersion] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
     const [selectedBlock, setSelectedBlock] = useState("");
     const [alerts, setAlerts] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [role, setRole] = useState(null);
+    const [currUser, setCurrUser] = useState(null);
+    const [userList, setUserList] = useState(null);
 
-    // simulate getting notifications and user info
+    // simulate getting data
     useEffect(() =>
     {
         let notification0 = new NotificationObject("Alert For Light Offline", 
@@ -51,9 +62,14 @@ function Dashboard(props)
         let notification2 = new NotificationObject("Alert For Light 1.2.11", 
                                                    "Light 1.2.11 AC Failure",
                                                    "false");
+        let curruser = new UserObject("office_admin", "Project Manager", "default");
+        let user0 = new UserObject("VIOLA CHAN", "Design Manager", "default");
+        let user1 = new UserObject("MANNMO WONG", "Designer", "default");
+
+        setVersion("3.0.0");
         setAlerts([notification0, notification1, notification2]);
-        setUsername("office_admin");
-        setRole("Project Manager");
+        setCurrUser(curruser);
+        setUserList([user0, user1]);
     }, []);
 
     function sidebarToggle()
@@ -130,7 +146,8 @@ function Dashboard(props)
                     <SearchBar handleSearch = {handleSearch}/>
                     {alerts != null && <Notification ref = {notificationRef} notifications = {alerts}/>}
                     <div className = "dashboard-page-header-divider"></div>
-                    {username != null && role != null && <UserDropdown />}
+                    {currUser != null && userList != null && 
+                    <UserDropdown ref = {userDDRef} currUser = {currUser} userList = {userList}/>}
                 </div>
                 <div className = "dashboard-page-sidebar">
                     {/* path buttons */}
@@ -200,7 +217,8 @@ function Dashboard(props)
                     {/* bottom text */}
                     <div className = "dashboard-page-sidebar-bottomtext">
                         <Timestamp />
-                        <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>
+                        {version != null && 
+                        <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>}
                     </div>
                 </div>
                 <div className = "dashboard-page-selector">

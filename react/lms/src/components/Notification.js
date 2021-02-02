@@ -13,7 +13,7 @@ const Notification = forwardRef((props, ref) =>
 
     const notificationsList = notifications.map(notif =>
         <div key = {notif.title}>
-            {notif.rectified == "true" ?
+            {notif.rectified === "true" ?
                 <div>
                     <li>
                         <img 
@@ -109,7 +109,7 @@ const Notification = forwardRef((props, ref) =>
     );
 
     return(
-        <div>
+        <div ref = {node}>
             {notifications.length ?
                 <img 
                     alt = "" 
