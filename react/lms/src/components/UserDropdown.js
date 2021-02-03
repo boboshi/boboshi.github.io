@@ -2,8 +2,8 @@ import React, {useState, useEffect, useRef} from "react";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 import AddUser from "../resources/dashboard/add_user.png";
-import UserSettings from "../resources/dashboard/blank_user.png";
-import Logout from "../resources/dashboard/blank_user.png";
+import UserSettings from "../resources/dashboard/user_settings.png";
+import Logout from "../resources/dashboard/logout.png";
 
 function UserDropdown(props)
 {
