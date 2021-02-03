@@ -1,8 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
-import DefaultUser from "../resources/dashboard/blank_user.png";
-import AddUser from "../resources/dashboard/blank_user.png";
+import AddUser from "../resources/dashboard/add_user.png";
 import UserSettings from "../resources/dashboard/blank_user.png";
 import Logout from "../resources/dashboard/blank_user.png";
 
@@ -19,7 +18,7 @@ function UserDropdown(props)
                 <div className = "dashboard-page-header-user-dropdown-li-role">{user.role}</div>
                 <img
                     alt = ""
-                    src = {user.image === "default" ? DefaultUser : DefaultUser}
+                    src = {user.image}
                     className = "dashboard-page-header-user-dropdown-li-image">
                 </img>
             </li>
@@ -94,7 +93,7 @@ function UserDropdown(props)
             <h1 className = "dashboard-page-header-user-dropdown-role">{props.currUser.role}</h1>
             <img
                 alt = ""
-                src = {props.currUser.image === "default" ? DefaultUser : DefaultUser}
+                src = {props.currUser.image}
                 className = "dashboard-page-header-user-dropdown-image">
             </img>
             <img

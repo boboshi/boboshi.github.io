@@ -4,6 +4,7 @@ import {Route, HashRouter, useHistory, useLocation} from "react-router-dom";
 import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
 import SidebarToggleButton from "../resources/dashboard/menu_icon@2x.png";
+import DefaultUser from "../resources/dashboard/blank_user.png";
 import UsersIcon from "../resources/dashboard/users-solid.png";
 import LibraryAddIcon from "../resources/dashboard/library_add.png";
 
@@ -70,9 +71,9 @@ function Dashboard(props)
         let notification2 = new NotificationObject("Alert For Light 1.2.11", 
                                                    "Light 1.2.11 AC Failure",
                                                    "false");
-        let curruser = new UserObject("office_admin", "Project Manager", "default");
-        let user0 = new UserObject("VIOLA CHAN", "Design Manager", "default");
-        let user1 = new UserObject("MANNMO WONG", "Designer", "default");
+        let curruser = new UserObject("office_admin", "Project Manager", DefaultUser);
+        let user0 = new UserObject("VIOLA CHAN", "Design Manager", DefaultUser);
+        let user1 = new UserObject("MANNMO WONG", "Designer", DefaultUser);
 
         setVersion("3.0.0");
         setAlerts([notification0, notification1, notification2]);
@@ -163,7 +164,7 @@ function Dashboard(props)
 
     function addUser()
     {
-        console.log("add user clicked");
+        goToPath("/dashboard/usermanagement");
     }
 
     function userSettings(str)
@@ -333,7 +334,7 @@ function Dashboard(props)
                     <div className = "pages">
                         <Route 
                             path = "/dashboard/view" 
-                            render = {(props) => <DashboardView {...props} />}>
+                            render = {(props) => <DashboardView block = {selectedBlock} {...props} />}>
                         </Route>
                         <Route 
                             path = "/dashboard/config" 
@@ -365,5 +366,3 @@ function Dashboard(props)
 }
 
 export default Dashboard;
-
-//  render = {(props) => <LoginForm changePage = {changePage} {...props} />}>
