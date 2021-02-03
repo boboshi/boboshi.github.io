@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 import DefaultUser from "../resources/dashboard/blank_user.png";
@@ -10,7 +10,6 @@ function UserDropdown(props)
 {
     const node = useRef();
     const [isOpen, setIsOpen] = useState(false);
-    const [currUser, setCurrUser] = useState(props.currUser);
     const [lastLogin, setLastLogin] = useState(null);
 
     const userList = props.userList.map(user =>
@@ -91,11 +90,11 @@ function UserDropdown(props)
 
     return(
         <div ref = {node} className = "dashboard-page-header-user-dropdown" onClick = {handleDropdownClick}>
-            <h1 className = "dashboard-page-header-user-dropdown-name">{currUser.name}</h1>
-            <h1 className = "dashboard-page-header-user-dropdown-role">{currUser.role}</h1>
+            <h1 className = "dashboard-page-header-user-dropdown-name">{props.currUser.name}</h1>
+            <h1 className = "dashboard-page-header-user-dropdown-role">{props.currUser.role}</h1>
             <img
                 alt = ""
-                src = {currUser.image === "default" ? DefaultUser : DefaultUser}
+                src = {props.currUser.image === "default" ? DefaultUser : DefaultUser}
                 className = "dashboard-page-header-user-dropdown-image">
             </img>
             <img

@@ -1,14 +1,22 @@
 import React, {useState, useRef, useEffect} from "react";
-import {Route, HashRouter, useHistory, Redirect} from "react-router-dom";
+import {Route, HashRouter, useHistory, useLocation} from "react-router-dom";
+
 import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
 import SidebarToggleButton from "../resources/dashboard/menu_icon@2x.png";
+import UsersIcon from "../resources/dashboard/users-solid.png";
+import LibraryAddIcon from "../resources/dashboard/library_add.png";
 
 import Timestamp from "../components/Timestamp";
 import Dropdown from "../components/Dropdown";
 import SearchBar from "../components/SearchBar";
 import Notification from "../components/Notification";
 import UserDropdown from "../components/UserDropdown";
+import SidebarIcon from "../components/SidebarIcon";
+import DashboardView from "../components/DashboardView";
+import DashboardConfig from "../components/DashboardConfig";
+import DashboardUserManagement from "../components/DashboardUserManagement";
+import DashboardAdd from "../components/DashboardAdd";
 
 class NotificationObject
 {
@@ -33,6 +41,7 @@ class UserObject
 function Dashboard(props)
 {
     const history = useHistory();
+    const location = useLocation();
 
     const locationDDRef = useRef();
     const areaDDRef = useRef();
@@ -71,6 +80,12 @@ function Dashboard(props)
         setUserList([user0, user1]);
     }, []);
 
+    function goToPath(path)
+    {
+        if(location.pathname !== path)
+            history.push(path);
+    }
+
     function sidebarToggle()
     {
         var sb = document.getElementsByClassName("dashboard-page-sidebar");
@@ -92,6 +107,7 @@ function Dashboard(props)
             areaDDRef.current.clearChoice();
         if (blockDDRef.current)
             blockDDRef.current.clearChoice();
+        goToPath("/dashboard");
     }
 
     function handleLocationButton()
@@ -111,6 +127,11 @@ function Dashboard(props)
             blockDDRef.current.clearChoice();
     }
 
+    function handleBlockButton()
+    {
+        goToPath("/dashboard/view");
+    }
+
     function setSelectedLocationHelper(location)
     {
         setSelectedLocation(location);
@@ -126,11 +147,8 @@ function Dashboard(props)
     function setSelectedBlockHelper(block)
     {
         setSelectedBlock(block);
-    }
-
-    function handleBlockButton()
-    {
-        console.log(selectedBlock);
+        if (location.pathname === "/dashboard")
+            goToPath("/dashboard/view");
     }
 
     function handleSearch(search)
@@ -150,7 +168,7 @@ function Dashboard(props)
 
     function userSettings(str)
     {
-        console.log("user settings clicked");
+        goToPath("/dashboard/usermanagement");
     }
 
     function logout()
@@ -158,24 +176,24 @@ function Dashboard(props)
         history.push("/login");
     }
 
-    function handleSidebarOverview()
+    function handleSidebarView()
     {
-        console.log("dashboard overview");
+        goToPath("/dashboard/view");
     }
 
     function handleSidebarConfig()
     {
-        console.log("config");
+        goToPath("/dashboard/config");
     }
 
     function handleSidebarUser()
     {
-        console.log("user management");
+        goToPath("/dashboard/usermanagement");
     }
 
     function handleSidebarAdd()
     {
-        console.log("add");
+        goToPath("/dashboard/add");
     }
 
     return(
@@ -248,43 +266,23 @@ function Dashboard(props)
                     }
                 </div>
                 {/* sidebar toggle button */}
-                <img
-                    alt = ""
-                    src = {SidebarToggleButton} 
-                    className = "dashboard-page-sidebar-togglebtnimg">
-                </img>
                 <button 
                     onClick = {sidebarToggle} 
                     className = "dashboard-page-sidebar-togglebtn">
+                    <img
+                        alt = ""
+                        src = {SidebarToggleButton} 
+                        className = "dashboard-page-sidebar-togglebtnimg">
+                    </img>
                 </button>
                 {/* logo */}
                 <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
                 {/* sidebar buttons */}
                 <div className = "dashboard-page-sidebar-icon-container">
-                    <div 
-                        className = "dashboard-page-sidebar-icon"
-                        onClick = {handleSidebarOverview}
-                    >
-
-                    </div>
-                    <div 
-                        className = "dashboard-page-sidebar-icon"
-                        onClick = {handleSidebarConfig}
-                    >
-
-                    </div>
-                    <div 
-                        className = "dashboard-page-sidebar-icon"
-                        onClick = {handleSidebarUser}
-                    >
-
-                    </div>
-                    <div 
-                        className = "dashboard-page-sidebar-icon"
-                        onClick = {handleSidebarAdd}
-                    >
-
-                    </div>
+                    <SidebarIcon onClick = {handleSidebarView} path = "/dashboard/view" icon = {UsersIcon}></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarConfig} path = "/dashboard/config" icon = {UsersIcon}></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarUser} path = "/dashboard/usermanagement" icon = {UsersIcon}></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarAdd} path = "/dashboard/add" icon = {LibraryAddIcon}></SidebarIcon>
                 </div>
                 {/* bottom text */}
                 <div className = "dashboard-page-sidebar-bottomtext">
@@ -326,21 +324,42 @@ function Dashboard(props)
                         </div>
                     </div>
                 }
-                {selectedLocation && !selectedBlock &&
+                {location.pathname === "/dashboard" && selectedLocation &&
                     <div>
                         <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
                     </div>
                 }
                 <HashRouter>
                     <div className = "pages">
-
+                        <Route 
+                            path = "/dashboard/view" 
+                            render = {(props) => <DashboardView {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/config" 
+                            render = {(props) => <DashboardConfig {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/usermanagement" 
+                            render = {(props) => <DashboardUserManagement {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/add" 
+                            render = {(props) => <DashboardAdd {...props} />}>
+                        </Route>
                     </div>
                 </HashRouter>
             </div>
-            <div className = "dashboard-page-footer">
-                <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
-                <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
-            </div>
+            {location.pathname !== "/dashboard/view" ? 
+                <div className = "dashboard-page-footer">
+                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+                </div> :
+                <div className = "dashboard-page-view-footer">
+                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+                </div>
+            }
         </div>
     );
 }
