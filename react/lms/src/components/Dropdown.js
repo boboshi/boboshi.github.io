@@ -1,3 +1,5 @@
+import "../resources/css/dashboarddropdown.css";
+
 import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";

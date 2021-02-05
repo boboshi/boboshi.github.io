@@ -1,0 +1,475 @@
+* {-webkit-font-smoothing: antialiased;}
+
+body, ul
+{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* main page and bg */
+
+.main-page
+{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-width: 1440px;
+  min-height: 789px;
+}
+
+.main-page-bg
+{
+  z-index: -2;
+  position: absolute;
+  width: 100%;
+  height: 119%;
+  margin-top: -10.95%;
+}
+
+.main-page-footer
+{
+  position: absolute;
+  background: #F7F7F7 0% 0% no-repeat padding-box;
+  opacity: 1;
+  width: 100%;
+  height: 4vh;
+  bottom: 0vh;
+}
+
+.main-page-footer-copyright
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  text-align: center;
+  opacity: 1.0;
+  z-index: 0;
+  padding-top: 0.1%;
+}
+
+.main-page-footer-privacy
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.7vw, 10.08px);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  opacity: 1.0;
+  z-index: 0;
+  margin-top: -1.23%;
+  margin-left: 80%;
+}
+
+/* ------------------ */
+
+/* input placeholders */
+
+::placeholder /* Chrome, Firefox, Opera, Safari 10.1+ */
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+
+:-ms-input-placeholder /* Internet Explorer 10-11 */
+{ 
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+
+::-ms-input-placeholder /* Microsoft Edge */
+{ 
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  opacity: 0.4;
+  text-align: center;
+}
+
+/* ----------------- */
+
+/* --- login form -- */
+
+.login-page-form
+{
+  position: absolute;
+  width: 28.8%;
+  height: 71.5%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-page-form-rect
+{
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.login-page-form-welcome
+{
+  color: #FFFFFF;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.6vw, 23.04px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 1.0;
+  z-index: 0;
+  position: absolute;
+  top: 4%;
+  left: 7.3%;
+}
+
+.login-page-form-logo
+{
+  position: absolute;
+  top: 17.8%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 66%;
+  height: 10%;
+}
+
+.login-page-form-logintext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.4vw, 20.16px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.login-page-form-lmstext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.05vw, 15.12px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 40%;
+  left: 68.5%;
+  transform: translate(-50%, 0%);
+  width: 100%;
+}
+
+.login-page-form-email
+{
+  position: absolute;
+  top: 49.6%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 9%;
+}
+
+.login-page-form-password
+{
+  position: absolute;
+  top: 61%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 9%;
+}
+
+.login-page-form-nextbtn
+{
+  background: url("../login/NEXT button@2x.png") 0% 0% no-repeat padding-box;
+  background-size: contain;
+  position: absolute;
+  top: 80%;
+  left: 65%;
+  border: none;
+  outline: none;
+  width: 32.5%;
+  height: 6.5%;
+  cursor: pointer;
+}
+
+.login-page-form-nextbtn:hover
+{
+  filter: brightness(120%);
+}
+
+.login-page-form-forgottext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  position: absolute;
+  top: 79.2%;
+  left: 4.8%;
+}
+
+.login-page-form-pwbtn
+{
+  background: none;
+  border: none;
+  outline: none;
+  top: 81.8%;
+  left: 4.8%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.login-page-form-pwbtntext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  background: none;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  position: absolute;
+  border: none;
+  outline: none;
+  top: 81.8%;
+  left: 4.8%;
+}
+
+.login-page-form-pwbtntext:hover
+{
+  background: #5c5c5c;
+}
+
+.login-page-form-line
+{
+  position: absolute;
+  opacity: 0.7;
+  width: 100%;
+  height: 0.2%;
+  top: 90%;
+}
+
+.login-page-form-agreetext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.76vw, 11px);
+  position: absolute;
+  text-align: center;
+  top: 91%;
+  left: 5%;
+  width: 90%;
+  opacity: 0.6;
+}
+
+/* ----------------- */
+
+/* -- signup form -- */
+
+.signup-page-form
+{
+  position: absolute;
+  width: 28.8%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.signup-page-form-rect
+{
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.signup-page-form-welcome
+{
+  color: #FFFFFF;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.6vw, 23.04px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 1.0;
+  z-index: 0;
+  position: absolute;
+  top: 4%;
+  left: 7.3%;
+}
+
+.signup-page-form-logo
+{
+  position: absolute;
+  top: 16.6%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 66%;
+  height: 8.937%;
+}
+
+.signup-page-form-signuptext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.4vw, 20.16px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.signup-page-form-lmstext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.05vw, 15.12px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: 37%;
+  left: 68.5%;
+  transform: translate(-50%, 0%);
+  width: 100%;
+}
+
+.signup-page-form-email
+{
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-password
+{
+  position: absolute;
+  top: 56.5%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-verifypassword
+{
+  position: absolute;
+  top: 67%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 6px;
+  opacity: 0.7;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 89%;
+  height: 8.045%;
+}
+
+.signup-page-form-nextbtn
+{
+  background: url("../login/NEXT button@2x.png") 0% 0% no-repeat padding-box;
+  background-size: contain;
+  position: absolute;
+  top: 80.3%;
+  left: 65%;
+  border: none;
+  outline: none;
+  width: 32.5%;
+  height: 6.5%;
+  cursor: pointer;
+}
+
+.signup-page-form-nextbtn:hover
+{
+  filter: brightness(120%);
+}
+
+.signup-page-form-logintext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  position: absolute;
+  top: 79.7%;
+  left: 4.8%;
+}
+
+.signup-page-form-loginbtn
+{
+  background: none;
+  border: none;
+  outline: none;
+  top: 82.3%;
+  left: 4.8%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.signup-page-form-loginbtntext
+{
+  color: #009BA7;
+  font-family: "work sans", sans-serif;
+  background: none;
+  font-size: max(0.85vw, 12.2px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  position: absolute;
+  border: none;
+  outline: none;
+  top: 82.3%;
+  left: 4.8%;
+  cursor: pointer;
+}
+
+.signup-page-form-loginbtntext:hover
+{
+  background: #5c5c5c;
+}
+
+.signup-page-form-line
+{
+  position: absolute;
+  opacity: 0.7;
+  width: 100%;
+  height: 0.2%;
+  top: 91%;
+}
+
+.signup-page-form-agreetext
+{
+  color: #C6C6C6;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.76vw, 11px);
+  position: absolute;
+  text-align: center;
+  top: 92%;
+  left: 5%;
+  width: 90%;
+  opacity: 0.6;
+}
+
+/* ----------------- */

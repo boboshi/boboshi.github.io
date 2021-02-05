@@ -1,3 +1,5 @@
+import "../resources/css/dashboardusermanagement.css";
+
 import React from "react";
 
 function DashboardUserManagement(props)

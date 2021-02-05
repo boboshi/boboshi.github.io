@@ -1,0 +1,83 @@
+.dashboard-page-dropdown
+{
+  width: 100%;
+  height: 100%;
+  background: #FCFCFC 0% 0% no-repeat padding-box;
+  box-shadow: 0px 2px 3px #00000029;
+  border-radius: 3px;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.dashboard-page-dropdown-titletext
+{
+  color: #333132;
+  font-family: "work sans", sans-serif;
+  font-size: max(0.75vw, 10.8px);
+  font-weight: 400;
+  opacity: 1.0;
+  z-index: 0;
+  position: absolute;
+  left: 5%;
+}
+
+.dashboard-page-dropdown-choicetext
+{
+  color: #007497;
+  font-family: "work sans", sans-serif;
+  font-size: max(1.2vw, 17.28px);
+  font-weight: 600;
+  opacity: 1.0;
+  z-index: 0;
+  position: absolute;
+  left: 5%;
+  top: 20%;
+}
+
+.dashboard-page-dropdown-arrow
+{
+  filter: invert(47%) sepia(5%) saturate(209%) hue-rotate(187deg) brightness(89%) contrast(92%);
+  position: absolute;
+  width: 8.5%;
+  height: 40%;
+  top: 25%;
+  right: 8%;
+}
+
+.dashboard-page-dropdown-list
+{
+  z-index: 1;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: #FCFCFC 0% 0% no-repeat padding-box;
+  box-shadow: 0px 2px 3px #00000029;
+  border-radius: 3px;
+  opacity: 1;
+}
+
+.dashboard-page-dropdown-ul
+{
+  list-style: none;
+}
+
+.dashboard-page-dropdown-ul:empty
+{
+  width: 100px;
+  height: 100px;
+  border: 10px solid #000000;
+}
+
+.dashboard-page-dropdown-ul li 
+{
+  color: #6D6E71;
+  font-family: "work sans", sans-serif;
+  font-weight: 600;
+  padding: 8px 12px;
+}
+
+.dashboard-page-dropdown-ul li:hover 
+{
+  background-color: rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+}

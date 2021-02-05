@@ -1,0 +1,9 @@
+.dashboard-page-add
+{
+  position: absolute;
+  border: 1px solid #000000;
+  top: 17%;
+  left: 12%;
+  width: 81%;
+  height: 75%;
+}

@@ -1,0 +1,377 @@
+/* width is 1166 */
+
+.dashboard-page-view
+{
+  position: absolute;
+  top: 17%;
+  left: 12%;
+  width: 81%;
+  height: 170%;
+}
+
+.dashboard-page-view-header-default
+{
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 13.5%;
+}
+
+.dashboard-page-view-headertop-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-top: 0.3%;
+    left: 8%;
+}
+
+.dashboard-page-view-header-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #000000;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-top: 0.3%;
+    left: 8%;
+}
+
+.dashboard-page-view-headerimg-default
+{
+    position: absolute;
+    top: -4%;
+    left: -0.55%;
+    width: 101.502%;
+}
+
+.dashboard-page-view-header-refresh
+{
+    z-index: 0;
+    position: absolute;
+    top: 4%;
+    left: 88%;
+    width: 2.7%;
+    height: auto;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+    transition-duration: .1s;
+    cursor: pointer;
+}
+
+.dashboard-page-view-header-refresh:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-view-header-info
+{
+    z-index: 0;
+    position: absolute;
+    top: 4%;
+    left: 95.8%;
+    width: 2.7%;
+    height: auto;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+    transition-duration: .1s;
+    cursor: pointer;
+}
+
+.dashboard-page-view-header-info:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-view-border-default
+{
+    z-index: -2;
+    position: absolute;
+    top: 1%;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    opacity: 1;
+}
+
+/* block lights */
+
+.dashboard-page-view-blocklights-container
+{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 49.2%;
+    height: 20%;
+    display: block;
+}
+
+.dashboard-page-view-block-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 2.5%;
+    width: 2.3%;
+    height: auto;
+}
+
+.dashboard-page-view-blocklights-header-divider
+{
+    z-index: 0;
+    position: absolute;
+    background-color: #005596;
+    top: 2.6%;
+    left: 93.5%;
+    width: 0.1%;
+    height: 9%;
+}
+
+/* active lights */
+
+.dashboard-page-view-activelights-container
+{
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 49.2%;
+    height: 20%;
+}
+
+.dashboard-page-view-activelights-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 2.5%;
+    width: 3.5%;
+    height: auto;
+}
+
+.dashboard-page-view-activelights-header-divider
+{
+    z-index: 0;
+    position: absolute;
+    background-color: #A35200;
+    top: 2.6%;
+    left: 94%;
+    width: 0.1%;
+    height: 9%;
+}
+
+/* energy consumption */
+
+.dashboard-page-view-energy-container
+{
+    position: absolute;
+    top: 21.5%;
+    left: 0%;
+    width: 49.2%;
+    height: 20%;
+}
+
+.dashboard-page-view-energy-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 2.5%;
+    width: 3.5%;
+    height: auto;
+}
+
+/* light control */
+
+.dashboard-page-view-control-container
+{
+    position: absolute;
+    top: 21.5%;
+    right: 0%;
+    width: 49.2%;
+    height: 20%;
+}
+
+.dashboard-page-view-control-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 2.5%;
+    width: 3.5%;
+    height: auto;
+}
+
+/* activity log */
+
+.dashboard-page-view-activity-container
+{
+    position: absolute;
+    top: 43%;
+    left: 0%;
+    width: 65%;
+    height: 22%;
+}
+
+.dashboard-page-view-activity-header
+{
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 13.5%;
+}
+
+.dashboard-page-view-activity-headerimg
+{
+    position: absolute;
+    top: -4%;
+    left: -0.4%;
+    width: 101.12%;
+    height: auto;
+}
+
+.dashboard-page-view-activity-header-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #000000;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-top: 0.3%;
+    left: 6.6%;
+}
+
+.dashboard-page-view-activity-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 2%;
+    width: 2.65%;
+    height: auto;
+}
+
+/* gateway information */
+
+.dashboard-page-view-gateway-container
+{
+    position: absolute;
+    top: 43%;
+    right: 0%;
+    width: 33.5%;
+    height: 22%;
+}
+
+.dashboard-page-view-gateway-header
+{
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 13.5%;
+}
+
+.dashboard-page-view-gateway-headerimg
+{
+    position: absolute;
+    top: -13%;
+    left: -0.8%;
+    width: 102%;
+}
+
+.dashboard-page-view-gateway-header-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #000000;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-top: 0.3%;
+    left: 11.5%;
+}
+
+.dashboard-page-view-gateway-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 4.25%;
+    left: 3.5%;
+    width: 4.5%;
+    height: auto;
+}
+
+/* light status */
+
+.dashboard-page-view-status-container
+{
+    position: absolute;
+    top: 67%;
+    right: 0%;
+    width: 100%;
+    height: 22%;
+}
+
+.dashboard-page-view-status-header
+{
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 13.5%;
+}
+
+.dashboard-page-view-status-headerimg
+{
+    position: absolute;
+    top: -13%;
+    left: -0.8%;
+    width: 102%;
+}
+
+.dashboard-page-view-status-header-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #000000;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-top: 0.3%;
+    left: 11.5%;
+}
+
+.dashboard-page-view-status-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 4.25%;
+    left: 3.5%;
+    width: 4.5%;
+    height: auto;
+}
+
+/* footer */
+
+.dashboard-page-view-footer
+{
+  position: absolute;
+  background: #F7F7F7 0% 0% no-repeat padding-box;
+  opacity: 1;
+  width: 100%;
+  height: 4%;
+  bottom: -98%;
+}

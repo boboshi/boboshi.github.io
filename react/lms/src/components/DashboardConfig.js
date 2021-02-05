@@ -1,10 +1,14 @@
+import "../resources/css/dashboardconfig.css";
+
 import React from "react";
+
+//import ThreeJsScene from "./threejsscene";
 
 function DashboardConfig(props)
 {
     return(
         <div className = "dashboard-page-config">
-            THIS IS DASHBOARD CONFIG
+            CONFIG PAGE
         </div>
     );
 }

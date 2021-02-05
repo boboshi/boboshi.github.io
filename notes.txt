@@ -22,21 +22,14 @@ cpu overheating issue??????
 ====================================================
 what in the fucks going on
 ====================================================
-
-frontend notes:
-blank dashboard
-  - location selection (country)
-    - display country map
-    - area selection
-      - block selection
-        - remove country map
-        - show config/map (threejs)
-
-icons on sidebar to add:
-- overview
-- config
-- user management
-- add
+get list of missing icons and assets and email
+- sidebar icons
+- block lights information icon
+- light control card header icon
+- light control loop icon
+- light status icon
+- settings icon
+- question mark circle icon
 
 running steps:
 npm start in lms/react/lms

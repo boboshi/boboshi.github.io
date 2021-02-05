@@ -1,31 +1,33 @@
+import "../resources/css/dashboardview.css";
+
 import React, {useState, useEffect} from "react";
+
+import BlockLights from "../components/BlockLights";
+import ActiveLights from "../components/ActiveLights";
+import EnergyConsumption from "../components/EnergyConsumption";
+import LightControl from "../components/LightControl";
+import ActivityLog from "../components/ActivityLog";
+import GatewayInfo from "../components/GatewayInfo";
+import LightStatus from "../components/LightStatus";
 
 function DashboardView(props)
 {
-    const [totalLights, setTotalLights] = useState(null);
-    const [lightsOn, setLightsOn] = useState(null);
-    const [lightsOff, setLightsOff] = useState(null);
-    const [lightsDimmed, setLightsDimmed] = useState(null);
-    const [lightFaults, setLightFaults] = useState(null);
-
     useEffect(() =>
     {
         // simulate getting data
-        setTotalLights(100);
-        setLightsOn(50);
-        setLightsOff(10);
-        setLightsDimmed(40);
-        setLightFaults(3);
-    })
+
+    }, []);
 
     return(
         <div className = "dashboard-page-view">
-            THIS IS DASHBOARD VIEW FOR {props.block} <br/>
-            TOTAL LIGHTS: {totalLights} <br/>
-            LIGHTS ON: {lightsOn} <br/>
-            LIGHTS OFF: {lightsOff} <br/>
-            LIGHTS DIMMED: {lightsDimmed} <br/>
-            LIGHTS FAULTS: {lightFaults}
+            <br/> <br/> <br/>DASHBOARD VIEW FOR {props.block ? props.block : "UNKNOWN"} <br/>
+            <BlockLights />
+            <ActiveLights />
+            <EnergyConsumption />
+            <LightControl />
+            <ActivityLog />
+            <GatewayInfo />
+            <LightStatus />
         </div>
     );
 }

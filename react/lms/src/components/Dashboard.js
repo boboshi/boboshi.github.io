@@ -1,12 +1,17 @@
+import "../resources/css/dashboard.css";
+
 import React, {useState, useRef, useEffect} from "react";
 import {Route, HashRouter, useHistory, useLocation} from "react-router-dom";
 
 import Map from "../resources/dashboard/map@2x.png";
-import SidebarLogo from "../resources/dashboard/Aztech logo 2020@2x.png";
-import SidebarToggleButton from "../resources/dashboard/menu_icon@2x.png";
+import SidebarLogo from "../resources/dashboard/Aztech logo 2020.svg";
+import SidebarToggleButton from "../resources/dashboard/menu_icon.svg";
 import DefaultUser from "../resources/dashboard/blank_user.png";
+import LightIcon from "../resources/dashboard/light_icon.png";
 import UsersIcon from "../resources/dashboard/users-solid.png";
 import LibraryAddIcon from "../resources/dashboard/library_add.png";
+import DarkModeIconBase from "../resources/dashboard/md-switch-base.png";
+import DarkModeIconCircle from "../resources/dashboard/md-switch-circle.png";
 
 import Timestamp from "../components/Timestamp";
 import Dropdown from "../components/Dropdown";
@@ -16,6 +21,9 @@ import UserDropdown from "../components/UserDropdown";
 import SidebarIcon from "../components/SidebarIcon";
 import DashboardView from "../components/DashboardView";
 import DashboardConfig from "../components/DashboardConfig";
+import DashboardLight from "../components/DashboardLight";
+import DashboardPower from "../components/DashboardPower";
+import DashboardLightCycle from "../components/DashboardLightCycle";
 import DashboardUserManagement from "../components/DashboardUserManagement";
 import DashboardAdd from "../components/DashboardAdd";
 
@@ -51,6 +59,7 @@ function Dashboard(props)
 
     const arrowVar = ">";
 
+    const [darkMode, setDarkMode] = useState(false);
     const [version, setVersion] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedArea, setSelectedArea] = useState("");
@@ -187,6 +196,21 @@ function Dashboard(props)
         goToPath("/dashboard/config");
     }
 
+    function handleSidebarLight()
+    {
+        goToPath("/dashboard/light");
+    }
+
+    function handleSidebarPower()
+    {
+        goToPath("/dashboard/power");
+    }
+
+    function handleSidebarLightCycle()
+    {
+        goToPath("/dashboard/lightcycle");
+    }
+
     function handleSidebarUser()
     {
         goToPath("/dashboard/usermanagement");
@@ -195,6 +219,18 @@ function Dashboard(props)
     function handleSidebarAdd()
     {
         goToPath("/dashboard/add");
+    }
+
+    function handleSidebarDarkModeToggle()
+    {
+        setDarkMode(!darkMode);
+
+        var dm = document.getElementsByClassName("dashboard-page-sidebar-icon-switch-circle");
+
+        if (dm[0].style.transform === "translate3d(90%, 0px, 0px)")
+            dm[0].style.transform = "translate3d(0%, 0px, 0px)";
+        else
+            dm[0].style.transform = "translate3d(90%, 0px, 0px)";
     }
 
     return(
@@ -280,10 +316,21 @@ function Dashboard(props)
                 <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
                 {/* sidebar buttons */}
                 <div className = "dashboard-page-sidebar-icon-container">
-                    <SidebarIcon onClick = {handleSidebarView} path = "/dashboard/view" icon = {UsersIcon}></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarConfig} path = "/dashboard/config" icon = {UsersIcon}></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarUser} path = "/dashboard/usermanagement" icon = {UsersIcon}></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarAdd} path = "/dashboard/add" icon = {LibraryAddIcon}></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarView} path = "/dashboard/view" icon = {UsersIcon} tooltip = "Dashboard"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarConfig} path = "/dashboard/config" icon = {UsersIcon} tooltip = "Configuration"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarLight} path = "/dashboard/light" icon = {LightIcon} tooltip = "Light"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarPower} path = "/dashboard/power" icon = {UsersIcon} tooltip = "Power"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarLightCycle} path = "/dashboard/lightcycle" icon = {UsersIcon} tooltip = "LightCycle"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarUser} path = "/dashboard/usermanagement" icon = {UsersIcon} tooltip = "Users"></SidebarIcon>
+                    <SidebarIcon onClick = {handleSidebarAdd} path = "/dashboard/add" icon = {LibraryAddIcon} tooltip = "Add"></SidebarIcon>
+                    {/* dark mode toggle button */}
+                    <div
+                        title = "Dark Mode"
+                        className = "dashboard-page-sidebar-icon-switch"
+                        onClick = {handleSidebarDarkModeToggle}>
+                        <img alt = "" src = {DarkModeIconBase} className = "dashboard-page-sidebar-icon-switchimg"></img>
+                        <img alt = "" src = {DarkModeIconCircle} className = "dashboard-page-sidebar-icon-switch-circle"></img>
+                    </div>
                 </div>
                 {/* bottom text */}
                 <div className = "dashboard-page-sidebar-bottomtext">
@@ -339,6 +386,18 @@ function Dashboard(props)
                         <Route 
                             path = "/dashboard/config" 
                             render = {(props) => <DashboardConfig {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/light" 
+                            render = {(props) => <DashboardLight {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/power" 
+                            render = {(props) => <DashboardPower {...props} />}>
+                        </Route>
+                        <Route 
+                            path = "/dashboard/lightcycle" 
+                            render = {(props) => <DashboardLightCycle {...props} />}>
                         </Route>
                         <Route 
                             path = "/dashboard/usermanagement" 

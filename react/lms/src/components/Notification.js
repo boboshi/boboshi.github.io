@@ -1,3 +1,5 @@
+import "../resources/css/notification.css";
+
 import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
 import NotificationIcon from "../resources/dashboard/Component 14 – 3(plain)@2x.png";
 import NotificationIconAlert from "../resources/dashboard/Component 14 – 3(no number)@2x.png"
