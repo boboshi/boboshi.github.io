@@ -136,6 +136,179 @@
     height: 9%;
 }
 
+.dashboard-page-view-blocklights-divider0
+{
+    position: absolute;
+    border: 1px solid #E0E0E0;
+    top: 56.75%;
+    left: 4.1%;
+    width: 91.8%;
+    height: 0%;
+}
+
+.dashboard-page-view-blocklights-divider1
+{
+    position: absolute;
+    border: 1px solid #E0E0E0;
+    top: 56.75%;
+    left: 34.7%;
+    width: 0%;
+    height: 37.1%;
+}
+
+.dashboard-page-view-blocklights-divider2
+{
+    position: absolute;
+    border: 1px solid #E0E0E0;
+    top: 19.75%;
+    left: 65.3%;
+    width: 0%;
+    height: 74.2%;
+}
+
+.dashboard-page-view-blocklights-text-numlights
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(1vw, 14.4px);
+    padding-top: 10%;
+    left: 8%;
+}
+
+.dashboard-page-view-blocklights-text-faults
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(1vw, 14.4px);
+    padding-top: 10%;
+    left: 74%;
+}
+
+.dashboard-page-view-blocklights-text-on
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(1vw, 14.4px);
+    padding-top: 28%;
+    left: 14%;
+}
+
+.dashboard-page-view-blocklights-text-off
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(1vw, 14.4px);
+    padding-top: 28%;
+    left: 45%;
+}
+
+.dashboard-page-view-blocklights-text-dimmed
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(1vw, 14.4px);
+    padding-top: 28%;
+    left: 77%;
+}
+
+.dashboard-page-view-blocklights-icon-faults
+{
+    z-index: 1;
+    position: absolute;
+    top: 23.7%;
+    left: 69%;
+    width: 4%;
+    height: auto;
+}
+
+.dashboard-page-view-blocklights-icon-on
+{
+    z-index: 1;
+    position: absolute;
+    top: 62.5%;
+    left: 10.5%;
+    width: 2.3%;
+    height: auto;
+}
+
+.dashboard-page-view-blocklights-icon-off
+{
+    z-index: 1;
+    position: absolute;
+    top: 62.5%;
+    left: 41%;
+    width: 2.3%;
+    height: auto;
+}
+
+.dashboard-page-view-blocklights-icon-dimmed
+{
+    z-index: 1;
+    position: absolute;
+    top: 62.5%;
+    left: 72.5%;
+    width: 2.3%;
+    height: auto;
+}
+
+.dashboard-page-view-blocklights-value-container-numlights
+{
+    position: absolute;
+    text-align: left;
+    top: 25%;
+    left: 8%;
+    width: 50%;
+}
+
+.dashboard-page-view-blocklights-value-container-faults
+{
+    position: absolute;
+    text-align: center;
+    top: 25%;
+    left: 71.2%;
+    width: 20%;
+}
+
+.dashboard-page-view-blocklights-value-container-on
+{
+    position: absolute;
+    text-align: center;
+    top: 64%;
+    left: 8%;
+    width: 22%;
+}
+
+.dashboard-page-view-blocklights-value-container-off
+{
+    position: absolute;
+    text-align: center;
+    top: 64%;
+    left: 39%;
+    width: 22%;
+}
+
+.dashboard-page-view-blocklights-value-container-dimmed
+{
+    position: absolute;
+    text-align: center;
+    top: 64%;
+    left: 71.2%;
+    width: 20%;
+}
+
+.dashboard-page-view-blocklights-value
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(2.4vw, 34.56px);
+}
+
 /* active lights */
 
 .dashboard-page-view-activelights-container
@@ -168,6 +341,105 @@
     height: 9%;
 }
 
+.dashboard-page-view-activelights-table-container
+{
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.8vw, 10.08px);
+    width: 90%;
+    margin-top: 8.5%;
+    margin-left: 5%;
+}
+
+.dashboard-page-view-activelights-table-header-detections
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 10.08px);
+    margin-left: 3.3%;
+    display: inline;
+}
+
+.dashboard-page-view-activelights-table-header-date
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 10.08px);
+    margin-left: 16%;
+    display: inline;
+}
+
+.dashboard-page-view-activelights-table-header-time
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 10.08px);
+    margin-left: 18%;
+    display: inline;
+}
+
+.dashboard-page-view-activelights-table-header-stats
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 10.08px);
+    margin-left: 16%;
+    display: inline;
+}
+
+.dashboard-page-view-activelights-table-divider
+{
+    position: absolute;
+    width: 89%;
+    height: 0%;
+    margin-top: 1.5%;
+    left: 5.25%;
+    border: 1px solid #E0E0E0;
+}
+
+.dashboard-page-view-activelights-table
+{
+    padding-top: 3.3%;
+}
+
+.dashboard-page-view-activelights-table tr:nth-child(odd)
+{
+    background-color: #FEF8F3;
+}
+
+.dashboard-page-view-activelights-table-id
+{
+    color: #333132;
+    width: 13.9%;
+    padding-top: 0.8%;
+    padding-left: 3%;
+}
+
+.dashboard-page-view-activelights-table-date
+{
+    color: #333132;
+    width: 10.2%;
+    padding-top: 0.8%;
+}
+
+.dashboard-page-view-activelights-table-time
+{
+    color: #333132;
+    width: 9.2%;
+    padding-top: 0.8%;
+}
+
+.dashboard-page-view-activelights-table-stats
+{
+    color: #009BA7;
+    font-weight: 600;
+    width: 10%;
+    padding-top: 0.8%;
+}
 /* energy consumption */
 
 .dashboard-page-view-energy-container
@@ -336,8 +608,8 @@
 {
     position: absolute;
     top: -13%;
-    left: -0.8%;
-    width: 102%;
+    left: -0.28%;
+    width: 100.7%;
 }
 
 .dashboard-page-view-status-header-text
@@ -350,17 +622,17 @@
     font-size: max(1vw, 14.4px);
     font-weight: 500;
     letter-spacing: 0.05em;
-    padding-top: 0.3%;
-    left: 11.5%;
+    margin-top: 0.7%;
+    left: 4.3%;
 }
 
 .dashboard-page-view-status-icon
 {
     z-index: 1;
     position: absolute;
-    top: 4.25%;
-    left: 3.5%;
-    width: 4.5%;
+    top: 1%;
+    left: 1%;
+    width: 2.25%;
     height: auto;
 }
 

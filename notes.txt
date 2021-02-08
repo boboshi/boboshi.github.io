@@ -22,6 +22,10 @@ cpu overheating issue??????
 ====================================================
 what in the fucks going on
 ====================================================
+
+====================================================
+                     FRONT END
+====================================================
 get list of missing icons and assets and email
 - sidebar icons
 - block lights information icon
@@ -30,6 +34,7 @@ get list of missing icons and assets and email
 - light status icon
 - settings icon
 - question mark circle icon
+====================================================
 
 running steps:
 npm start in lms/react/lms

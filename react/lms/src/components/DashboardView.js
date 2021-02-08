@@ -20,7 +20,6 @@ function DashboardView(props)
 
     return(
         <div className = "dashboard-page-view">
-            <br/> <br/> <br/>DASHBOARD VIEW FOR {props.block ? props.block : "UNKNOWN"} <br/>
             <BlockLights />
             <ActiveLights />
             <EnergyConsumption />
