@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 
 import Header from "../resources/dashboard/dashboard header.svg";
-import ControlIcon from "../resources/dashboard/chart-area-solid.svg";
+import ControlIcon from "../resources/dashboard/settings_power-24px.svg";
 
 function EnergyConsumption(props)
 {
