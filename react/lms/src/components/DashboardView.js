@@ -2,6 +2,8 @@ import "../resources/css/dashboardview.css";
 
 import React, {useState, useEffect} from "react";
 
+import ExportButton from "../resources/dashboard/export button@2x.png";
+
 import BlockLights from "../components/BlockLights";
 import ActiveLights from "../components/ActiveLights";
 import EnergyConsumption from "../components/EnergyConsumption";
@@ -18,8 +20,20 @@ function DashboardView(props)
 
     }, []);
 
+    function handleExportClick()
+    {
+        console.log("clicked export");
+    }
+
     return(
         <div className = "dashboard-page-view">
+            {/* export button */}
+            <img 
+                alt = "" 
+                src = {ExportButton} 
+                className = "dashboard-page-view-exportbtn"
+                onClick = {handleExportClick}
+            ></img>
             <BlockLights />
             <ActiveLights />
             <EnergyConsumption />

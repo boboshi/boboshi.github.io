@@ -9,6 +9,22 @@
   height: 170%;
 }
 
+.dashboard-page-view-exportbtn
+{
+    font-family: "work sans", sans-serif;
+    position: absolute;
+    top: -3.26%;
+    left: 90.22%;
+    width: 10%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-view-exportbtn:hover
+{
+    filter: brightness(120%);
+}
+
 .dashboard-page-view-header-default
 {
     z-index: -1;
