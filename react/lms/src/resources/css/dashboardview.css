@@ -346,7 +346,7 @@
 {
     font-family: "work sans", sans-serif;
     font-weight: 500;
-    font-size: max(0.8vw, 10.08px);
+    font-size: max(0.8vw, 11.52px);
     width: 90%;
     margin-top: 8.5%;
     margin-left: 5%;
@@ -354,42 +354,46 @@
 
 .dashboard-page-view-activelights-table-header-detections
 {
+    position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
     font-weight: 600;
-    font-size: max(0.8vw, 10.08px);
-    margin-left: 3.3%;
-    display: inline;
+    font-size: max(0.8vw, 11.52px);
+    left: 8.2%;
+    top: 15.7%;
 }
 
 .dashboard-page-view-activelights-table-header-date
 {
+    position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
     font-weight: 600;
-    font-size: max(0.8vw, 10.08px);
-    margin-left: 16%;
-    display: inline;
+    font-size: max(0.8vw, 11.52px);
+    left: 33.2%;
+    top: 15.7%;
 }
 
 .dashboard-page-view-activelights-table-header-time
 {
+    position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
     font-weight: 600;
-    font-size: max(0.8vw, 10.08px);
-    margin-left: 18%;
-    display: inline;
+    font-size: max(0.8vw, 11.52px);
+    left: 53.7%;
+    top: 15.7%;
 }
 
 .dashboard-page-view-activelights-table-header-stats
 {
+    position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
     font-weight: 600;
-    font-size: max(0.8vw, 10.08px);
-    margin-left: 16%;
-    display: inline;
+    font-size: max(0.8vw, 11.52px);
+    left: 72.1%;
+    top: 15.7%;
 }
 
 .dashboard-page-view-activelights-table-divider
@@ -397,14 +401,15 @@
     position: absolute;
     width: 89%;
     height: 0%;
-    margin-top: 1.5%;
+    margin-top: 3%;
     left: 5.25%;
     border: 1px solid #E0E0E0;
+    opacity: 0.8
 }
 
 .dashboard-page-view-activelights-table
 {
-    padding-top: 3.3%;
+    padding-top: 5.5%;
 }
 
 .dashboard-page-view-activelights-table tr:nth-child(odd)
