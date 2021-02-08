@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import LightIcon from "../resources/dashboard/Icon awesome-lightbulb.svg";
 import BlockLightsHeader from "../resources/dashboard/blocklights header.svg";
 import BlockRefreshIcon from "../resources/dashboard/Icon ionic-md-refresh(block).svg";
-import BlockInfoIcon from "../resources/dashboard/Icon ionic-md-refresh(block).svg";
+import BlockInfoIcon from "../resources/dashboard/Group 52718.svg";
 import WarningIcon from "../resources/dashboard/Icon ionic-ios-warning.svg";
 import OnIcon from "../resources/dashboard/Icon material-lightbulb-outline.svg";
 import OffIcon from "../resources/dashboard/Icon material-lightbulb-filled.svg";

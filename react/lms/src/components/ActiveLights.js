@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import MotionIcon from "../resources/dashboard/MotionSensor-icon-GY.svg";
 import ActiveLightsHeader from "../resources/dashboard/activelights header.svg";
 import ActiveRefreshIcon from "../resources/dashboard/Icon ionic-md-refresh(active).svg";
-import ActiveInfoIcon from "../resources/dashboard/Icon ionic-md-refresh(active).svg";
+import ActiveInfoIcon from "../resources/dashboard/Group 52718.svg";
 
 class ActiveLightObject
 {

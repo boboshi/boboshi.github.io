@@ -76,14 +76,15 @@
 {
     z-index: 0;
     position: absolute;
-    top: 4%;
-    left: 95.8%;
-    width: 2.7%;
+    top: -0.7%;
+    left: 93.6%;
+    width: 7%;
     height: auto;
     transition-property: transform;
     transition-timing-function: cubic-bezier(.42, 0, .58, 1);
     transition-duration: .1s;
     cursor: pointer;
+    opacity: 0.5;
 }
 
 .dashboard-page-view-header-info:hover
@@ -336,7 +337,7 @@
     position: absolute;
     background-color: #A35200;
     top: 2.6%;
-    left: 94%;
+    left: 93.6%;
     width: 0.1%;
     height: 9%;
 }
