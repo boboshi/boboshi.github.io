@@ -59,7 +59,6 @@
 
 .dashboard-page-header-user-dropdown-li-image
 {
-  filter: invert(96%) sepia(2%) saturate(41%) hue-rotate(314deg) brightness(87%) contrast(81%);  width: 100px;
   transform: translate(410%, -17%);
   width: 15%;
   height: auto;
@@ -122,7 +121,6 @@
 
 .dashboard-page-header-user-dropdown-image
 {
-  filter: invert(96%) sepia(2%) saturate(41%) hue-rotate(314deg) brightness(87%) contrast(81%);  width: 100px;
   transform: translate(410%, 30%);
   width: 15%;
   height: auto;
@@ -130,7 +128,6 @@
 
 .dashboard-page-header-user-dropdown-arrow
 {
-  filter: invert(47%) sepia(5%) saturate(209%) hue-rotate(187deg) brightness(89%) contrast(92%);
   position: absolute;
   top: 50%;
   left: 82%;

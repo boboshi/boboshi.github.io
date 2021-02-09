@@ -6,12 +6,27 @@ import {Route, HashRouter, useHistory, useLocation} from "react-router-dom";
 import Map from "../resources/dashboard/map@2x.png";
 import SidebarLogo from "../resources/dashboard/Aztech logo 2020.svg";
 import SidebarToggleButton from "../resources/dashboard/menu_icon.svg";
-import DefaultUser from "../resources/dashboard/blank_user.png";
-import LightIcon from "../resources/dashboard/light_icon.png";
-import UsersIcon from "../resources/dashboard/users-solid.png";
-import LibraryAddIcon from "../resources/dashboard/library_add.png";
+
+import DashboardIcon from "../resources/dashboard/icon-dashboard.svg";
+import DashboardSelectedIcon from "../resources/dashboard/icon-dashboard-selected.svg";
+import ConfigIcon from "../resources/dashboard/icon-config.svg";
+import ConfigSelectedIcon from "../resources/dashboard/icon-config-selected.svg";
+import LightIcon from "../resources/dashboard/icon-light.svg";
+import LightSelectedIcon from "../resources/dashboard/icon-light-selected.svg";
+import PowerIcon from "../resources/dashboard/icon-power.svg";
+import PowerSelectedIcon from "../resources/dashboard/icon-power-selected.svg";
+import LightCycleIcon from "../resources/dashboard/icon-lightcycle.svg";
+import LightCycleSelectedIcon from "../resources/dashboard/icon-lightcycle-selected.svg";
+import UsersIcon from "../resources/dashboard/icon-users.svg";
+import UsersSelectedIcon from "../resources/dashboard/icon-users-selected.svg";
+import LibraryAddIcon from "../resources/dashboard/icon-add.svg";
+import LibraryAddSelectedIcon from "../resources/dashboard/icon-add-selected.svg";
+
 import DarkModeIconBase from "../resources/dashboard/md-switch-base.png";
 import DarkModeIconCircle from "../resources/dashboard/md-switch-circle.png";
+
+import AdminProfile from "../resources/dashboard/office-admin-profile.png";
+import DefaultUser from "../resources/dashboard/icon-userdropdown-default.svg";
 
 import Timestamp from "../components/Timestamp";
 import Dropdown from "../components/Dropdown";
@@ -80,7 +95,7 @@ function Dashboard(props)
         let notification2 = new NotificationObject("Alert For Light 1.2.11", 
                                                    "Light 1.2.11 AC Failure",
                                                    "false");
-        let curruser = new UserObject("office_admin", "Project Manager", DefaultUser);
+        let curruser = new UserObject("office_admin", "Project Manager", AdminProfile);
         let user0 = new UserObject("VIOLA CHAN", "Design Manager", DefaultUser);
         let user1 = new UserObject("MANNMO WONG", "Designer", DefaultUser);
 
@@ -316,13 +331,55 @@ function Dashboard(props)
                 <img alt = "" src = {SidebarLogo} className = "dashboard-page-sidebar-logo"></img>
                 {/* sidebar buttons */}
                 <div className = "dashboard-page-sidebar-icon-container">
-                    <SidebarIcon onClick = {handleSidebarView} path = "/dashboard/view" icon = {UsersIcon} tooltip = "Dashboard"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarConfig} path = "/dashboard/config" icon = {UsersIcon} tooltip = "Configuration"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarLight} path = "/dashboard/light" icon = {LightIcon} tooltip = "Light"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarPower} path = "/dashboard/power" icon = {UsersIcon} tooltip = "Power"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarLightCycle} path = "/dashboard/lightcycle" icon = {UsersIcon} tooltip = "LightCycle"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarUser} path = "/dashboard/usermanagement" icon = {UsersIcon} tooltip = "Users"></SidebarIcon>
-                    <SidebarIcon onClick = {handleSidebarAdd} path = "/dashboard/add" icon = {LibraryAddIcon} tooltip = "Add"></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarView} 
+                        path = "/dashboard/view" 
+                        icon = {DashboardIcon} 
+                        selectedicon = {DashboardSelectedIcon} 
+                        tooltip = "Dashboard"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarConfig} 
+                        path = "/dashboard/config" 
+                        icon = {ConfigIcon}
+                        selectedicon = {ConfigSelectedIcon}
+                        tooltip = "Configuration"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarLight} 
+                        path = "/dashboard/light" 
+                        icon = {LightIcon}
+                        selectedicon = {LightSelectedIcon}
+                        tooltip = "Light"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarPower} 
+                        path = "/dashboard/power" 
+                        icon = {PowerIcon}
+                        selectedicon = {PowerSelectedIcon} 
+                        tooltip = "Power"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarLightCycle} 
+                        path = "/dashboard/lightcycle" 
+                        icon = {LightCycleIcon}
+                        selectedicon = {LightCycleSelectedIcon} 
+                        tooltip = "LightCycle"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarUser} 
+                        path = "/dashboard/usermanagement" 
+                        icon = {UsersIcon}
+                        selectedicon = {UsersSelectedIcon} 
+                        tooltip = "Users"
+                    ></SidebarIcon>
+                    <SidebarIcon 
+                        onClick = {handleSidebarAdd} 
+                        path = "/dashboard/add" 
+                        icon = {LibraryAddIcon}
+                        selectedicon = {LibraryAddSelectedIcon}
+                        tooltip = "Add"
+                    ></SidebarIcon>
                     {/* dark mode toggle button */}
                     <div
                         title = "Dark Mode"

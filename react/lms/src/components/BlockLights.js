@@ -20,11 +20,11 @@ function BlockLights(props)
     useEffect(() =>
     {
         // simulate getting data
-        setTotalLights(100);
-        setLightFaults(3);
-        setLightsOn(50);
-        setLightsOff(10);
-        setLightsDimmed(40);
+        setTotalLights(800000);
+        setLightFaults(40);
+        setLightsOn(80000);
+        setLightsOff(1000);
+        setLightsDimmed(7000);
     }, []);
 
     function handleBlockRefresh()
@@ -73,22 +73,25 @@ function BlockLights(props)
             <img alt = "" src = {OffIcon} className = "dashboard-page-view-blocklights-icon-off"></img>
             <img alt = "" src = {DimIcon} className = "dashboard-page-view-blocklights-icon-dimmed"></img>
             {/* section values */}
-            <div className = "dashboard-page-view-blocklights-value-container-numlights">
-                <h1 className = "dashboard-page-view-blocklights-value">{totalLights}</h1>
-            </div>
-            <div className = "dashboard-page-view-blocklights-value-container-faults">
-                <h1 className = "dashboard-page-view-blocklights-value">{lightFaults}</h1>
-            </div>
-            <div className = "dashboard-page-view-blocklights-value-container-on">
-                <h1 className = "dashboard-page-view-blocklights-value">{lightsOn}</h1>
-            </div>
-            <div className = "dashboard-page-view-blocklights-value-container-off">
-                <h1 className = "dashboard-page-view-blocklights-value">{lightsOff}</h1>
-            </div>
-            <div className = "dashboard-page-view-blocklights-value-container-dimmed">
-                <h1 className = "dashboard-page-view-blocklights-value">{lightsDimmed}</h1>
-            </div>
-            
+            {totalLights && lightsOn && lightsOff && lightsDimmed && lightFaults &&
+                <div>
+                    <div className = "dashboard-page-view-blocklights-value-container-numlights">
+                        <h1 className = "dashboard-page-view-blocklights-value">{totalLights.toLocaleString()}</h1>
+                    </div>
+                    <div className = "dashboard-page-view-blocklights-value-container-faults">
+                        <h1 className = "dashboard-page-view-blocklights-value">{lightFaults.toLocaleString()}</h1>
+                    </div>
+                    <div className = "dashboard-page-view-blocklights-value-container-on">
+                        <h1 className = "dashboard-page-view-blocklights-value">{lightsOn.toLocaleString()}</h1>
+                    </div>
+                    <div className = "dashboard-page-view-blocklights-value-container-off">
+                        <h1 className = "dashboard-page-view-blocklights-value">{lightsOff.toLocaleString()}</h1>
+                    </div>
+                    <div className = "dashboard-page-view-blocklights-value-container-dimmed">
+                        <h1 className = "dashboard-page-view-blocklights-value">{lightsDimmed.toLocaleString()}</h1>
+                    </div>
+                </div>
+            }
             <div className = "dashboard-page-view-border-default"></div>
         </div>
     );

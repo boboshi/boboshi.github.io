@@ -1,6 +1,6 @@
 import "../resources/css/dashboardview.css";
 
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 
 import ExportButton from "../resources/dashboard/export button@2x.png";
 

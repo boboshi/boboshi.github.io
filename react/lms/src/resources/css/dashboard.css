@@ -79,6 +79,11 @@
   cursor: pointer;
 }
 
+.dashboard-page-header-dashboardtext:hover
+{
+  filter: brightness(140%);
+}
+
 .dashboard-page-header-dashboardtext:last-child
 {
   color: #005570;
@@ -97,6 +102,11 @@
   cursor: pointer;
 }
 
+.dashboard-page-header-buttontext:hover
+{
+  filter: brightness(140%);
+}
+
 .dashboard-page-header-buttontext-selected
 {
   color: #005570;
@@ -108,6 +118,11 @@
   display: inline;
   margin-left: 1%;
   cursor: pointer;
+}
+
+.dashboard-page-header-buttontext-selected:hover
+{
+  filter: brightness(140%);
 }
 
 .dashboard-page-header-divider
@@ -210,32 +225,20 @@
 {
   z-index: 1;
   position: relative;
-  filter: invert(12%) sepia(83%) saturate(3999%) hue-rotate(181deg) brightness(98%) contrast(101%);
   top: 18%;
   left: 15%;
   width: 70%;
-  opacity: 0.5;
+  height: auto;
 }
 
 .dashboard-page-sidebar-icon-selected
 {
   z-index: 1;
   position: relative;
-  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(324deg) brightness(106%) contrast(102%);
-  top: 18%;
-  left: 15%;
-  width: 70%;
-}
-
-.dashboard-page-sidebar-icon-circle
-{
-  z-index: -1;
-  position: relative;
-  background-color: #005570;
-  border-radius: 50%;
-  top: -70%;
+  top: 2%;
+  left: -2%;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 .dashboard-page-sidebar-icon-switch

@@ -248,7 +248,7 @@ body, ul
 
 .login-page-form-pwbtntext:hover
 {
-  background: #5c5c5c;
+  filter: brightness(140%);
 }
 
 .login-page-form-line
@@ -447,7 +447,7 @@ body, ul
 
 .signup-page-form-loginbtntext:hover
 {
-  background: #5c5c5c;
+  filter: brightness(140%);
 }
 
 .signup-page-form-line

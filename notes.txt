@@ -26,14 +26,9 @@ what in the fucks going on
 ====================================================
                      FRONT END
 ====================================================
-get list of missing icons and assets and email
-- sidebar icons
-- block lights information icon
-- light control card header icon
-- light control loop icon
-- light status icon
-- settings icon
-- question mark circle icon
+start getting proper assets in using adobe xd
+figure out how to do graph
+ - if too mafan, just use an image as placeholder
 ====================================================
 
 running steps:
