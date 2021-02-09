@@ -535,6 +535,40 @@
     background: #E6E4E4;
 }
 
+.dashboard-page-view-energy-graph-container
+{
+    position: absolute;
+    top: 27%;
+    left: 4%;
+    width: 92%;
+    height: 70%;
+}
+
+.dashboard-page-view-energy-yaxis
+{
+    position: absolute;
+    color: #6D6E71;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.7vw, 10.08px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    top: 54.4%;
+    left: 3%;
+}
+
+.dashboard-page-view-energy-xaxis
+{
+    display: inline-block;
+    position: absolute;
+    color: #6D6E71;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.7vw, 10.08px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    top: 93%;
+    left: 52.15%;
+}
+
 /* light control */
 
 .dashboard-page-view-control-container

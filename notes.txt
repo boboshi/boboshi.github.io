@@ -27,8 +27,7 @@ what in the fucks going on
                      FRONT END
 ====================================================
 start getting proper assets in using adobe xd
-figure out how to do graph
- - if too mafan, just use an image as placeholder
+continue with present/past labels on the graph
 ====================================================
 
 running steps:
