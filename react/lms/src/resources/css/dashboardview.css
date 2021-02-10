@@ -633,6 +633,50 @@
     height: auto;
 }
 
+.dashboard-page-view-control-floor-header
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 20%;
+    left: 6%;
+}
+
+.dashboard-page-view-control-light-header
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 45%;
+    left: 6%;
+}
+
+.dashboard-page-view-control-lighting-header
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 70%;
+    left: 6%;
+}
+
+.dashboard-page-view-control-admin-header
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 70%;
+    left: 70%;
+}
+
 /* activity log */
 
 .dashboard-page-view-activity-container

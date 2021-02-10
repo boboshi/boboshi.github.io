@@ -1,5 +1,5 @@
 import React from "react";
-import {LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
+import {Line, LineChart, Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import moment from "moment";
 
 function EnergyConsumptionGraph(props)
@@ -7,9 +7,17 @@ function EnergyConsumptionGraph(props)
     const oneDTemplate =
     (
         <ResponsiveContainer>
-            <LineChart>
-                <Line data = {props.data[0]} type = "line" dataKey = "Present" stroke = "#2CD9C5"/>
-                <Line data = {props.data[1]} type = "line" dataKey = "Past" stroke = "#8C54FF"/>
+            <AreaChart>
+                <defs>
+                    <linearGradient id="presentColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#2CD9C5" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#2CD9C5" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="pastColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#8C54FF" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#8C54FF" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
                 <CartesianGrid stroke = "#ccc" strokeDasharray = "5 5"/>
                 <XAxis 
                     dataKey = "t"
@@ -48,16 +56,38 @@ function EnergyConsumptionGraph(props)
                     }}
                     labelFormatter={index => ""}
                 />
-            </LineChart>
+                <Area 
+                    data = {props.data[0]} 
+                    type = "line" dataKey = "Present" 
+                    stroke = "#2CD9C5" fillOpacity = {1} 
+                    fill = "url(#presentColour)" 
+                    dot = {{stroke: "#2CD9C5", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+                <Area 
+                    data = {props.data[1]} 
+                    type = "line" dataKey = "Past" 
+                    stroke = "#8C54FF" fillOpacity = {1} 
+                    fill = "url(#pastColour)" 
+                    dot = {{stroke: "#8C54FF", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+            </AreaChart>
         </ResponsiveContainer>
     );
 
     const fiveDTemplate =
     (
         <ResponsiveContainer>
-            <LineChart>
-                <Line data = {props.data[2]} type = "line" dataKey = "Present" stroke = "#2CD9C5"/>
-                <Line data = {props.data[3]} type = "line" dataKey = "Past" stroke = "#8C54FF"/>
+            <AreaChart>
+                <defs>
+                    <linearGradient id="presentColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#2CD9C5" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#2CD9C5" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="pastColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#8C54FF" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#8C54FF" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
                 <CartesianGrid stroke = "#ccc" strokeDasharray = "5 5"/>
                 <XAxis 
                     dataKey = "t"
@@ -95,16 +125,38 @@ function EnergyConsumptionGraph(props)
                     }}
                     labelFormatter={index => ""}
                 />
-            </LineChart>
+                <Area 
+                    data = {props.data[2]} 
+                    type = "line" dataKey = "Present" 
+                    stroke = "#2CD9C5" fillOpacity = {1} 
+                    fill = "url(#presentColour)" 
+                    dot = {{stroke: "#2CD9C5", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+                <Area 
+                    data = {props.data[3]} 
+                    type = "line" dataKey = "Past" 
+                    stroke = "#8C54FF" fillOpacity = {1} 
+                    fill = "url(#pastColour)" 
+                    dot = {{stroke: "#8C54FF", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+            </AreaChart>
         </ResponsiveContainer>
     );
 
     const oneMTemplate =
     (
         <ResponsiveContainer>
-            <LineChart>
-                <Line data = {props.data[4]} type = "line" dataKey = "Present" stroke = "#2CD9C5"/>
-                <Line data = {props.data[5]} type = "line" dataKey = "Past" stroke = "#8C54FF"/>
+            <AreaChart>
+                <defs>
+                    <linearGradient id="presentColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#2CD9C5" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#2CD9C5" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="pastColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#8C54FF" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#8C54FF" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
                 <CartesianGrid stroke = "#ccc" strokeDasharray = "5 5"/>
                 <XAxis 
                     dataKey = "t"
@@ -142,16 +194,38 @@ function EnergyConsumptionGraph(props)
                     }}
                     labelFormatter={index => ""}
                 />
-            </LineChart>
+                <Area 
+                    data = {props.data[4]} 
+                    type = "line" dataKey = "Present" 
+                    stroke = "#2CD9C5" fillOpacity = {1} 
+                    fill = "url(#presentColour)" 
+                    dot = {{stroke: "#2CD9C5", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+                <Area 
+                    data = {props.data[5]} 
+                    type = "line" dataKey = "Past" 
+                    stroke = "#8C54FF" fillOpacity = {1} 
+                    fill = "url(#pastColour)" 
+                    dot = {{stroke: "#8C54FF", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+            </AreaChart>
         </ResponsiveContainer>
     );
 
     const oneYTemplate =
     (
         <ResponsiveContainer>
-            <LineChart>
-                <Line data = {props.data[6]} type = "line" dataKey = "Present" stroke = "#2CD9C5"/>
-                <Line data = {props.data[7]} type = "line" dataKey = "Past" stroke = "#8C54FF"/>
+            <AreaChart>
+                <defs>
+                    <linearGradient id="presentColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#2CD9C5" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#2CD9C5" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="pastColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#8C54FF" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#8C54FF" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
                 <CartesianGrid stroke = "#ccc" strokeDasharray = "5 5"/>
                 <XAxis 
                     dataKey = "t"
@@ -189,16 +263,38 @@ function EnergyConsumptionGraph(props)
                     }}
                     labelFormatter={index => ""}
                 />
-            </LineChart>
+                <Area 
+                    data = {props.data[6]} 
+                    type = "line" dataKey = "Present" 
+                    stroke = "#2CD9C5" fillOpacity = {1} 
+                    fill = "url(#presentColour)" 
+                    dot = {{stroke: "#2CD9C5", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+                <Area 
+                    data = {props.data[7]} 
+                    type = "line" dataKey = "Past" 
+                    stroke = "#8C54FF" fillOpacity = {1} 
+                    fill = "url(#pastColour)" 
+                    dot = {{stroke: "#8C54FF", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+            </AreaChart>
         </ResponsiveContainer>
     );
 
     const threeYTemplate =
     (
         <ResponsiveContainer>
-            <LineChart>
-                <Line data = {props.data[8]} type = "line" dataKey = "Present" stroke = "#2CD9C5"/>
-                <Line data = {props.data[9]} type = "line" dataKey = "Past" stroke = "#8C54FF"/>
+            <AreaChart>
+                <defs>
+                    <linearGradient id="presentColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#2CD9C5" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#2CD9C5" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="pastColour" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="25%" stopColor="#8C54FF" stopOpacity={0.15}/>
+                        <stop offset="100%" stopColor="#8C54FF" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
                 <CartesianGrid stroke = "#ccc" strokeDasharray = "5 5"/>
                 <XAxis 
                     dataKey = "t"
@@ -236,7 +332,21 @@ function EnergyConsumptionGraph(props)
                     }}
                     labelFormatter={index => ""}
                 />
-            </LineChart>
+                <Area 
+                    data = {props.data[8]} 
+                    type = "line" dataKey = "Present" 
+                    stroke = "#2CD9C5" fillOpacity = {1} 
+                    fill = "url(#presentColour)" 
+                    dot = {{stroke: "#2CD9C5", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+                <Area 
+                    data = {props.data[9]} 
+                    type = "line" dataKey = "Past" 
+                    stroke = "#8C54FF" fillOpacity = {1} 
+                    fill = "url(#pastColour)" 
+                    dot = {{stroke: "#8C54FF", strokeWidth: 2, fill: "#FFFFFF"}} 
+                />
+            </AreaChart>
         </ResponsiveContainer>
     );
 

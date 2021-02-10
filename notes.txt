@@ -27,7 +27,9 @@ what in the fucks going on
                      FRONT END
 ====================================================
 start getting proper assets in using adobe xd
-continue with present/past labels on the graph
+
+current task:
+dashboard view light control card
 ====================================================
 
 running steps:
