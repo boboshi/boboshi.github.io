@@ -19,7 +19,7 @@ function EnergyConsumption(props)
         {t: 102600, Present: 0.042},
         {t: 117000, Present: 0.078},
         {t: 131400, Present: 0.07},
-        {t: 145800, Present: 0.05},
+        {t: 145800, Present: 0.06},
     ];
 
     const data0 = [
@@ -98,18 +98,14 @@ function EnergyConsumption(props)
                 {currDisplayOption === "3Y" && "(Years)"}
             </div>
             {/* present, past labels */}
-            <div className = "">
-
+            <div className = "dashboard-page-view-energy-present">
+                Present
             </div>
-            <div>
-                
+            <div className = "dashboard-page-view-energy-present-img"></div>
+            <div className = "dashboard-page-view-energy-past">
+                Past
             </div>
-            <div>
-                
-            </div>
-            <div>
-                
-            </div>
+            <div className = "dashboard-page-view-energy-past-img"></div>
             {/* graph */}
             {displayOptions}
             {displayGraph}

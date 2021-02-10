@@ -21,6 +21,8 @@ function EnergyConsumptionGraph(props)
                                 fontWeight: "500",
                                 letterSpacing: "0.05em"
                             }}
+                            axisLine = {false}
+                            tickLine = {false}
                             type = "number"
                             domain = {[59400, 145800]}
                             tickFormatter = {(tick) => moment(tick * 1000).format('HH:mm')}
@@ -34,6 +36,8 @@ function EnergyConsumptionGraph(props)
                                 fontWeight: "500",
                                 letterSpacing: "0.05em"
                             }}
+                            stroke = "#E0E0E0"
+                            tick = {{fill: "#6D6E71"}}
                         />
                         <Tooltip 
                             wrapperStyle = {{
@@ -43,6 +47,7 @@ function EnergyConsumptionGraph(props)
                                 fontWeight: "500",
                                 letterSpacing: "0.05em"
                             }}
+                            labelFormatter={index => ""}
                         />
                     </LineChart>
                 </ResponsiveContainer>

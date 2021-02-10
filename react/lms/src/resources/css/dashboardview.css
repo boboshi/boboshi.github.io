@@ -569,6 +569,49 @@
     left: 52.15%;
 }
 
+.dashboard-page-view-energy-present
+{
+    position: absolute;
+    color: #212529;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.7vw, 10.08px);
+    font-weight: 500;
+    top: 18%;
+    left: 80%;
+}
+
+.dashboard-page-view-energy-present-img
+{
+    position: absolute;
+    border: 1px solid #2CD9C5;
+    top: 20%;
+    left: 77%;
+    width: 2%;
+    height: 0%;
+}
+
+.dashboard-page-view-energy-past
+{
+    position: absolute;
+    color: #212529;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.7vw, 10.08px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    top: 18%;
+    left: 91.5%;
+}
+
+.dashboard-page-view-energy-past-img
+{
+    position: absolute;
+    border: 1px solid #826AF9;
+    top: 20%;
+    left: 88.5%;
+    width: 2%;
+    height: 0%;
+}
+
 /* light control */
 
 .dashboard-page-view-control-container
