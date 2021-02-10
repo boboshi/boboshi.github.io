@@ -1,14 +1,12 @@
-import "../resources/css/dashboarddropdown.css";
-
 import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
-import DownArrow from "../resources/dashboard/chevron-down-outline.png";
-import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 
-const Dropdown = forwardRef((props, ref) =>
+import DownArrow from "../resources/dashboard/icon-dropdown-down.svg";
+
+const GenericDropdown = forwardRef((props, ref) =>
 {
     const node = useRef();
     const [choice, setChoice] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen,setIsOpen] = useState(false);
 
     const optionsList = props.options.map(option =>
         <li 
@@ -30,11 +28,13 @@ const Dropdown = forwardRef((props, ref) =>
         }
     }));
 
-    const handleClickOutside = e => 
+    const handleClickOutside = e =>
     {
-        if (node.current.contains(e.target))
-            return;
-        setIsOpen(false);
+        if (node.current)
+            if (node.current.contains(e.target))
+                return;
+            else
+                setIsOpen(false);
     };
 
     function handleDropdownClick()
@@ -51,29 +51,33 @@ const Dropdown = forwardRef((props, ref) =>
 
     const openMenuTemplate =
     (
-        <div className = "dashboard-page-dropdown-list">
-            <ul className = "dashboard-page-dropdown-ul">
+        <div className = "dashboard-page-view-dropdown-list">
+            <ul className = "dashboard-page-view-dropdown-ul">
                 {optionsList}
             </ul>
         </div>
     );
 
     return(
-        <div ref = {node} className = "dashboard-page-dropdown" onClick = {handleDropdownClick}>
-            <h1 className = "dashboard-page-dropdown-titletext">
-                {props.title}
-            </h1>
-            <h1 className = "dashboard-page-dropdown-choicetext">
+        <div ref = {node} className = "dashboard-page-view-dropdown" onClick = {handleDropdownClick}>
+            <h1 className = "dashboard-page-view-dropdown-choicetext">
                 {choice}
             </h1>
-            <img 
-                alt = ""
-                src = {isOpen ? UpArrow : DownArrow} 
-                className = "dashboard-page-dropdown-arrow">
-            </img>
+            {isOpen ?             
+                <img 
+                    alt = ""
+                    src = {DownArrow}
+                    className = "dashboard-page-view-dropdown-uparrow"
+                ></img> :
+                <img 
+                    alt = ""
+                    src = {DownArrow}
+                    className = "dashboard-page-view-dropdown-downarrow"
+                ></img>
+            }
             {isOpen && openMenuTemplate}
         </div>
     );
-})
+});
 
-export default Dropdown;
+export default GenericDropdown;

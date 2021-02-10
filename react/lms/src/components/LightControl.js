@@ -1,10 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
+
+import GenericDropdown from "../components/GenericDropdown";
 
 import Header from "../resources/dashboard/dashboard header.svg";
 import ControlIcon from "../resources/dashboard/settings_power-24px.svg";
 
 function EnergyConsumption(props)
 {
+    const selectFloorRef = useRef();
+
+    const [selectedFloor, setSelectedFloor] = useState("");
+
     useEffect(() =>
     {
         // simulate getting data
@@ -24,6 +30,20 @@ function EnergyConsumption(props)
             <div className = "dashboard-page-view-control-admin-header">ADMIN CONTROL</div>
             <div className = "dashboard-page-view-border-default"></div>
             {/* dropdown lists */}
+            <div className = "dashboard-page-view-selectfloor-ddcontainer" style = {{zIndex: 10}}>
+                <GenericDropdown
+                    ref = {selectFloorRef}
+                    options = {["Level 1-1", "Level 2-1", "Level 3-1"]}
+                    selectOption = {setSelectedFloor}
+                ></GenericDropdown>
+            </div>
+            <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
+                <GenericDropdown
+                    ref = {selectFloorRef}
+                    options = {["Level 1-1", "Level 2-1", "Level 3-1"]}
+                    selectOption = {setSelectedFloor}
+                ></GenericDropdown>
+            </div>
             {/* buttons */}
         </div>
     );

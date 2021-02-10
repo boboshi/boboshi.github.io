@@ -635,6 +635,7 @@
 
 .dashboard-page-view-control-floor-header
 {
+    z-index: -2;
     position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
@@ -646,6 +647,7 @@
 
 .dashboard-page-view-control-light-header
 {
+    z-index: -2;
     position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
@@ -657,6 +659,7 @@
 
 .dashboard-page-view-control-lighting-header
 {
+    z-index: -2;
     position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
@@ -668,6 +671,7 @@
 
 .dashboard-page-view-control-admin-header
 {
+    z-index: -2;
     position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
@@ -675,6 +679,103 @@
     font-size: max(0.8vw, 11.52px);
     top: 70%;
     left: 70%;
+}
+
+.dashboard-page-view-selectfloor-ddcontainer
+{
+    position: absolute;
+    top: 28%;
+    left: 5%;
+    width: 47%;
+    height: 8%;
+}
+
+.dashboard-page-view-selectlight-ddcontainer
+{
+    position: absolute;
+    top: 53%;
+    left: 5%;
+    width: 47%;
+    height: 8%;
+}
+
+.dashboard-page-view-dropdown
+{
+    border: 1px solid #C6C6C6;
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.dashboard-page-view-dropdown-choicetext
+{
+    z-index: 0;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.75vw, 10.8px);
+    font-weight: 500;
+    opacity: 1.0;
+    left: 4%;
+    top: -3%;
+}
+
+.dashboard-page-view-dropdown-downarrow
+{
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    transform: scale(0.85);
+}
+
+.dashboard-page-view-dropdown-uparrow
+{
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    transform: rotate(180deg) scale(0.85);
+}
+
+.dashboard-page-view-dropdown-list
+{
+    z-index: -1;
+    position: absolute;
+    background-color: #FFFFFF;
+    top: 100%;
+    width: 99.5%;
+    border-left: 1px solid #C6C6C6;
+    border-right: 1px solid #C6C6C6;
+    border-bottom: 1px solid #C6C6C6;
+    border-radius: 6px;
+    opacity: 1;
+}
+
+.dashboard-page-view-dropdown-ul
+{
+    list-style: none;
+}
+
+.dashboard-page-view-dropdown-ul:empty
+{
+    width: 100px;
+    height: 100px;
+    border: 10px solid #000000;
+}
+
+.dashboard-page-view-dropdown-ul li 
+{
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.75vw, 10.8px);
+    font-weight: 500;
+    padding: 8px 12px;
+}
+
+.dashboard-page-view-dropdown-ul li:hover 
+{
+    background-color: #e2e1e123;
+    cursor: pointer;
 }
 
 /* activity log */
