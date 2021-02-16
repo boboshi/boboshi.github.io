@@ -2,11 +2,11 @@
 {
   z-index: 3;
   position: absolute;
-  top: 25%;
+  top: 22%;
   margin-left: 82%;
   cursor: pointer;
   width: 1.7%;
-  height: 43.2%;
+  height: auto;
 
   transition-property: transform;
   transition-timing-function: cubic-bezier(.42, 0, .58, 1);
