@@ -4,6 +4,9 @@ import GenericDropdown from "../components/GenericDropdown";
 
 import Header from "../resources/dashboard/dashboard header.svg";
 import ControlIcon from "../resources/dashboard/settings_power-24px.svg";
+import BulbIcon from "../resources/dashboard/Icon material-lightbulb-outline (white).svg";
+import BulbFillIcon from "../resources/dashboard/Icon material-lightbulb-outline (white filled).svg";
+import LoopIcon from "../resources/dashboard/loop-circular.svg";
 
 function EnergyConsumption(props)
 {
@@ -25,22 +28,34 @@ function EnergyConsumption(props)
 
     function handleOnButtonClick()
     {
-
+        if (selectedFloor && selectedLights)
+            console.log("on " + selectedFloor + " " + selectedLights);
+        else
+            console.log("please select lights");
     }
 
     function handleOffButtonClick()
     {
-
+        if (selectedFloor && selectedLights)
+            console.log("off " + selectedFloor + " " + selectedLights);
+        else
+            console.log("please select lights");
     }
 
     function handleNormalButtonClick()
-    {
-
+    {  
+        if (selectedFloor && selectedLights)
+            console.log("normal " + selectedFloor + " " + selectedLights);
+        else
+            console.log("please select lights");
     }
 
     function handleLoopButtonClick()
     {
-
+        if (selectedFloor && selectedLights)
+            console.log("loop " + selectedFloor + " " + selectedLights);
+        else
+            console.log("please select lights");
     }
 
     return(
@@ -64,6 +79,7 @@ function EnergyConsumption(props)
                             ref = {selectFloorRef}
                             options = {floorOptions}
                             selectOption = {setSelectedFloor}
+                            disabled = {false}
                         ></GenericDropdown>
                     </div>
                     <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
@@ -71,12 +87,56 @@ function EnergyConsumption(props)
                             ref = {selectLightsRef}
                             options = {lightOptions}
                             selectOption = {setSelectedLights}
+                            disabled = {!selectedFloor}
                         ></GenericDropdown>
                     </div>
                 </div>
             }
             {/* buttons */}
-            <div className = "dashboard-page-view-control-onbutton"></div>
+            <div 
+                className = "dashboard-page-view-control-onbtn"
+                onClick = {handleOnButtonClick}
+            >
+                <img
+                    alt = ""
+                    src = {BulbIcon}
+                    className = "dashboard-page-view-control-btn-icon"
+                ></img>
+                <div className = "dashboard-page-view-control-btn-text">Turn On</div>
+            </div>
+            <div 
+                className = "dashboard-page-view-control-offbtn"
+                onClick = {handleOffButtonClick}
+            >
+                <img
+                    alt = ""
+                    src = {BulbFillIcon}
+                    className = "dashboard-page-view-control-btn-icon"
+                ></img>
+                <div className = "dashboard-page-view-control-btn-text">Turn Off</div>
+            </div>
+            <div 
+                className = "dashboard-page-view-control-normalbtn"
+                onClick = {handleNormalButtonClick}
+            >
+                <img
+                    alt = ""
+                    src = {BulbIcon}
+                    className = "dashboard-page-view-control-btn-icon"
+                ></img>
+                <div className = "dashboard-page-view-control-btn-text"v>NORMAL</div>
+            </div>
+            <div 
+                className = "dashboard-page-view-control-loopbtn"
+                onClick = {handleLoopButtonClick}
+            >
+                <img
+                    alt = ""
+                    src = {LoopIcon}
+                    className = "dashboard-page-view-control-btn-loopicon"
+                ></img>
+                <div className = "dashboard-page-view-control-btn-looptext">LOOP</div>
+            </div>
         </div>
     );
 }

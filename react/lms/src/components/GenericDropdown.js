@@ -1,3 +1,5 @@
+import "../resources/css/genericdropdown.css";
+
 import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from "react";
 
 import DownArrow from "../resources/dashboard/icon-dropdown-down.svg";
@@ -6,8 +8,8 @@ const GenericDropdown = forwardRef((props, ref) =>
 {
     const node = useRef();
     const [choice, setChoice] = useState("");
-    const [isOpen,setIsOpen] = useState(false);
-
+    const [isOpen, setIsOpen] = useState(false);
+    
     const optionsList = props.options.map(option =>
         <li 
              key = {option}
@@ -58,24 +60,42 @@ const GenericDropdown = forwardRef((props, ref) =>
         </div>
     );
 
+    const disabledTemplate =
+    (
+        <div className = "dashboard-page-view-dropdown-list">
+            
+        </div>
+    );
+
     return(
-        <div ref = {node} className = "dashboard-page-view-dropdown" onClick = {handleDropdownClick}>
-            <h1 className = "dashboard-page-view-dropdown-choicetext">
-                {choice}
-            </h1>
-            {isOpen ?             
-                <img 
-                    alt = ""
-                    src = {DownArrow}
-                    className = "dashboard-page-view-dropdown-uparrow"
-                ></img> :
-                <img 
-                    alt = ""
-                    src = {DownArrow}
-                    className = "dashboard-page-view-dropdown-downarrow"
-                ></img>
+        <div className = "holder">
+            {!props.disabled ? 
+                <div ref = {node} className = "dashboard-page-view-dropdown" onClick = {handleDropdownClick}>
+                    <h1 className = "dashboard-page-view-dropdown-choicetext">
+                        {choice}
+                    </h1>
+                    {isOpen ?             
+                        <img 
+                            alt = ""
+                            src = {DownArrow}
+                            className = "dashboard-page-view-dropdown-uparrow"
+                        ></img> :
+                        <img 
+                            alt = ""
+                            src = {DownArrow}
+                            className = "dashboard-page-view-dropdown-downarrow"
+                        ></img>
+                    }
+                    {isOpen && openMenuTemplate}
+                </div> :
+                <div className = "dashboard-page-view-dropdown-disabled">
+                    <img
+                        alt = ""
+                        src = {DownArrow}
+                        className = "dashboard-page-view-dropdown-downarrow"
+                    ></img>
+                </div>
             }
-            {isOpen && openMenuTemplate}
         </div>
     );
 });
