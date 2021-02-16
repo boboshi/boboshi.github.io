@@ -124,7 +124,7 @@ function EnergyConsumption(props)
                     src = {BulbIcon}
                     className = "dashboard-page-view-control-btn-icon"
                 ></img>
-                <div className = "dashboard-page-view-control-btn-text"v>NORMAL</div>
+                <div className = "dashboard-page-view-control-btn-text">NORMAL</div>
             </div>
             <div 
                 className = "dashboard-page-view-control-loopbtn"

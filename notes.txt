@@ -29,8 +29,6 @@ what in the fucks going on
 start getting proper assets in using adobe xd
 
 current task:
-fix non-boolean warning at lightcontrol
-ITS AT TE FUCKING BUTTONS
 
 missing assets:
 user dropdown hover icons
