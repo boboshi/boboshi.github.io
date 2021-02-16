@@ -8,13 +8,40 @@ import ControlIcon from "../resources/dashboard/settings_power-24px.svg";
 function EnergyConsumption(props)
 {
     const selectFloorRef = useRef();
+    const selectLightsRef = useRef();
+
+    const [floorOptions, setFloorOptions] = useState([]);
+    const [lightOptions, setLightOptions] = useState([]);
 
     const [selectedFloor, setSelectedFloor] = useState("");
+    const [selectedLights, setSelectedLights] = useState("");
 
     useEffect(() =>
     {
-        // simulate getting data
+        // simulate getting data  
+        setFloorOptions(["Level 1-1", "Level 2-1", "Level 3-1"]);
+        setLightOptions(["All Lights"]);
     }, []);
+
+    function handleOnButtonClick()
+    {
+
+    }
+
+    function handleOffButtonClick()
+    {
+
+    }
+
+    function handleNormalButtonClick()
+    {
+
+    }
+
+    function handleLoopButtonClick()
+    {
+
+    }
 
     return(
         <div className = "dashboard-page-view-control-container">
@@ -30,21 +57,26 @@ function EnergyConsumption(props)
             <div className = "dashboard-page-view-control-admin-header">ADMIN CONTROL</div>
             <div className = "dashboard-page-view-border-default"></div>
             {/* dropdown lists */}
-            <div className = "dashboard-page-view-selectfloor-ddcontainer" style = {{zIndex: 10}}>
-                <GenericDropdown
-                    ref = {selectFloorRef}
-                    options = {["Level 1-1", "Level 2-1", "Level 3-1"]}
-                    selectOption = {setSelectedFloor}
-                ></GenericDropdown>
-            </div>
-            <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
-                <GenericDropdown
-                    ref = {selectFloorRef}
-                    options = {["Level 1-1", "Level 2-1", "Level 3-1"]}
-                    selectOption = {setSelectedFloor}
-                ></GenericDropdown>
-            </div>
+            {floorOptions && lightOptions &&
+                <div>
+                    <div className = "dashboard-page-view-selectfloor-ddcontainer" style = {{zIndex: 10}}>
+                        <GenericDropdown
+                            ref = {selectFloorRef}
+                            options = {floorOptions}
+                            selectOption = {setSelectedFloor}
+                        ></GenericDropdown>
+                    </div>
+                    <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
+                        <GenericDropdown
+                            ref = {selectLightsRef}
+                            options = {lightOptions}
+                            selectOption = {setSelectedLights}
+                        ></GenericDropdown>
+                    </div>
+                </div>
+            }
             {/* buttons */}
+            <div className = "dashboard-page-view-control-onbutton"></div>
         </div>
     );
 }

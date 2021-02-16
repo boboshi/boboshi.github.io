@@ -189,7 +189,7 @@
     color: #333132;
     font-family: "work sans", sans-serif;
     font-size: max(1vw, 14.4px);
-    padding-top: 10%;
+    top: 21.5%;
     left: 8%;
 }
 
@@ -200,7 +200,7 @@
     color: #333132;
     font-family: "work sans", sans-serif;
     font-size: max(1vw, 14.4px);
-    padding-top: 10%;
+    top: 21.5%;
     left: 74%;
 }
 
@@ -210,7 +210,7 @@
     color: #333132;
     font-family: "work sans", sans-serif;
     font-size: max(1vw, 14.4px);
-    padding-top: 28%;
+    top: 60.2%;
     left: 14%;
 }
 
@@ -220,7 +220,7 @@
     color: #333132;
     font-family: "work sans", sans-serif;
     font-size: max(1vw, 14.4px);
-    padding-top: 28%;
+    top: 60.2%;
     left: 45%;
 }
 
@@ -230,7 +230,7 @@
     color: #333132;
     font-family: "work sans", sans-serif;
     font-size: max(1vw, 14.4px);
-    padding-top: 28%;
+    top: 60.2%;
     left: 77%;
 }
 

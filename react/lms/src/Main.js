@@ -1,3 +1,5 @@
+import "./resources/css/fonts.css";
+
 import React, {useEffect} from "react";
 import {Route, HashRouter, Redirect} from "react-router-dom";
 import LoginForm from "./components/LoginForm";

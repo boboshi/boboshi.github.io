@@ -23,10 +23,10 @@
 
 .dashboard-page-dropdown-choicetext
 {
-  color: #007497;
+  color: #005570;
   font-family: "work sans", sans-serif;
   font-size: max(1.2vw, 17.28px);
-  font-weight: 600;
+  font-weight: 500;
   opacity: 1.0;
   z-index: 0;
   position: absolute;
@@ -72,7 +72,7 @@
 {
   color: #6D6E71;
   font-family: "work sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   padding: 8px 12px;
 }
 
