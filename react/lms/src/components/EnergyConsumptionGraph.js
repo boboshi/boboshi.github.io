@@ -1,5 +1,5 @@
 import React from "react";
-import {Line, LineChart, Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
+import {Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import moment from "moment";
 
 function EnergyConsumptionGraph(props)

@@ -272,7 +272,7 @@
   position: relative;
   filter: invert(12%) sepia(83%) saturate(3999%) hue-rotate(181deg) brightness(98%) contrast(101%);
   opacity: 0.8;
-  top: -34%;
+  top: -35%;
   left: 10%;
   width: 44%;
   transition-property: transform;

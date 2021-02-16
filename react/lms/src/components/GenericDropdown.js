@@ -60,13 +60,6 @@ const GenericDropdown = forwardRef((props, ref) =>
         </div>
     );
 
-    const disabledTemplate =
-    (
-        <div className = "dashboard-page-view-dropdown-list">
-            
-        </div>
-    );
-
     return(
         <div className = "holder">
             {!props.disabled ? 
