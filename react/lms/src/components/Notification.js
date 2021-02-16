@@ -109,21 +109,23 @@ const Notification = forwardRef((props, ref) =>
     return(
         <div ref = {node}>
             {notifications.length ?
-                <div>
+                <div className = "dashboard-page-header-notification">
                     <img 
                         alt = "" 
                         src = {NotificationIconAlert} 
-                        className = "dashboard-page-header-notification"
+                        className = "dashboard-page-header-notification-img"
                         onClick = {handleNotificationClick}
                     ></img>
                     <div className = "dashboard-page-header-notification-number">{notifications.length}</div>
                 </div> :
-                <img 
-                    alt = "" 
-                    src = {NotificationIcon} 
-                    className = "dashboard-page-header-notification"
-                    onClick = {handleNotificationClick}
-                ></img>
+                <div className = "dashboard-page-header-notification">
+                    <img 
+                        alt = "" 
+                        src = {NotificationIcon} 
+                        className = "dashboard-page-header-notification-img"
+                        onClick = {handleNotificationClick}
+                    ></img>
+                </div>
             }
             {isOpen && openTemplate}
         </div>

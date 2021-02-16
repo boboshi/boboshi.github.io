@@ -31,6 +31,9 @@ start getting proper assets in using adobe xd
 current task:
 fix font sizes for placeholders
 dashboard view light control card
+
+missing assets:
+user dropdown hover icons
 ====================================================
 
 running steps:

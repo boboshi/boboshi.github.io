@@ -24,9 +24,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     axisLine = {false}
                     tickLine = {false}
@@ -39,9 +38,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     stroke = "#E0E0E0"
                     tick = {{fill: "#6D6E71"}}
@@ -50,9 +48,8 @@ function EnergyConsumptionGraph(props)
                     wrapperStyle = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     labelFormatter={index => ""}
                 />
@@ -94,9 +91,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     axisLine = {false}
                     tickLine = {false}
@@ -108,9 +104,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     stroke = "#E0E0E0"
                     tick = {{fill: "#6D6E71"}}
@@ -119,9 +114,8 @@ function EnergyConsumptionGraph(props)
                     wrapperStyle = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     labelFormatter={index => ""}
                 />
@@ -163,9 +157,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     axisLine = {false}
                     tickLine = {false}
@@ -177,9 +170,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     stroke = "#E0E0E0"
                     tick = {{fill: "#6D6E71"}}
@@ -188,9 +180,8 @@ function EnergyConsumptionGraph(props)
                     wrapperStyle = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     labelFormatter={index => ""}
                 />
@@ -232,9 +223,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     axisLine = {false}
                     tickLine = {false}
@@ -244,22 +234,20 @@ function EnergyConsumptionGraph(props)
                 />
                 <YAxis 
                     style = {{
-                        color: "#6D6E71",
+                        color: "#FFFFFF",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
-                    stroke = "#E0E0E0"
-                    tick = {{fill: "#6D6E71"}}
+                    stroke = "#FFFFFF"
+                    tick = {{fill: "#FFFFFF"}}
                 />
                 <Tooltip 
                     wrapperStyle = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     labelFormatter={index => ""}
                 />
@@ -301,9 +289,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     axisLine = {false}
                     tickLine = {false}
@@ -315,9 +302,8 @@ function EnergyConsumptionGraph(props)
                     style = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     stroke = "#E0E0E0"
                     tick = {{fill: "#6D6E71"}}
@@ -326,9 +312,8 @@ function EnergyConsumptionGraph(props)
                     wrapperStyle = {{
                         color: "#6D6E71",
                         fontFamily: "work sans, sans-serif",
-                        fontSize: "max(0.7vw, 10.08px)",
-                        fontWeight: "500",
-                        letterSpacing: "0.05em"
+                        fontSize: "max(0.572vw, 8.247px)",
+                        fontWeight: "400",
                     }}
                     labelFormatter={index => ""}
                 />

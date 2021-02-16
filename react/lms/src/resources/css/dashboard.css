@@ -6,6 +6,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  overflow: overlay;
 }
 
 .dashboard-page-header
@@ -271,7 +272,7 @@
   position: relative;
   filter: invert(12%) sepia(83%) saturate(3999%) hue-rotate(181deg) brightness(98%) contrast(101%);
   opacity: 0.8;
-  top: -36%;
+  top: -34%;
   left: 10%;
   width: 44%;
   transition-property: transform;
@@ -395,6 +396,8 @@
 { 
   color: #C6C6C6;
   font-family: "work sans", sans-serif;
+  font-size: max(0.9vw, 12.96px);
+  font-weight: 400;
   opacity: 0.4;
   text-align: left;
 }
@@ -403,6 +406,8 @@
 { 
   color: #C6C6C6;
   font-family: "work sans", sans-serif;
+  font-size: max(0.9vw, 12.96px);
+  font-weight: 400;
   opacity: 0.4;
   text-align: left;
 }
@@ -411,6 +416,8 @@
 { 
   color: #C6C6C6;
   font-family: "work sans", sans-serif;
+  font-size: max(0.9vw, 12.96px);
+  font-weight: 400;
   opacity: 0.4;
   text-align: left;
 }
