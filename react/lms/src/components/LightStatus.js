@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 
 import StatusHeader from "../resources/dashboard/status header.svg";
 import StatusIcon from "../resources/dashboard/history-24px.svg";

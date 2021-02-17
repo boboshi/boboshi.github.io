@@ -7,7 +7,7 @@ import DownArrow from "../resources/dashboard/icon-dropdown-down.svg";
 const GenericDropdown = forwardRef((props, ref) =>
 {
     const node = useRef();
-    const [choice, setChoice] = useState("");
+    const [choice, setChoice] = useState(props.default);
     const [isOpen, setIsOpen] = useState(false);
     
     const optionsList = props.options.map(option =>

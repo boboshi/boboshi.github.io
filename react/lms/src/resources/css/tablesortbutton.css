@@ -1,0 +1,10 @@
+.dashboard-view-tablesort-btn
+{
+    position: absolute;
+    border: 1px solid #000000;
+    top: -1px;
+    left: -15px;
+    height: 109%;
+    width: 1em;
+    cursor: pointer;
+}

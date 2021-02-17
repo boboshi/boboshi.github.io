@@ -22,7 +22,7 @@ function ActiveLights(props)
     const [lightData, setLightData] = useState([]);
 
     const activeLightsList = lightData.map(light =>
-        <tr key= {light.id}>
+        <tr key = {light.id}>
             <td className = "dashboard-page-view-activelights-table-id"> {light.id} - {light.detections}</td>
             <td className = "dashboard-page-view-activelights-table-date"> {light.date} </td>
             <td className = "dashboard-page-view-activelights-table-time"> {light.time} </td>
