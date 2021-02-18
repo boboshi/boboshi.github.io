@@ -379,7 +379,7 @@
     font-weight: 400;
     font-size: max(0.8vw, 11.52px);
     width: 90%;
-    margin-top: 8.5%;
+    margin-top: 15%;
     margin-left: 5%;
 }
 
@@ -432,7 +432,7 @@
     position: absolute;
     width: 89%;
     height: 0%;
-    margin-top: 3%;
+    margin-top: -2.5%;
     left: 5.25%;
     border: 1px solid #E0E0E0;
     opacity: 0.8
@@ -441,6 +441,7 @@
 .dashboard-page-view-activelights-table
 {
     padding-top: 5.5%;
+    border-collapse: collapse;
 }
 
 .dashboard-page-view-activelights-table tr:nth-child(odd)
@@ -948,7 +949,7 @@
     font-weight: 400;
     font-size: max(0.8vw, 11.52px);
     width: 89%;
-    margin-top: 8.5%;
+    margin-top: 11%;
     margin-left: 5.5%;
     margin-right: 5.5%;
 }
@@ -999,6 +1000,7 @@
 {
     padding-top: 2.2%;
     width: 100%;
+    border-collapse: collapse;
 }
 
 .dashboard-page-view-activity-table tr:nth-child(odd)
@@ -1013,7 +1015,7 @@
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
     width: 13.9%;
-    padding-top: 0.4%;
+    padding-top: 0.5%;
     padding-left: 3%;
 }
 
@@ -1024,7 +1026,7 @@
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
     width: 10.2%;
-    padding-top: 0.4%;
+    padding-top: 0.5%;
 }
 
 .dashboard-page-view-activity-showing
@@ -1331,7 +1333,7 @@
     font-weight: 400;
     font-size: max(0.8vw, 11.52px);
     width: 93%;
-    margin-top: 4.5%;
+    margin-top: 7%;
     margin-left: 3.55%;
     margin-right: 3.55%;
 }
@@ -1355,7 +1357,7 @@
     font-weight: 600;
     font-size: max(0.8vw, 11.52px);
     top: 17%;
-    left: 20%;
+    left: 26.6%;
 }
 
 .dashboard-page-view-status-table-header-time
@@ -1366,7 +1368,7 @@
     font-weight: 600;
     font-size: max(0.8vw, 11.52px);
     top: 17%;
-    left: 40%;
+    left: 50%;
 }
 
 .dashboard-page-view-status-table-header-status
@@ -1377,7 +1379,7 @@
     font-weight: 600;
     font-size: max(0.8vw, 11.52px);
     top: 17%;
-    left: 60%;
+    left: 73.35%;
 }
 
 .dashboard-page-view-status-table-divider
@@ -1394,7 +1396,7 @@
 {
     position: absolute;
     border: 1px solid #E0E0E0;
-    top: 90%;
+    top: 90.3%;
     width: 93%;
     height: 0%;
     opacity: 0.8
@@ -1404,6 +1406,7 @@
 {
     padding-top: 2.2%;
     width: 100%;
+    border-collapse: collapse;
 }
 
 .dashboard-page-view-status-table tr:nth-child(odd)
@@ -1417,8 +1420,8 @@
     font-family: "work sans", sans-serif;
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
-    width: 13.9%;
-    padding-top: 0.3%;
+    width: 10%;
+    padding-top: 0.4%;
     padding-left: 1.9%;
 }
 
@@ -1429,7 +1432,7 @@
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
     width: 10.2%;
-    padding-top: 0.3%;
+    padding-top: 0.4%;
 }
 
 .dashboard-page-view-status-table-time
@@ -1439,7 +1442,7 @@
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
     width: 10.2%;
-    padding-top: 0.3%;
+    padding-top: 0.4%;
 }
 
 .dashboard-page-view-status-table-status
@@ -1449,7 +1452,7 @@
     font-size: max(0.75vw, 10.8px);
     font-weight: 500;
     width: 10.2%;
-    padding-top: 0.3%;
+    padding-top: 0.4%;
 }
 
 .dashboard-page-view-status-showing

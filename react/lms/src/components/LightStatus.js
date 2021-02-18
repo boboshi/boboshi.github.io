@@ -172,19 +172,31 @@ function LightStatus(props)
             {lightStatusList &&
                 <div className = "dashboard-page-view-status-table-container">
                     <div className = "dashboard-page-view-status-table-header-name">
-
+                        <TableSortButton
+                            onClick = {handleNameClick}
+                            sort = {sortingMode === "name_descending" ? 2 : (sortingMode === "name_ascending" ? 1 : 0)}
+                        />
                         LIGHT
                     </div>
                     <div className = "dashboard-page-view-status-table-header-date">
-                        
+                        <TableSortButton
+                            onClick = {handleDateClick}
+                            sort = {sortingMode === "date_descending" ? 2 : (sortingMode === "date_ascending" ? 1 : 0)}
+                        />
                         LAST RESPONSE DATE
                     </div>
                     <div className = "dashboard-page-view-status-table-header-time">
-                        
+                        <TableSortButton
+                            onClick = {handleTimeClick}
+                            sort = {sortingMode === "time_descending" ? 2 : (sortingMode === "time_ascending" ? 1 : 0)}
+                        />
                         LAST RESPONSE TIME
                     </div>
                     <div className = "dashboard-page-view-status-table-header-status">
-                        
+                        <TableSortButton
+                            onClick = {handleStatusClick}
+                            sort = {sortingMode === "status_descending" ? 2 : (sortingMode === "status_ascending" ? 1 : 0)}
+                        />
                         STATUS
                     </div>
                     <div className = "dashboard-page-view-status-table-divider"></div>
