@@ -3,7 +3,7 @@ import "../resources/css/tablesortbutton.css";
 import DownArrow from "../resources/dashboard/chevron-down-outline.png";
 import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 
-import React, {useState} from "react";
+import React from "react";
 
 // props.sort 0 - no arrows 1 - up 2 - down
 
@@ -11,7 +11,6 @@ function TableSortButton(props)
 {
     return(
         <div className = "dashboard-view-tablesort-btn" onClick = {props.onClick}>
-            {/*{props.sort}*/}
             <img
                 alt = ""
                 src = {UpArrow}
