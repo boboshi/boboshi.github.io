@@ -1,10 +1,57 @@
 .dashboard-view-tablesort-btn
 {
     position: absolute;
-    border: 1px solid #000000;
-    top: -1px;
-    left: -15px;
-    height: 109%;
-    width: 1em;
+    top: 0.5px;
+    left: -12px;
+    height: 80%;
+    width: 0.8em;
     cursor: pointer;
+}
+
+.dashboard-view-tablesort-up
+{
+    position: absolute;
+    filter: invert(32%) sepia(99%) saturate(1725%) hue-rotate(160deg) brightness(98%) contrast(101%);
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 3%;
+    width: 90%;
+    height: 70%;
+}
+
+.dashboard-view-tablesort-up-off
+{
+    position: absolute;
+    filter: invert(100%) sepia(7%) saturate(611%) hue-rotate(317deg) brightness(111%) contrast(76%);
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 3%;
+    width: 90%;
+    height: 70%;
+}
+
+.dashboard-view-tablesort-down
+{
+    position: absolute;
+    filter: invert(32%) sepia(99%) saturate(1725%) hue-rotate(160deg) brightness(98%) contrast(101%);
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 48%;
+    width: 90%;
+    height: 70%;
+}
+
+.dashboard-view-tablesort-down-off
+{
+    position: absolute;
+    filter: invert(100%) sepia(7%) saturate(611%) hue-rotate(317deg) brightness(111%) contrast(76%);
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 48%;
+    width: 90%;
+    height: 70%;
 }
