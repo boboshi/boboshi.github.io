@@ -29,16 +29,16 @@ what in the fucks going on
 start getting proper assets in using adobe xd
 
 current task:
-figure out next/previous button setup for tables
-  - up to 5 in between? (including first and
-                         last)
-  - if more than 5 pages use ... between first/second,
-    2nd last/last
-
-get the fucking sorting result correct fuck
+pagination for sortable tables:
+  figure out next/previous button setup for tables
+    - up to 5 in between? (including first and
+                           last)
+    - if more than 5 pages use ... between first/second,
+      2nd last/last
 
 missing assets:
 user dropdown hover icons
+table sorting arrow icons
 ====================================================
 
 running steps:

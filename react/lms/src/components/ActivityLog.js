@@ -28,30 +28,35 @@ function ActivityLog(props)
         user_ascending: 
         {
             class: "user_ascending",
-            fn: (a, b) => b.user - a.user
+            fn: (a, b) => b.user.localeCompare(a.user)
         },
         action_descending: 
         {
             class: "action_descending",
-            fn: (a, b) => a.action - b.action
+            fn: (a, b) => a.action.localeCompare(b.action)
         },
         action_ascending: 
         {
             class: "action_ascending",
-            fn: (a, b) => b.action - a.action
+            fn: (a, b) => b.action.localeCompare(a.action)
         }
     };
 
     const entriesRef = useRef();
 
-    const [entriesOptions, setEntriesOptions] = useState([10, 20, 30]);
     const [currentOption, setCurrentOption] = useState(10);
     // user_descending, user_ascending, action_descending, action_ascending
     const [sortingMode, setSortingMode] = useState("user_descending");
+    const [currentPage, setCurrentPage] = useState(0);
+    const [lastPage, setLastPage] = useState(0);
 
     const [activityData, setActivityData] = useState([]);
+    const [displayData, setDisplayData] = useState([]);
 
-    let activityList = activityData.length && [...activityData].sort(sortTypes[sortingMode].fn).map(activity =>
+    let activityList = displayData.length && 
+        displayData.slice(currentPage * 10, (currentPage + 1) * 10)
+        .sort(sortTypes[sortingMode].fn)
+        .map(activity =>
         <tr key = {activity.user + activity.action}>
             <td className = "dashboard-page-view-activity-table-user">{activity.user}</td>
             <td className = "dashboard-page-view-activity-table-action">{activity.action}</td>
@@ -73,8 +78,25 @@ function ActivityLog(props)
         a.push(new ActivityObject("1.1.2 - 9463", "2020-09-08"));
         a.push(new ActivityObject("1.1.8 - 3955", "2020-09-09"));
         a.push(new ActivityObject("1.1.2 - 3697", "2020-09-10"));
+        a.push(new ActivityObject("1.1.3 - 3697", "2020-09-11"));
+        a.push(new ActivityObject("1.1.7 - 3697", "2020-09-12"));
+        a.push(new ActivityObject("1.2.1 - 9463", "2020-09-13"));
+        a.push(new ActivityObject("1.1.1 - 4120", "2020-09-14"));
+        a.push(new ActivityObject("1.1.5 - 4098", "2020-09-15"));
+        a.push(new ActivityObject("1.1.8 - 3955", "2020-09-16"));
+        a.push(new ActivityObject("1.1.2 - 3697", "2020-09-17"));
+        a.push(new ActivityObject("1.2.1 - 9463", "2020-09-18"));
+        a.push(new ActivityObject("1.1.8 - 3955", "2020-09-19"));
+        a.push(new ActivityObject("1.1.2 - 9463", "2020-09-20"));
+        a.push(new ActivityObject("1.1.8 - 3955", "2020-09-21"));
+        a.push(new ActivityObject("1.1.2 - 3697", "2020-09-22"));
+        a.push(new ActivityObject("1.1.3 - 3697", "2020-09-23"));
+        a.push(new ActivityObject("1.1.7 - 3697", "2020-09-24"));
 
         setActivityData(a);
+        var tmp = a.slice(0, currentOption);
+        setDisplayData(tmp);
+        setLastPage(Math.ceil(tmp.length / 10) - 1);
     }, []);
 
     function handleActivityLogRefresh()
@@ -85,57 +107,31 @@ function ActivityLog(props)
     function handleSelectOption(option)
     {
         setCurrentOption(option);
+        var tmp = activityData.slice(0, option);
+        setDisplayData(tmp);
+        setLastPage(Math.ceil(tmp.length / 10) - 1);
     }
 
     function handleUserClick()
     {
-        var tmp;
-
-        if (sortingMode === "action_descending" || sortingMode === "action_ascending" || sortingMode === "user_ascending")
-        {
-            setSortingMode("user_descending");
-            tmp = "user_descending";
-        }        
-        else
-        {
-            setSortingMode("user_ascending");
-            tmp = "user_ascending";
-        }
+        sortingMode === "user_descending" ? setSortingMode("user_ascending") : setSortingMode("user_descending");
     }
 
     function handleActionClick()
     {
-        var tmp;
-
-        if (sortingMode === "user_descending" || sortingMode === "user_ascending" || sortingMode === "action_ascending")
-        {
-            setSortingMode("action_descending");
-            tmp = "action_descending";
-        }
-        else
-        {
-            setSortingMode("action_ascending");
-            tmp = "action_ascending";
-
-        }
+        sortingMode === "action_descending" ? setSortingMode("action_ascending") : setSortingMode("action_descending");
     }
 
-    // table sorting
-    if (sortingMode === "user_descending")
+    function handlePrevClick()
     {
-
+        if (currentPage !== 0)
+            setCurrentPage(currentPage - 1);
     }
-    else if (sortingMode === "user_ascending")
-    {
 
-    }
-    else if (sortingMode === "action_descending")
+    function handleNextClick()
     {
-
-    }
-    else
-    {
-
+        if (currentPage !== lastPage)
+            setCurrentPage(currentPage + 1);
     }
 
     return(
@@ -161,7 +157,7 @@ function ActivityLog(props)
                 <GenericDropdown
                     ref = {entriesRef}
                     default = {10}
-                    options = {entriesOptions}
+                    options = {[10, 20, 30]}
                     selectOption = {handleSelectOption}
                     disabled = {false}
                 ></GenericDropdown>
@@ -194,14 +190,25 @@ function ActivityLog(props)
                     </table>
                     <div className = "dashboard-page-view-activity-table-divider2"></div>
                     <div className = "dashboard-page-view-activity-showing">
-                        Showing {0} {" "}
+                        Showing {currentPage * 10 + 1} {" "}
                         to {" "}
-                        {0} {" "}
+                        {currentPage === lastPage ? displayData.length : (currentPage + 1) * 10} {" "}
                         of {" "}
-                        {0} entries
+                        {displayData.length} entries
                     </div>
                 </div>
             }
+            {/* buttons */}
+            <div 
+                className = {currentPage === 0 ? "dashboard-page-view-activity-prev" : "dashboard-page-view-activity-prev-active"}
+                onClick = {handlePrevClick}>
+                PREVIOUS
+            </div>
+            <div 
+                className = {currentPage === lastPage ? "dashboard-page-view-activity-next" : "dashboard-page-view-activity-next-active"}
+                onClick = {handleNextClick}>
+                NEXT
+            </div>
         </div>
     );
 }
