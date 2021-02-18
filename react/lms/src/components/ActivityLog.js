@@ -20,26 +20,10 @@ function ActivityLog(props)
 {
     const sortTypes = 
     {
-        user_descending: 
-        {
-            class: "user_descending",
-            fn: (a, b) => a.user.localeCompare(b.user)
-        },
-        user_ascending: 
-        {
-            class: "user_ascending",
-            fn: (a, b) => b.user.localeCompare(a.user)
-        },
-        action_descending: 
-        {
-            class: "action_descending",
-            fn: (a, b) => a.action.localeCompare(b.action)
-        },
-        action_ascending: 
-        {
-            class: "action_ascending",
-            fn: (a, b) => b.action.localeCompare(a.action)
-        }
+        user_descending: (a, b) => a.user.localeCompare(b.user),
+        user_ascending: (a, b) => b.user.localeCompare(a.user),
+        action_descending: (a, b) => a.action.localeCompare(b.action),
+        action_ascending: (a, b) => b.action.localeCompare(a.action)
     };
 
     const entriesRef = useRef();
@@ -53,7 +37,7 @@ function ActivityLog(props)
     const [displayLength, setDisplayLength] = useState([]);
 
     let activityList = activityData.length && 
-        activityData.sort(sortTypes[sortingMode].fn)
+        activityData.sort(sortTypes[sortingMode])
         .slice(currentPage * 10, (currentPage + 1) * 10)
         .map(activity =>
         <tr key = {activity.user + activity.action}>
