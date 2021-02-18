@@ -44,18 +44,17 @@ function ActivityLog(props)
 
     const entriesRef = useRef();
 
-    const [currentOption, setCurrentOption] = useState("10");
     // user_descending, user_ascending, action_descending, action_ascending
     const [sortingMode, setSortingMode] = useState("user_descending");
     const [currentPage, setCurrentPage] = useState(0);
     const [lastPage, setLastPage] = useState(0);
 
     const [activityData, setActivityData] = useState([]);
-    const [displayData, setDisplayData] = useState([]);
+    const [displayLength, setDisplayLength] = useState([]);
 
-    let activityList = displayData.length && 
-        displayData.slice(currentPage * 10, (currentPage + 1) * 10)
-        .sort(sortTypes[sortingMode].fn)
+    let activityList = activityData.length && 
+        activityData.sort(sortTypes[sortingMode].fn)
+        .slice(currentPage * 10, (currentPage + 1) * 10)
         .map(activity =>
         <tr key = {activity.user + activity.action}>
             <td className = "dashboard-page-view-activity-table-user">{activity.user}</td>
@@ -94,13 +93,8 @@ function ActivityLog(props)
         a.push(new ActivityObject("1.1.7 - 3697", "2020-09-24"));
 
         setActivityData(a);
-        var tmp;
-        if (currentOption !== "ALL")
-            tmp = a.slice(0, parseInt(currentOption));
-        else
-            tmp = a;
-        setDisplayData(tmp);
-        setLastPage(Math.ceil(tmp.length / 10) - 1);
+        setDisplayLength(10);
+        setLastPage(0);
     }, []);
 
     function handleActivityLogRefresh()
@@ -110,14 +104,16 @@ function ActivityLog(props)
 
     function handleSelectOption(option)
     {
-        setCurrentOption(option);
-        var tmp;
-        if (option !== "ALL")
-            tmp = activityData.slice(0, option);
+        var len;
+        if (option === "ALL" || parseInt(option) > activityData.length)
+            len = activityData.length;
         else
-            tmp = activityData;
-        setDisplayData(tmp);
-        setLastPage(Math.ceil(tmp.length / 10) - 1);
+            len = option;
+        setDisplayLength(len);
+        var last = Math.ceil(len / 10) - 1;
+        setLastPage(last);
+        if (currentPage > last)
+            setCurrentPage(last);
     }
 
     function handleUserClick()
@@ -200,9 +196,9 @@ function ActivityLog(props)
                     <div className = "dashboard-page-view-activity-showing">
                         Showing {currentPage * 10 + 1} {" "}
                         to {" "}
-                        {currentPage === lastPage ? displayData.length : (currentPage + 1) * 10} {" "}
+                        {currentPage === lastPage ? displayLength : (currentPage + 1) * 10} {" "}
                         of {" "}
-                        {displayData.length} entries
+                        {displayLength} entries
                     </div>
                 </div>
             }
