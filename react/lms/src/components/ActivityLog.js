@@ -77,7 +77,7 @@ function ActivityLog(props)
         a.push(new ActivityObject("1.1.7 - 3697", "2020-09-24"));
 
         setActivityData(a);
-        setDisplayLength(10);
+        setDisplayLength(a.length < 10 ? a.length : 10);
         setLastPage(0);
     }, []);
 
@@ -144,7 +144,7 @@ function ActivityLog(props)
             <div className = "dashboard-page-view-activity-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {entriesRef}
-                    default = {10}
+                    default = {"10"}
                     options = {["10", "20", "30", "ALL"]}
                     selectOption = {handleSelectOption}
                     disabled = {false}

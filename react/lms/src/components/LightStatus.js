@@ -82,9 +82,10 @@ function LightStatus(props)
         a.push(new LightStatusObject("1.3.4", "2020-09-22", "17:44:22", "ON"));
         a.push(new LightStatusObject("1.3.5", "2020-09-23", "17:44:23", "OFF"));
         a.push(new LightStatusObject("1.3.6", "2020-09-24", "17:44:24", "ON"));
+        // 24 elements
 
         setLightStatusData(a);
-        setDisplayLength(10);
+        setDisplayLength(a.length < 10 ? a.length : 10);
         setLastPage(0);
     }, []);
 
@@ -98,7 +99,7 @@ function LightStatus(props)
         var len;
         if (option === "ALL" || parseInt(option) > lightStatusData.length)
             len = lightStatusData.length;
-        else;
+        else
             len = option;
         setDisplayLength(len);
         var last = Math.ceil(len / 10) - 1;
@@ -161,7 +162,7 @@ function LightStatus(props)
             <div className = "dashboard-page-view-status-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {entriesRef}
-                    default = {10}
+                    default = {"10"}
                     options = {["10", "20", "30", "ALL"]}
                     selectOption = {handleSelectOption}
                     disabled = {false}
@@ -207,10 +208,11 @@ function LightStatus(props)
                     </table>
                     <div className = "dashboard-page-view-status-table-divider2"></div>
                     <div className = "dashboard-page-view-status-showing">
-                        Showing {" "}
+                        Showing {currentPage * 10 + 1} {" "}
                         to {" "}
+                        {currentPage === lastPage ? displayLength : (currentPage + 1) * 10} {" "}
                         of {" "}
-                        entries
+                        {displayLength} entries
                     </div>
                 </div>                
             }
