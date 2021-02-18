@@ -154,21 +154,19 @@ function ActivityLog(props)
             {/* 0 - no arrows 1 - up 2 - down */}
             {activityList &&
                 <div className = "dashboard-page-view-activity-table-container">
-                    <div className = "dashboard-page-view-activity-table-header">
-                        <div className = "dashboard-page-view-activity-table-header-user">
-                            <TableSortButton 
-                                onClick = {handleUserClick} 
-                                sort = {sortingMode === "user_descending" ? 2 : (sortingMode === "user_ascending" ? 1 : 0)}
-                            />
-                            USER
-                        </div>
-                        <div className = "dashboard-page-view-activity-table-header-action">
-                            <TableSortButton 
-                                onClick = {handleActionClick}
-                                sort = {sortingMode === "action_descending" ? 2 : (sortingMode === "action_ascending" ? 1 : 0)}
-                            />
-                            ACTION
-                        </div>
+                    <div className = "dashboard-page-view-activity-table-header-user">
+                        <TableSortButton 
+                            onClick = {handleUserClick} 
+                            sort = {sortingMode === "user_descending" ? 2 : (sortingMode === "user_ascending" ? 1 : 0)}
+                        />
+                        USER
+                    </div>
+                    <div className = "dashboard-page-view-activity-table-header-action">
+                        <TableSortButton 
+                            onClick = {handleActionClick}
+                            sort = {sortingMode === "action_descending" ? 2 : (sortingMode === "action_ascending" ? 1 : 0)}
+                        />
+                        ACTION
                     </div>
                     <div className = "dashboard-page-view-activity-table-divider"></div>
                     <table className = "dashboard-page-view-activity-table">
