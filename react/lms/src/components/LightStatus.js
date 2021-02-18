@@ -82,7 +82,6 @@ function LightStatus(props)
         a.push(new LightStatusObject("1.3.4", "2020-09-22", "17:44:22", "ON"));
         a.push(new LightStatusObject("1.3.5", "2020-09-23", "17:44:23", "OFF"));
         a.push(new LightStatusObject("1.3.6", "2020-09-24", "17:44:24", "ON"));
-        // 24 elements
 
         setLightStatusData(a);
         setDisplayLength(a.length < 10 ? a.length : 10);
