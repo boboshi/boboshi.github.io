@@ -44,7 +44,7 @@ function ActivityLog(props)
 
     const entriesRef = useRef();
 
-    const [currentOption, setCurrentOption] = useState(10);
+    const [currentOption, setCurrentOption] = useState("10");
     // user_descending, user_ascending, action_descending, action_ascending
     const [sortingMode, setSortingMode] = useState("user_descending");
     const [currentPage, setCurrentPage] = useState(0);
@@ -94,7 +94,11 @@ function ActivityLog(props)
         a.push(new ActivityObject("1.1.7 - 3697", "2020-09-24"));
 
         setActivityData(a);
-        var tmp = a.slice(0, currentOption);
+        var tmp;
+        if (currentOption !== "ALL")
+            tmp = a.slice(0, parseInt(currentOption));
+        else
+            tmp = a;
         setDisplayData(tmp);
         setLastPage(Math.ceil(tmp.length / 10) - 1);
     }, []);
@@ -107,7 +111,11 @@ function ActivityLog(props)
     function handleSelectOption(option)
     {
         setCurrentOption(option);
-        var tmp = activityData.slice(0, option);
+        var tmp;
+        if (option !== "ALL")
+            tmp = activityData.slice(0, option);
+        else
+            tmp = activityData;
         setDisplayData(tmp);
         setLastPage(Math.ceil(tmp.length / 10) - 1);
     }
@@ -157,7 +165,7 @@ function ActivityLog(props)
                 <GenericDropdown
                     ref = {entriesRef}
                     default = {10}
-                    options = {[10, 20, 30]}
+                    options = {["10", "20", "30", "ALL"]}
                     selectOption = {handleSelectOption}
                     disabled = {false}
                 ></GenericDropdown>

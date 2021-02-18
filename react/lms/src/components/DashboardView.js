@@ -3,6 +3,7 @@ import "../resources/css/dashboardview.css";
 import React, {useEffect} from "react";
 
 import ExportButton from "../resources/dashboard/export button@2x.png";
+import Map from "../resources/dashboard/map@2x.png";
 
 import BlockLights from "../components/BlockLights";
 import ActiveLights from "../components/ActiveLights";
@@ -26,22 +27,30 @@ function DashboardView(props)
     }
 
     return(
-        <div className = "dashboard-page-view">
-            {/* export button */}
-            <img 
-                alt = "" 
-                src = {ExportButton} 
-                className = "dashboard-page-view-exportbtn"
-                onClick = {handleExportClick}
-            ></img>
-            <BlockLights />
-            <ActiveLights />
-            <EnergyConsumption />
-            <LightControl />
-            <ActivityLog />
-            <GatewayInfo />
-            <LightStatus />
+        <div>
+            {props.block ?
+                <div className = "dashboard-page-view">
+                    {/* export button */}
+                    <img 
+                        alt = "" 
+                        src = {ExportButton} 
+                        className = "dashboard-page-view-exportbtn"
+                        onClick = {handleExportClick}
+                    ></img>
+                    <BlockLights />
+                    <ActiveLights />
+                    <EnergyConsumption />
+                    <LightControl />
+                    <ActivityLog />
+                    <GatewayInfo />
+                    <LightStatus />
+                </div> :
+                <div>
+                    <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
+                </div>
+            }
         </div>
+
     );
 }
 
