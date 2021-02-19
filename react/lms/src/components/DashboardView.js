@@ -37,6 +37,7 @@ function DashboardView(props)
                         className = "dashboard-page-view-exportbtn"
                         onClick = {handleExportClick}
                     ></img>
+                    {/* cards */}
                     <BlockLights />
                     <ActiveLights />
                     <EnergyConsumption />
