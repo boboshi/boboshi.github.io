@@ -1465,3 +1465,96 @@
     top: 93.4%;
     left: 4.21%;
 }
+
+.dashboard-page-view-status-pagination-container
+{
+    position: absolute;
+    top: 93%;
+    left: 67%;
+    width: 30%;
+    height: 5.5%;
+}
+
+.dashboard-page-view-status-prev
+{
+    color: #C6C6C6;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    top: 93%;
+    left: 80%;
+    cursor: default;
+    float: right;
+}
+
+.dashboard-page-view-status-prev-active
+{
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    top: 93%;
+    left: 80%;
+    cursor: pointer;
+    float: right;
+}
+
+.dashboard-page-view-status-prev-active:hover
+{
+    filter: brightness(120%);
+}
+
+.dashboard-page-view-status-next
+{
+    color: #C6C6C6;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    top: 93%;
+    left: 91.3%;
+    cursor: default;
+    float: right;
+    margin-left: 5%;
+}
+
+.dashboard-page-view-status-next-active
+{
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    top: 93%;
+    left: 91.3%;
+    cursor: pointer;
+    float: right;
+    margin-left: 5%;
+}
+
+.dashboard-page-view-status-next-active:hover
+{
+    filter: brightness(120%);
+}
+
+.dashboard-page-view-status-page
+{
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    
+    cursor: pointer;
+    float: right;
+    margin-left: 5%;
+}
+
+.dashboard-page-view-status-page-current
+{
+    color: #C6C6C6;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    
+    cursor: default;
+    float: right;
+    margin-left: 5%;
+}

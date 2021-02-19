@@ -36,6 +36,22 @@ pagination for sortable tables:
     - if more than 5 pages use ... between first/second,
       2nd last/last
 
+    for 7 pages (+- 1 page from selected)
+    page 1:
+    prev 1 2 ... 7 next
+    page 2:
+    prev 1 2 3 ... 7 next   
+    page 3:
+    prev 1 2 3 4 ... 7 next
+    page 4:
+    prev 1 ... 3 4 5 ... 7 next
+    page 5:
+    prev 1 ... 4 5 6 7 next
+    page 6:
+    prev 1 ... 5 6 7 next
+    page 7:
+    prev 1 ... 6 7 next
+
 missing assets:
 user dropdown hover icons
 ====================================================

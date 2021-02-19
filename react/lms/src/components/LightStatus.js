@@ -18,6 +18,17 @@ class LightStatusObject
     }
 }
 
+class PageObject
+{
+    constructor(index, active, value, style)
+    {
+        this.index = index;
+        this.active = active;
+        this.value = value;
+        this.style = style;
+    }
+}
+
 function LightStatus(props)
 {
     const sortTypes =
@@ -45,13 +56,44 @@ function LightStatus(props)
         lightStatusData.sort(sortTypes[sortingMode])
         .slice(currentPage * 10, (currentPage + 1) * 10)
         .map(lightStatus =>
-        <tr key = {lightStatus.name}>
-            <td className = "dashboard-page-view-status-table-name">{lightStatus.name}</td>
-            <td className = "dashboard-page-view-status-table-date">{lightStatus.date}</td>
-            <td className = "dashboard-page-view-status-table-time">{lightStatus.time}</td>
-            <td className = "dashboard-page-view-status-table-status">{lightStatus.status}</td>
-        </tr>
-    );
+            <tr key = {lightStatus.name}>
+                <td className = "dashboard-page-view-status-table-name">{lightStatus.name}</td>
+                <td className = "dashboard-page-view-status-table-date">{lightStatus.date}</td>
+                <td className = "dashboard-page-view-status-table-time">{lightStatus.time}</td>
+                <td className = "dashboard-page-view-status-table-status">{lightStatus.status}</td>
+            </tr>
+        );
+
+    let pageListHelper = [];
+
+    for (var i = 0; i < lastPage + 1; ++i)
+    {
+        if (i === currentPage)
+        {
+            pageListHelper.push(new PageObject(i, false, i + 1, "dashboard-page-view-status-page-current"));
+        }
+        else if (i === 0 || i === lastPage || i === currentPage - 1 || i === currentPage + 1)
+        {
+            pageListHelper.push(new PageObject(i, true, i + 1, "dashboard-page-view-status-page"));
+        }
+        else if (i === currentPage - 2 || i === currentPage + 2)
+        {
+            pageListHelper.push(new PageObject(i, false, "...", "dashboard-page-view-status-page-current"));
+        }
+    }
+
+    let pageList = pageListHelper.length &&
+        pageListHelper
+        .slice(0).reverse()
+        .map((page) =>
+            <div
+                key = {page.index}
+                className = {page.style}
+                onClick={page.active ? () => handlePageClick(page.index) : () => {}}
+            >
+                {page.value}
+            </div>
+        );
 
     useEffect(() =>
     {
@@ -82,6 +124,13 @@ function LightStatus(props)
         a.push(new LightStatusObject("1.3.4", "2020-09-22", "17:44:22", "ON"));
         a.push(new LightStatusObject("1.3.5", "2020-09-23", "17:44:23", "OFF"));
         a.push(new LightStatusObject("1.3.6", "2020-09-24", "17:44:24", "ON"));
+        // 24
+
+        // + 40
+        for (var i = 0; i < 40; ++i)
+        {
+            a.push(new LightStatusObject("1.4." + i.toString(), "2020-09-25", "17:44:25", (i % 2) ? "ON" : "OFF"));
+        }
 
         setLightStatusData(a);
         setDisplayLength(a.length < 10 ? a.length : 10);
@@ -137,6 +186,11 @@ function LightStatus(props)
     {
         if (currentPage !== lastPage)
             setCurrentPage(currentPage + 1);
+    }
+
+    function handlePageClick(page)
+    {
+        setCurrentPage(page);
     }
 
     return(
@@ -216,7 +270,20 @@ function LightStatus(props)
                 </div>                
             }
             {/* buttons */}
-
+            <div className = "dashboard-page-view-status-pagination-container">
+                <div
+                    className = {currentPage === lastPage ? "dashboard-page-view-status-next" : "dashboard-page-view-status-next-active"}
+                    onClick = {handleNextClick}>
+                    NEXT
+                </div>
+                {/* pagination here */}
+                {lastPage > 1 && pageList}
+                <div
+                    className = {currentPage === 0 ? "dashboard-page-view-status-prev" : "dashboard-page-view-status-prev-active"}
+                    onClick = {handlePrevClick}>
+                    PREVIOUS
+                </div>
+            </div>
         </div>
     );
 }
