@@ -1050,6 +1050,7 @@
     top: 93%;
     left: 80%;
     cursor: default;
+    user-select: none;
 }
 
 .dashboard-page-view-activity-prev-active
@@ -1062,6 +1063,7 @@
     top: 93%;
     left: 80%;
     cursor: pointer;
+    user-select: none;
 }
 
 .dashboard-page-view-activity-prev-active:hover
@@ -1079,6 +1081,7 @@
     top: 93%;
     left: 91.3%;
     cursor: default;
+    user-select: none;
 }
 
 .dashboard-page-view-activity-next-active
@@ -1091,6 +1094,7 @@
     top: 93%;
     left: 91.3%;
     cursor: pointer;
+    user-select: none;
 }
 
 .dashboard-page-view-activity-next-active:hover
@@ -1485,6 +1489,7 @@
     left: 80%;
     cursor: default;
     float: right;
+    user-select: none;
 }
 
 .dashboard-page-view-status-prev-active
@@ -1497,6 +1502,7 @@
     left: 80%;
     cursor: pointer;
     float: right;
+    user-select: none;
 }
 
 .dashboard-page-view-status-prev-active:hover
@@ -1515,6 +1521,7 @@
     cursor: default;
     float: right;
     margin-left: 5%;
+    user-select: none;
 }
 
 .dashboard-page-view-status-next-active
@@ -1528,6 +1535,7 @@
     cursor: pointer;
     float: right;
     margin-left: 5%;
+    user-select: none;
 }
 
 .dashboard-page-view-status-next-active:hover
@@ -1545,6 +1553,7 @@
     cursor: pointer;
     float: right;
     margin-left: 5%;
+    user-select: none;
 }
 
 .dashboard-page-view-status-page-current
@@ -1557,4 +1566,5 @@
     cursor: default;
     float: right;
     margin-left: 5%;
+    user-select: none;
 }
