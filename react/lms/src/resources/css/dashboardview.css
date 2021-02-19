@@ -1040,29 +1040,34 @@
     left: 6.5%;
 }
 
-.dashboard-page-view-activity-prev
+.dashboard-page-view-activity-pagination-container
 {
     position: absolute;
+    top: 92.5%;
+    left: 45%;
+    width: 50%;
+    height: 5.5%;
+}
+
+.dashboard-page-view-activity-prev
+{
     color: #C6C6C6;
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 80%;
     cursor: default;
+    float: right;
     user-select: none;
 }
 
 .dashboard-page-view-activity-prev-active
 {
-    position: absolute;
     color: #005570;
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 80%;
     cursor: pointer;
+    float: right;
     user-select: none;
 }
 
@@ -1073,27 +1078,50 @@
 
 .dashboard-page-view-activity-next
 {
-    position: absolute;
     color: #C6C6C6;
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 91.3%;
     cursor: default;
+    float: right;
+    margin-left: 5%;
     user-select: none;
 }
 
 .dashboard-page-view-activity-next-active
 {
-    position: absolute;
     color: #005570;
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 91.3%;
     cursor: pointer;
+    float: right;
+    margin-left: 5%;
+    user-select: none;
+}
+
+.dashboard-page-view-activity-page
+{
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+    cursor: pointer;
+    float: right;
+    margin-left: 5%;
+    user-select: none;
+}
+
+.dashboard-page-view-activity-page-current
+{
+    color: #C6C6C6;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.91vw, 13.17px);
+
+    cursor: default;
+    float: right;
+    margin-left: 5%;
     user-select: none;
 }
 
@@ -1485,8 +1513,7 @@
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 80%;
+
     cursor: default;
     float: right;
     user-select: none;
@@ -1498,8 +1525,7 @@
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 80%;
+
     cursor: pointer;
     float: right;
     user-select: none;
@@ -1516,8 +1542,7 @@
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 91.3%;
+
     cursor: default;
     float: right;
     margin-left: 5%;
@@ -1530,8 +1555,7 @@
     font-family: "work sans", sans-serif;
     font-weight: 600;
     font-size: max(0.91vw, 13.17px);
-    top: 93%;
-    left: 91.3%;
+
     cursor: pointer;
     float: right;
     margin-left: 5%;

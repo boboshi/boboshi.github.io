@@ -69,17 +69,11 @@ function LightStatus(props)
     for (var i = 0; i < lastPage + 1; ++i)
     {
         if (i === currentPage)
-        {
             pageListHelper.push(new PageObject(i, false, i + 1, "dashboard-page-view-status-page-current"));
-        }
         else if (i === 0 || i === lastPage || i === currentPage - 1 || i === currentPage + 1)
-        {
             pageListHelper.push(new PageObject(i, true, i + 1, "dashboard-page-view-status-page"));
-        }
         else if (i === currentPage - 2 || i === currentPage + 2)
-        {
             pageListHelper.push(new PageObject(i, false, "...", "dashboard-page-view-status-page-current"));
-        }
     }
 
     let pageList = pageListHelper.length &&
@@ -128,9 +122,7 @@ function LightStatus(props)
 
         // + 40
         for (var i = 0; i < 40; ++i)
-        {
             a.push(new LightStatusObject("1.4." + i.toString(), "2020-09-25", "17:44:25", (i % 2) ? "ON" : "OFF"));
-        }
 
         setLightStatusData(a);
         setDisplayLength(a.length < 10 ? a.length : 10);
@@ -276,7 +268,6 @@ function LightStatus(props)
                     onClick = {handleNextClick}>
                     NEXT
                 </div>
-                {/* pagination here */}
                 {lastPage > 1 && pageList}
                 <div
                     className = {currentPage === 0 ? "dashboard-page-view-status-prev" : "dashboard-page-view-status-prev-active"}

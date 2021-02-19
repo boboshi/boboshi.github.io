@@ -16,6 +16,17 @@ class ActivityObject
     }
 }
 
+class PageObject
+{
+    constructor(index, active, value, style)
+    {
+        this.index = index;
+        this.active = active;
+        this.value = value;
+        this.style = style;
+    }
+}
+
 function ActivityLog(props)
 {
     const sortTypes = 
@@ -44,6 +55,31 @@ function ActivityLog(props)
             <td className = "dashboard-page-view-activity-table-user">{activity.user}</td>
             <td className = "dashboard-page-view-activity-table-action">{activity.action}</td>
         </tr>
+    );
+
+    let pageListHelper = [];
+
+    for (var i = 0; i < lastPage + 1; ++i)
+    {
+        if (i === currentPage)
+            pageListHelper.push(new PageObject(i, false, i + 1, "dashboard-page-view-activity-page-current"));
+        else if (i === 0 || i === lastPage || i === currentPage - 1 || i === currentPage + 1)
+            pageListHelper.push(new PageObject(i, true, i + 1, "dashboard-page-view-activity-page"));
+        else if (i === currentPage - 2 || i === currentPage + 2)
+            pageListHelper.push(new PageObject(i, false, "...", "dashboard-page-view-activity-page-current"));
+    }
+
+    let pageList = pageListHelper.length &&
+    pageListHelper
+    .slice(0).reverse()
+    .map((page) =>
+        <div
+            key = {page.index}
+            className = {page.style}
+            onClick={page.active ? () => handlePageClick(page.index) : () => {}}
+        >
+            {page.value}
+        </div>
     );
 
     useEffect(() =>
@@ -75,6 +111,11 @@ function ActivityLog(props)
         a.push(new ActivityObject("1.1.2 - 3697", "2020-09-22"));
         a.push(new ActivityObject("1.1.3 - 3697", "2020-09-23"));
         a.push(new ActivityObject("1.1.7 - 3697", "2020-09-24"));
+        // 24
+
+        // + 40
+        for (var i = 0; i < 40; ++i)
+            a.push(new ActivityObject("1.3." + i.toString() + " - 9999", "2020-09-25"));
 
         setActivityData(a);
         setDisplayLength(a.length < 10 ? a.length : 10);
@@ -120,6 +161,11 @@ function ActivityLog(props)
     {
         if (currentPage !== lastPage)
             setCurrentPage(currentPage + 1);
+    }
+
+    function handlePageClick(page)
+    {
+        setCurrentPage(page);
     }
 
     return(
@@ -185,15 +231,18 @@ function ActivityLog(props)
                 </div>
             }
             {/* buttons */}
-            <div 
-                className = {currentPage === 0 ? "dashboard-page-view-activity-prev" : "dashboard-page-view-activity-prev-active"}
-                onClick = {handlePrevClick}>
-                PREVIOUS
-            </div>
-            <div 
-                className = {currentPage === lastPage ? "dashboard-page-view-activity-next" : "dashboard-page-view-activity-next-active"}
-                onClick = {handleNextClick}>
-                NEXT
+            <div className = "dashboard-page-view-activity-pagination-container">
+                <div 
+                    className = {currentPage === lastPage ? "dashboard-page-view-activity-next" : "dashboard-page-view-activity-next-active"}
+                    onClick = {handleNextClick}>
+                    NEXT
+                </div>
+                {lastPage > 1 && pageList}
+                <div 
+                    className = {currentPage === 0 ? "dashboard-page-view-activity-prev" : "dashboard-page-view-activity-prev-active"}
+                    onClick = {handlePrevClick}>
+                    PREVIOUS
+                </div>
             </div>
         </div>
     );
