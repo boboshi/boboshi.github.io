@@ -63,6 +63,8 @@
     border-bottom: 1px solid #C6C6C6;
     border-radius: 6px;
     opacity: 1;
+    overflow-y: auto;
+    max-height: 700%;
 }
 
 .dashboard-page-view-dropdown-ul

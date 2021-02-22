@@ -397,7 +397,7 @@ function Dashboard(props)
                 </div>
             </div>
             <div className = "dashboard-page-selector">
-                <div className = "dashboard-page-selector-locationdropdown">
+                <div className = "dashboard-page-selector-locationdropdown" style = {{zIndex: 10}}>
                     <Dropdown 
                         ref = {locationDDRef}
                         title = "LOCATION"

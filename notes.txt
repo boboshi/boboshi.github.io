@@ -33,13 +33,17 @@ config page? three.js or adobe xd link
   - update boon leng on status, check with him for
     this
 
+scrollable dropdownbox:
+ul.dropdown-menu {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
 notes for config page
   - lol what the fuck is going on
-  - start/end time shouldn't be dd box??
   - circular dial input for brightness???
   - how does adding schedules even work lol
   - are the modes under the calendar fixed?
-  - 
 
 missing assets:
 user dropdown hover icons
