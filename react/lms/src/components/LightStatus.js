@@ -217,28 +217,40 @@ function LightStatus(props)
             {/* 0 - no arrows 1 - up 2 - down */}
             {lightStatusList &&
                 <div className = "dashboard-page-view-status-table-container">
-                    <div className = "dashboard-page-view-status-table-header-name">
+                    <div 
+                        className = "dashboard-page-view-status-table-header-name"
+                        onClick = {handleNameClick}
+                    >
                         <TableSortButton
                             onClick = {handleNameClick}
                             sort = {sortingMode === "name_descending" ? 2 : (sortingMode === "name_ascending" ? 1 : 0)}
                         />
                         LIGHT
                     </div>
-                    <div className = "dashboard-page-view-status-table-header-date">
+                    <div 
+                        className = "dashboard-page-view-status-table-header-date"
+                        onClick = {handleDateClick}
+                    >
                         <TableSortButton
                             onClick = {handleDateClick}
                             sort = {sortingMode === "date_descending" ? 2 : (sortingMode === "date_ascending" ? 1 : 0)}
                         />
                         LAST RESPONSE DATE
                     </div>
-                    <div className = "dashboard-page-view-status-table-header-time">
+                    <div 
+                        className = "dashboard-page-view-status-table-header-time"
+                        onClick = {handleTimeClick}
+                    >
                         <TableSortButton
                             onClick = {handleTimeClick}
                             sort = {sortingMode === "time_descending" ? 2 : (sortingMode === "time_ascending" ? 1 : 0)}
                         />
                         LAST RESPONSE TIME
                     </div>
-                    <div className = "dashboard-page-view-status-table-header-status">
+                    <div 
+                        className = "dashboard-page-view-status-table-header-status"
+                        onClick = {handleStatusClick}
+                    >
                         <TableSortButton
                             onClick = {handleStatusClick}
                             sort = {sortingMode === "status_descending" ? 2 : (sortingMode === "status_ascending" ? 1 : 0)}
