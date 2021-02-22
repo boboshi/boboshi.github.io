@@ -30,6 +30,42 @@ function DashboardView(props)
         <div>
             {props.block ?
                 <div className = "dashboard-page-view">
+                    {/* cards */}
+                    <BlockLights    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <ActiveLights    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <EnergyConsumption    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <LightControl    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <ActivityLog    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <GatewayInfo    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
+                    <LightStatus    
+                        location = {props.location}
+                        area = {props.area}
+                        block = {props.block} 
+                    />
                     {/* export button */}
                     <img 
                         alt = "" 
@@ -37,14 +73,6 @@ function DashboardView(props)
                         className = "dashboard-page-view-exportbtn"
                         onClick = {handleExportClick}
                     ></img>
-                    {/* cards */}
-                    <BlockLights />
-                    <ActiveLights />
-                    <EnergyConsumption />
-                    <LightControl />
-                    <ActivityLog />
-                    <GatewayInfo />
-                    <LightStatus />
                 </div> :
                 <div>
                     <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>

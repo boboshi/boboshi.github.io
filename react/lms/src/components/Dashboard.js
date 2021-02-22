@@ -70,18 +70,25 @@ function Dashboard(props)
     const locationDDRef = useRef();
     const areaDDRef = useRef();
     const blockDDRef = useRef();
+    const levelDDRef = useRef();
+    const lightDDRef = useRef();
+
     const notificationRef = useRef();
 
     const arrowVar = ">";
 
     const [darkMode, setDarkMode] = useState(false);
     const [version, setVersion] = useState(null);
-    const [selectedLocation, setSelectedLocation] = useState("");
-    const [selectedArea, setSelectedArea] = useState("");
-    const [selectedBlock, setSelectedBlock] = useState("");
     const [alerts, setAlerts] = useState(null);
     const [currUser, setCurrUser] = useState(null);
     const [userList, setUserList] = useState(null);
+
+    // dropdown
+    const [selectedLocation, setSelectedLocation] = useState("");
+    const [selectedArea, setSelectedArea] = useState("");
+    const [selectedBlock, setSelectedBlock] = useState("");
+    const [selectedLevel, setSelectedLevel] = useState("");
+    const [selectedLight, setSelectedLight] = useState("");
 
     // simulate getting data
     useEffect(() =>
@@ -172,8 +179,24 @@ function Dashboard(props)
     function setSelectedBlockHelper(block)
     {
         setSelectedBlock(block);
+        setSelectedLevel("");
+        if (levelDDRef.current)
+            levelDDRef.current.clearChoice();
         if (location.pathname === "/dashboard")
             goToPath("/dashboard/view");
+    }
+
+    function setSelectedLevelHelper(level)
+    {
+        setSelectedLevel(level);
+        setSelectedLight("");
+        if (lightDDRef.current)
+            lightDDRef.current.clearChoice();
+    }
+
+    function setSelectedLightHelper(light)
+    {
+        setSelectedLight(light);
     }
 
     function handleSearch(search)
@@ -201,39 +224,9 @@ function Dashboard(props)
         history.push("/login");
     }
 
-    function handleSidebarView()
+    function handleSidebarButton(path)
     {
-        goToPath("/dashboard/view");
-    }
-
-    function handleSidebarConfig()
-    {
-        goToPath("/dashboard/config");
-    }
-
-    function handleSidebarLight()
-    {
-        goToPath("/dashboard/light");
-    }
-
-    function handleSidebarPower()
-    {
-        goToPath("/dashboard/power");
-    }
-
-    function handleSidebarLightCycle()
-    {
-        goToPath("/dashboard/lightcycle");
-    }
-
-    function handleSidebarUser()
-    {
-        goToPath("/dashboard/usermanagement");
-    }
-
-    function handleSidebarAdd()
-    {
-        goToPath("/dashboard/add");
+        goToPath(path);
     }
 
     function handleSidebarDarkModeToggle()
@@ -247,6 +240,183 @@ function Dashboard(props)
         else
             dm[0].style.transform = "translate3d(90%, 0px, 0px)";
     }
+
+    const defaultPaths =
+    (
+        <div className = "dashboard-page-header-paths">
+            <div className = "dashboard-page-header-dashboardtext"
+                 onClick = {handleDashboardButton}>
+                DASHBOARD
+            </div>
+            {selectedLocation &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
+                                        "dashboard-page-header-buttontext"}
+                         onClick = {handleLocationButton}>
+                         {selectedLocation}
+                    </div>
+                </span>
+            }
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedBlock ? "dashboard-page-header-buttontext-selected" :
+                                        "dashboard-page-header-buttontext"}
+                         onClick = {handleAreaButton}>
+                        {selectedArea}
+                    </div>
+                </span>
+            }
+            {selectedBlock &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = "dashboard-page-header-buttontext-selected"
+                         onClick = {handleBlockButton}>
+                        {selectedBlock.toUpperCase()}
+                    </div>
+                </span>
+            }
+        </div>
+    );
+
+    const configPaths =
+    (
+        <div className = "dashboard-page-header-paths">
+            <div className = "dashboard-page-header-dashboardtext"
+                 onClick = {handleDashboardButton}>
+                DASHBOARD
+            </div>
+            <span>
+                <span className = "dashboard-page-header-patharrows">
+                    {arrowVar}
+                </span>
+                <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
+                                    "dashboard-page-header-buttontext"}
+                     onClick = {handleLocationButton}>
+                     CONFIGURE
+                </div>
+            </span>
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext" : 
+                                        "dashboard-page-header-buttontext-selected"}
+                         onClick = {handleAreaButton}>
+                         {selectedArea}
+                    </div>
+                </span>
+            }
+        </div>
+    );
+
+    const defaultTemplate =
+    (
+        <div className = "dashboard-page-selector">
+            <div className = "dashboard-page-selector-0" style = {{zIndex: 10}}>
+                <Dropdown 
+                    ref = {locationDDRef}
+                    title = "LOCATION"
+                    options = {["SINGAPORE"]}
+                    initial = {selectedLocation}
+                    selectOption = {setSelectedLocationHelper}
+                ></Dropdown>
+            </div>
+            {selectedLocation && 
+                <div>
+                    <div className = "dashboard-page-selector-1" style = {{zIndex: 10}}>
+                        <Dropdown
+                            ref = {areaDDRef}
+                            title = "AREA"
+                            options = {["GEYLANG"]}
+                            initial = {selectedArea}
+                            selectOption = {setSelectedAreaHelper}
+                        ></Dropdown>
+                    </div>
+                </div>
+            }
+            {selectedLocation && selectedArea &&
+                <div>
+                    <div className = "dashboard-page-selector-2" style = {{zIndex: 10}}>
+                        <Dropdown
+                            ref = {blockDDRef}
+                            title = "BLOCK"
+                            options = {["Office_Lights"]}
+                            initial = {selectedBlock}
+                            selectOption = {setSelectedBlockHelper}
+                        ></Dropdown>
+                    </div>
+                </div>
+            }
+            {location.pathname === "/dashboard" && selectedLocation &&
+                <div>
+                    <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
+                </div>
+            }
+        </div>
+    );
+
+    const configTemplate =
+    (
+        <div className = "dashboard-page-selector">
+            <div className = "dashboard-page-selector-0" style = {{zIndex: 10}}>
+                <Dropdown 
+                    ref = {areaDDRef}
+                    title = "AREA"
+                    options = {["GEYLANG"]}
+                    initial = {selectedArea}
+                    selectOption = {setSelectedAreaHelper}
+                ></Dropdown>
+            </div>
+            {selectedArea &&
+                <div>
+                    <div className = "dashboard-page-selector-1" style = {{zIndex: 10}}>
+                        <Dropdown
+                            ref = {blockDDRef}
+                            title = "BLOCK(S)"
+                            options = {["Office_Lights"]}
+                            initial = {selectedBlock}
+                            selectOption = {setSelectedBlockHelper}
+                        ></Dropdown>
+                    </div>
+                </div>
+            }
+            {selectedArea && selectedBlock &&
+                <div>
+                    <div className = "dashboard-page-selector-2" style = {{zIndex: 10}}>
+                        <Dropdown
+                            ref = {levelDDRef}
+                            title = "LEVEL"
+                            options = {["ALL SELECTED"]}
+                            initial = {selectedLevel}
+                            selectOption = {setSelectedLevelHelper}
+                        ></Dropdown>
+                    </div>
+                </div>
+            }
+            {selectedArea && selectedBlock && selectedLevel &&
+                <div>
+                    <div className = "dashboard-page-selector-3" style = {{zIndex: 10}}>
+                        <Dropdown
+                            ref = {lightDDRef}
+                            title = "LIGHT(S)"
+                            options = {["ALL SELECTED"]}
+                            initial = {selectedLight}
+                            selectOption = {setSelectedLightHelper}
+                        ></Dropdown>
+                    </div>
+                </div>
+            }
+        </div>
+    );
 
     return(
         <div className = "dashboard-page">
@@ -266,57 +436,7 @@ function Dashboard(props)
             </div>
             <div className = "dashboard-page-sidebar">
                 {/* path buttons */}
-                <div className = "dashboard-page-header-paths">
-                    <div className = "dashboard-page-header-dashboardtext"
-                         onClick = {handleDashboardButton}>
-                        DASHBOARD
-                    </div>
-                    {selectedLocation &&
-                        <span>
-                            <span className = "dashboard-page-header-patharrows">
-                                {arrowVar}
-                            </span>
-                            {!selectedArea ? 
-                                <div className = "dashboard-page-header-buttontext-selected"
-                                     onClick = {handleLocationButton}>
-                                     {selectedLocation}
-                                </div> : 
-                                <div className = "dashboard-page-header-buttontext"
-                                     onClick = {handleLocationButton}>
-                                    {selectedLocation}
-                                </div>
-                            }
-                        </span>
-                    }
-                    {selectedArea &&
-                        <span>
-                            <span className = "dashboard-page-header-patharrows">
-                                {arrowVar}
-                            </span>
-                            {!selectedBlock ? 
-                                <div className = "dashboard-page-header-buttontext-selected"
-                                     onClick = {handleAreaButton}>
-                                    {selectedArea}
-                                </div> : 
-                                <div className = "dashboard-page-header-buttontext"
-                                     onClick = {handleAreaButton}>
-                                    {selectedArea}
-                                </div>
-                            }
-                        </span>
-                    }
-                    {selectedBlock &&
-                        <span>
-                            <span className = "dashboard-page-header-patharrows">
-                                {arrowVar}
-                            </span>
-                            <div className = "dashboard-page-header-buttontext-selected"
-                                 onClick = {handleBlockButton}>
-                                {selectedBlock.toUpperCase()}
-                            </div>
-                        </span>
-                    }
-                </div>
+                {location.pathname === "/dashboard/config" ? configPaths : defaultPaths}
                 {/* sidebar toggle button */}
                 <button 
                     onClick = {sidebarToggle} 
@@ -332,49 +452,49 @@ function Dashboard(props)
                 {/* sidebar buttons */}
                 <div className = "dashboard-page-sidebar-icon-container">
                     <SidebarIcon 
-                        onClick = {handleSidebarView} 
+                        onClick = {handleSidebarButton}
                         path = "/dashboard/view" 
                         icon = {DashboardIcon} 
                         selectedicon = {DashboardSelectedIcon} 
                         tooltip = "Dashboard"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarConfig} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/config" 
                         icon = {ConfigIcon}
                         selectedicon = {ConfigSelectedIcon}
                         tooltip = "Configuration"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarLight} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/light" 
                         icon = {LightIcon}
                         selectedicon = {LightSelectedIcon}
                         tooltip = "Light"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarPower} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/power" 
                         icon = {PowerIcon}
                         selectedicon = {PowerSelectedIcon} 
                         tooltip = "Power"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarLightCycle} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/lightcycle" 
                         icon = {LightCycleIcon}
                         selectedicon = {LightCycleSelectedIcon} 
                         tooltip = "LightCycle"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarUser} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/usermanagement" 
                         icon = {UsersIcon}
                         selectedicon = {UsersSelectedIcon} 
                         tooltip = "Users"
                     ></SidebarIcon>
                     <SidebarIcon 
-                        onClick = {handleSidebarAdd} 
+                        onClick = {handleSidebarButton} 
                         path = "/dashboard/add" 
                         icon = {LibraryAddIcon}
                         selectedicon = {LibraryAddSelectedIcon}
@@ -396,87 +516,62 @@ function Dashboard(props)
                     <h1 className = "dashboard-page-sidebar-bottomtext-versiontext">VER {version}</h1>}
                 </div>
             </div>
-            <div className = "dashboard-page-selector">
-                <div className = "dashboard-page-selector-locationdropdown" style = {{zIndex: 10}}>
-                    <Dropdown 
-                        ref = {locationDDRef}
-                        title = "LOCATION"
-                        options = {["SINGAPORE"]}
-                        selectOption = {setSelectedLocationHelper}
-                    ></Dropdown>
+            {/* default, non-config page */}
+            {location.pathname !== "/dashboard/config" && defaultTemplate}
+            {/* config */}
+            {location.pathname === "/dashboard/config" && configTemplate}
+            {/* footer */}
+            <div className = {location.pathname !== "/dashboard/view" ? 
+                                (location.pathname !== "/dashboard/config" ? 
+                                    "dashboard-page-footer" : "dashboard-page-config-footer") : 
+                                        "dashboard-page-view-footer"}>
+                <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
+                <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
+            </div> :
+            <HashRouter>
+                <div className = "pages">
+                    <Route 
+                        path = "/dashboard/view" 
+                        render = {(props) => <DashboardView 
+                                                location = {selectedLocation}
+                                                area = {selectedArea}
+                                                block = {selectedBlock} 
+                                                {...props} />}
+                                            >
+                    </Route>
+                    <Route 
+                        path = "/dashboard/config" 
+                        render = {(props) => <DashboardConfig 
+                                                location = {selectedLocation}
+                                                area = {selectedArea}
+                                                block = {selectedBlock}
+                                                level = {selectedLevel}
+                                                lights = {selectedLight}
+                                                {...props} />}
+                                            >
+                    </Route>
+                    <Route 
+                        path = "/dashboard/light" 
+                        render = {(props) => <DashboardLight {...props} />}>
+                    </Route>
+                    <Route 
+                        path = "/dashboard/power" 
+                        render = {(props) => <DashboardPower {...props} />}>
+                    </Route>
+                    <Route 
+                        path = "/dashboard/lightcycle" 
+                        render = {(props) => <DashboardLightCycle {...props} />}>
+                    </Route>
+                    <Route 
+                        path = "/dashboard/usermanagement" 
+                        render = {(props) => <DashboardUserManagement {...props} />}>
+                    </Route>
+                    <Route 
+                        path = "/dashboard/add" 
+                        render = {(props) => <DashboardAdd {...props} />}>
+                    </Route>
                 </div>
-                {selectedLocation && 
-                    <div>
-                        <div className = "dashboard-page-selector-areadropdown">
-                            <Dropdown
-                                ref = {areaDDRef}
-                                title = "AREA"
-                                options = {["GEYLANG"]}
-                                selectOption = {setSelectedAreaHelper}
-                            ></Dropdown>
-                        </div>
-                    </div>
-                }
-                {selectedLocation && selectedArea &&
-                    <div>
-                        <div className = "dashboard-page-selector-blockdropdown">
-                            <Dropdown
-                                ref = {blockDDRef}
-                                title = "BLOCK"
-                                options = {["Office_Lights"]}
-                                selectOption = {setSelectedBlockHelper}
-                            ></Dropdown>
-                        </div>
-                    </div>
-                }
-                {location.pathname === "/dashboard" && selectedLocation &&
-                    <div>
-                        <img alt = "" src = {Map} className = "dashboard-page-selector-sgmapimg"></img>
-                    </div>
-                }
-                <HashRouter>
-                    <div className = "pages">
-                        <Route 
-                            path = "/dashboard/view" 
-                            render = {(props) => <DashboardView block = {selectedBlock} {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/config" 
-                            render = {(props) => <DashboardConfig {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/light" 
-                            render = {(props) => <DashboardLight {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/power" 
-                            render = {(props) => <DashboardPower {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/lightcycle" 
-                            render = {(props) => <DashboardLightCycle {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/usermanagement" 
-                            render = {(props) => <DashboardUserManagement {...props} />}>
-                        </Route>
-                        <Route 
-                            path = "/dashboard/add" 
-                            render = {(props) => <DashboardAdd {...props} />}>
-                        </Route>
-                    </div>
-                </HashRouter>
-            </div>
-            {location.pathname !== "/dashboard/view" ? 
-                <div className = "dashboard-page-footer">
-                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
-                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
-                </div> :
-                <div className = "dashboard-page-view-footer">
-                    <h1 className = "dashboard-page-footer-copyright">COPYRIGHT © 2020 AZTECH TECHNOLOGIES PTE LTD. ALL RIGHTS RESERVED.</h1>
-                    <h2 className = "dashboard-page-footer-privacy">PRIVACY POLICY · TERMS & CONDITIONS</h2>
-                </div>
-            }
+            </HashRouter>
         </div>
     );
 }

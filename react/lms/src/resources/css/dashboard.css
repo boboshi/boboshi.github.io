@@ -317,7 +317,7 @@
   height: 100%;
 }
 
-.dashboard-page-selector-locationdropdown
+.dashboard-page-selector-0
 {
   position: absolute;
   top: 8.89%;
@@ -326,7 +326,7 @@
   height: 5.75%;
 }
 
-.dashboard-page-selector-areadropdown
+.dashboard-page-selector-1
 {
   position: absolute;
   top: 8.89%;
@@ -335,11 +335,20 @@
   height: 5.75%;
 }
 
-.dashboard-page-selector-blockdropdown
+.dashboard-page-selector-2
 {
   position: absolute;
   top: 8.89%;
   left: 46.1%;
+  width: 15.1%;
+  height: 5.75%;
+}
+
+.dashboard-page-selector-3
+{
+  position: absolute;
+  top: 8.89%;
+  left: 63.1%;
   width: 15.1%;
   height: 5.75%;
 }

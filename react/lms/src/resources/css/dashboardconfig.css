@@ -1,9 +1,128 @@
 .dashboard-page-config
 {
-  position: absolute;
-  border: 1px solid #000000;
-  top: 17%;
-  left: 12%;
-  width: 81%;
-  height: 75%;
+    position: absolute;
+    top: 17%;
+    left: 12%;
+    width: 81%;
+    height: 100%;
+    text-align: left;
+}
+
+/* footer */
+.dashboard-page-config-footer
+{
+    position: absolute;
+    background: #F7F7F7 0% 0% no-repeat padding-box;
+    opacity: 1;
+    width: 100%;
+    height: 4%;
+    bottom: -27%;
+}
+
+/* top row headers */
+
+.dashboard-page-config-header-top
+{
+    width: 100%;
+    height: auto;
+}
+
+.dashboard-page-config-header-top-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    top: -0.1%;
+    left: 11.3%;
+}
+
+.dashboard-page-config-header-top-img
+{
+    position: absolute;
+    top: -1%;
+    left: -1.2%;
+    width: 102.4%;
+    height: auto;
+}
+
+.dashboard-page-config-header-top-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 2%;
+    left: 3%;
+    width: 5.5%;
+    height: auto;
+}
+
+/* motion sensor */
+
+.dashboard-page-config-ms-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    width: 31.8%;
+    height: 40%;
+}
+
+.dashboard-page-config-ms-button-container
+{
+    z-index: 1;
+    position: absolute;
+    border-radius: 14px;
+    background-color: #005570;
+    top: 1.4%;
+    left: 85%;
+    width: 9.3%;
+    height: 7%;
+    cursor: pointer;
+}
+
+.dashboard-page-config-ms-button-circle
+{
+    z-index: 1;
+    position: absolute;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 2px #00000029;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    width: 56%;
+    height: 91%;
+
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+    transition-duration: .1s;
+    /* -10%, 75% */
+    transform: translate(75%, 0%);
+}
+
+/* settings */
+
+.dashboard-page-config-settings-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    margin-left: 2%;
+    width: 31.8%;
+    height: 40%;
+}
+
+/* schedule */
+.dashboard-page-config-schedule-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    margin-left: 2%;
+    width: 31.8%;
+    height: 40%;
 }

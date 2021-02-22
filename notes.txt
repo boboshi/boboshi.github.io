@@ -45,6 +45,12 @@ notes for config page
   - how does adding schedules even work lol
   - are the modes under the calendar fixed?
 
+fix issue with child button not rerendering
+
+mini-tasks
+- generate array of times (for dropdown box)
+- 
+
 missing assets:
 user dropdown hover icons
 ====================================================

@@ -7,7 +7,7 @@ import UpArrow from "../resources/dashboard/chevron-up-outline.png";
 const Dropdown = forwardRef((props, ref) =>
 {
     const node = useRef();
-    const [choice, setChoice] = useState("");
+    const [choice, setChoice] = useState(props.initial);
     const [isOpen, setIsOpen] = useState(false);
 
     const optionsList = props.options.map(option =>
