@@ -65,15 +65,15 @@ function ConfigMotionSensor(props)
                 <img alt = "" src = {Header} className = "dashboard-page-config-header-top-img"></img>
             </div>
             {/* dropdown header */}
-            <div className = "dashboard-page-config-ms-header0">SENSITIVITY</div>
+            <div className = "dashboard-page-config-card-header0">SENSITIVITY</div>
             {/* info icon*/}
-            
+            <img title = "Set the motion sensensor's sensitivity." alt = "" src = {InfoIcon} className = "dashboard-page-config-ms-info"></img>
             {/* dropdown list */}
             <div className = "dashboard-page-config-ms-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {msRef}
                     default = {""}
-                    options = {["Low","Medium-Low","Medium", "Medium-High", "High"]}
+                    options = {["Low", "Medium-Low", "Medium", "Medium-High", "High"]}
                     selectOption = {props.setMS}
                     disabled = {motionSensorStatus === "ON" && props.lights ? false : true}
                 ></GenericDropdown>

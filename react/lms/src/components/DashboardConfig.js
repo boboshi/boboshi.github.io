@@ -11,6 +11,10 @@ import ConfigSchedule from "../components/ConfigSchedule";
 function DashboardConfig(props)
 {
     const [motionSensitivity, setMotionSensitivity] = useState("");
+    const [sync, setSync] = useState("ON");
+    const [intensity, setIntensity] = useState("");
+    const [holdTime, setHoldTime] = useState("");
+    const [holdTimeUnits, setHoldTimeUnits] = useState("");
 
     useEffect(() =>
     {
@@ -33,7 +37,12 @@ function DashboardConfig(props)
                 area = {props.area}
                 block = {props.block}
                 level = {props.level}
-                lights = {props.lights}    
+                lights = {props.lights}
+                sync = {sync}
+                setSync = {setSync}
+                setIntensity = {setIntensity}
+                setHoldTime = {setHoldTime}
+                setHoldTimeUnits = {setHoldTimeUnits}  
             />
             <ConfigSchedule 
                 location = {props.location}

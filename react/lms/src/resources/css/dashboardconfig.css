@@ -9,6 +9,7 @@
 }
 
 /* footer */
+
 .dashboard-page-config-footer
 {
     position: absolute;
@@ -59,6 +60,44 @@
     height: auto;
 }
 
+/* common headers */
+
+.dashboard-page-config-card-header0
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 20%;
+    left: 9%;
+}
+
+.dashboard-page-config-card-header1
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 47%;
+    left: 9%;
+}
+
+.dashboard-page-config-card-header2
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 74%;
+    left: 9%;
+}
+
 /* motion sensor */
 
 .dashboard-page-config-ms-container
@@ -68,7 +107,8 @@
     border: 1px solid #E0E0E0;
     border-radius: 3px;
     width: 31.8%;
-    height: 40%;
+    height: 35%;
+    vertical-align: top;
 }
 
 .dashboard-page-config-ms-button-container
@@ -80,7 +120,7 @@
     top: 1.4%;
     left: 85%;
     width: 9.3%;
-    height: 7%;
+    height: 7.875%;
     cursor: pointer;
 }
 
@@ -102,6 +142,30 @@
     transform: translate(75%, 0%);
 }
 
+.dashboard-page-config-ms-info
+{
+    position: absolute;
+    top: 16.25%;
+    left: 29%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-config-ms-info:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-config-ms-ddcontainer
+{
+    position: absolute;
+    top: 28%;
+    left: 8%;
+    width: 70%;
+    height: 8%;
+}
+
 /* settings */
 
 .dashboard-page-config-settings-container
@@ -112,27 +176,100 @@
     border-radius: 3px;
     margin-left: 2%;
     width: 31.8%;
-    height: 40%;
+    height: 35%;
+    vertical-align: top;
 }
 
-.dashboard-page-config-ms-header0
+.dashboard-page-config-settings-sync-info
 {
-    z-index: -2;
+    position: absolute;
+    top: 16.25%;
+    left: 32.3%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-config-settings-sync-info:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-config-settings-intensity-info
+{
+    position: absolute;
+    top: 43.2%;
+    left: 37.5%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-config-settings-intensity-info:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-config-settings-holdtime-info
+{
+    position: absolute;
+    top: 70.15%;
+    left: 29.3%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-config-settings-holdtime-info:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-config-clocktext
+{
     position: absolute;
     color: #333132;
     font-family: "work sans", sans-serif;
-    font-weight: 600;
-    font-size: max(0.8vw, 11.52px);
-    top: 16%;
-    left: 9%;
+    font-weight: 500;
+    font-size: max(0.91vw, 13.16px);
+    top: 29.7%;
+    left: 16%;
 }
 
-.dashboard-page-config-ms-ddcontainer
+.dashboard-page-config-radio
 {
     position: absolute;
-    top: 23%;
+    top: 29%;
+    left: 9%;
+    width: 5%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-config-settings-intensity-ddcontainer
+{
+    position: absolute;
+    top: 55%;
     left: 8%;
-    width: 47%;
+    width: 70%;
+    height: 8%;
+}
+
+.dashboard-page-config-settings-holdtime-ddcontainer
+{
+    position: absolute;
+    top: 82%;
+    left: 8%;
+    width: 25%;
+    height: 8%;
+}
+
+.dashboard-page-config-settings-holdtimeunits-ddcontainer
+{
+    position: absolute;
+    top: 82%;
+    left: 36%;
+    width: 41.9%;
     height: 8%;
 }
 
@@ -146,5 +283,6 @@
     border-radius: 3px;
     margin-left: 2%;
     width: 31.8%;
-    height: 40%;
+    height: 35%;
+    vertical-align: top;
 }
