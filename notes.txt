@@ -29,9 +29,6 @@ what in the fucks going on
 start getting proper assets in using adobe xd
 
 current task:
-config page? three.js or adobe xd link
-  - update boon leng on status, check with him for
-    this
 
 scrollable dropdownbox:
 ul.dropdown-menu {
@@ -41,11 +38,8 @@ ul.dropdown-menu {
 
 notes for config page
   - lol what the fuck is going on
-  - circular dial input for brightness???
+  - circular dial input for brightness (POSSIBLE)
   - how does adding schedules even work lol
-  - are the modes under the calendar fixed?
-
-fix issue with child button not rerendering
 
 mini-tasks
 - generate array of times (for dropdown box)

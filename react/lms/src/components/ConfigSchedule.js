@@ -13,7 +13,7 @@ function ConfigSchedule()
 
             {/* header */}
             <div className = "dashboard-page-config-header-top">
-                <h1 className = "dashboard-page-config-header-top-text">SCHEDULE</h1>
+                <h1 className = "dashboard-page-config-header-top-text">PRE-SET SCHEDULE</h1>
                 <img alt = "" src = {Header} className = "dashboard-page-config-header-top-img"></img>
             </div>
         </div>

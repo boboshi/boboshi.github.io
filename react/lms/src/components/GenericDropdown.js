@@ -87,6 +87,9 @@ const GenericDropdown = forwardRef((props, ref) =>
                         src = {DownArrow}
                         className = "dashboard-page-view-dropdown-downarrow"
                     ></img>
+                    <h1 className = "dashboard-page-view-dropdown-choicetext" style = {{opacity:0.5}}>
+                        {choice}
+                    </h1>
                 </div>
             }
         </div>

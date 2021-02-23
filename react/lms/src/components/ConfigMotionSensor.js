@@ -1,11 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
+
+import GenericDropdown from "../components/GenericDropdown";
 
 import Header from "../resources/dashboard/configheader-top.svg";
 import HeaderIcon from "../resources/dashboard/MotionSensor-icon-GY (black).svg";
+import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 
 function ConfigMotionSensor(props)
 {
-    const [motionSensorOn, setMotionSensorOn] = useState("");
+    const msRef = useRef();
+
+    const [motionSensorStatus, setMotionSensorStatus] = useState("ON");
 
     useEffect(() =>
     {
@@ -23,12 +28,14 @@ function ConfigMotionSensor(props)
         {
             circle[0].style.transform = "translate(75%, 0%)";
             container[0].style.backgroundColor = "#005570";
+            setMotionSensorStatus("ON");
         }
         // turn off
         else
         {
             circle[0].style.transform = "translate(-10%, 0%)";
             container[0].style.backgroundColor = "#333132";
+            setMotionSensorStatus("OFF")
         }
     }
 
@@ -47,7 +54,7 @@ function ConfigMotionSensor(props)
                 </div> :
                 <div
                     className = "dashboard-page-config-ms-button-container"
-                    style = {{opacity: 0.5, cursor: "default"}}
+                    style = {{opacity: 0.3, cursor: "default"}}
                 >
                     <div className = "dashboard-page-config-ms-button-circle"></div>
                 </div>
@@ -56,6 +63,20 @@ function ConfigMotionSensor(props)
             <div className = "dashboard-page-config-header-top">
                 <h1 className = "dashboard-page-config-header-top-text">MOTION SENSOR</h1>
                 <img alt = "" src = {Header} className = "dashboard-page-config-header-top-img"></img>
+            </div>
+            {/* dropdown header */}
+            <div className = "dashboard-page-config-ms-header0">SENSITIVITY</div>
+            {/* info icon*/}
+            
+            {/* dropdown list */}
+            <div className = "dashboard-page-config-ms-ddcontainer" style = {{zIndex: 10}}>
+                <GenericDropdown
+                    ref = {msRef}
+                    default = {""}
+                    options = {["Low","Medium-Low","Medium", "Medium-High", "High"]}
+                    selectOption = {props.setMS}
+                    disabled = {motionSensorStatus === "ON" && props.lights ? false : true}
+                ></GenericDropdown>
             </div>
         </div>
     );

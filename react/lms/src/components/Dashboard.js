@@ -133,12 +133,20 @@ function Dashboard(props)
         setSelectedLocation("");
         setSelectedArea("");
         setSelectedBlock("");
+        setSelectedLevel("");
+        setSelectedLight("");
+
         if (locationDDRef.current)
             locationDDRef.current.clearChoice();
         if (areaDDRef.current)
             areaDDRef.current.clearChoice();
         if (blockDDRef.current)
             blockDDRef.current.clearChoice();
+        if (levelDDRef.current)
+            levelDDRef.current.clearChoice();
+        if (lightDDRef.current)
+            lightDDRef.current.clearChoice();
+        
         goToPath("/dashboard");
     }
 
@@ -146,17 +154,31 @@ function Dashboard(props)
     {
         setSelectedArea("");
         setSelectedBlock("");
+        setSelectedLevel("");
+        setSelectedLight("");
+
         if (areaDDRef.current)
             areaDDRef.current.clearChoice();
         if (blockDDRef.current)
             blockDDRef.current.clearChoice();
+        if (levelDDRef.current)
+            levelDDRef.current.clearChoice();
+        if (lightDDRef.current)
+            lightDDRef.current.clearChoice();
     }
 
     function handleAreaButton()
     {
         setSelectedBlock("");
+        setSelectedLevel("");
+        setSelectedLight("");
+
         if (blockDDRef.current)
             blockDDRef.current.clearChoice();
+        if (levelDDRef.current)
+            levelDDRef.current.clearChoice();
+        if (lightDDRef.current)
+            lightDDRef.current.clearChoice();
     }
 
     function handleBlockButton()
@@ -179,9 +201,15 @@ function Dashboard(props)
     function setSelectedBlockHelper(block)
     {
         setSelectedBlock(block);
+
         setSelectedLevel("");
+        setSelectedLight("");
+
         if (levelDDRef.current)
             levelDDRef.current.clearChoice();
+        if (lightDDRef.current)
+            lightDDRef.current.clearChoice();
+        
         if (location.pathname === "/dashboard")
             goToPath("/dashboard/view");
     }
@@ -189,7 +217,9 @@ function Dashboard(props)
     function setSelectedLevelHelper(level)
     {
         setSelectedLevel(level);
+        
         setSelectedLight("");
+
         if (lightDDRef.current)
             lightDDRef.current.clearChoice();
     }
@@ -233,12 +263,12 @@ function Dashboard(props)
     {
         setDarkMode(!darkMode);
 
-        var dm = document.getElementsByClassName("dashboard-page-sidebar-icon-switch-circle");
-
-        if (dm[0].style.transform === "translate3d(90%, 0px, 0px)")
-            dm[0].style.transform = "translate3d(0%, 0px, 0px)";
+        var dm = document.getElementsByClassName("dashboard-page-sidebar-icon-darkmode-circle");
+        
+        if (dm[0].style.transform === "translate(-25%, -35%)")
+            dm[0].style.transform = "translate(60%, -35%)";
         else
-            dm[0].style.transform = "translate3d(90%, 0px, 0px)";
+            dm[0].style.transform = "translate(-25%, -35%)";
     }
 
     const defaultPaths =
@@ -503,10 +533,10 @@ function Dashboard(props)
                     {/* dark mode toggle button */}
                     <div
                         title = "Dark Mode"
-                        className = "dashboard-page-sidebar-icon-switch"
-                        onClick = {handleSidebarDarkModeToggle}>
-                        <img alt = "" src = {DarkModeIconBase} className = "dashboard-page-sidebar-icon-switchimg"></img>
-                        <img alt = "" src = {DarkModeIconCircle} className = "dashboard-page-sidebar-icon-switch-circle"></img>
+                        className = "dashboard-page-sidebar-darkmode-container"
+                        onClick = {handleSidebarDarkModeToggle}
+                    >
+                        <div className = "dashboard-page-sidebar-icon-darkmode-circle"></div>
                     </div>
                 </div>
                 {/* bottom text */}

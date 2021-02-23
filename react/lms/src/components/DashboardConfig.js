@@ -2,7 +2,7 @@
 
 import "../resources/css/dashboardconfig.css";
 
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 
 import ConfigMotionSensor from "../components/ConfigMotionSensor";
 import ConfigSettings from "../components/ConfigSettings";
@@ -10,6 +10,8 @@ import ConfigSchedule from "../components/ConfigSchedule";
 
 function DashboardConfig(props)
 {
+    const [motionSensitivity, setMotionSensitivity] = useState("");
+
     useEffect(() =>
     {
         // simulate getting data
@@ -23,21 +25,22 @@ function DashboardConfig(props)
                 area = {props.area}
                 block = {props.block}
                 level = {props.level}
-                lights = {props.light}    
+                lights = {props.lights}
+                setMS = {setMotionSensitivity}    
             />
             <ConfigSettings 
                 location = {props.location}
                 area = {props.area}
                 block = {props.block}
                 level = {props.level}
-                lights = {props.light}    
+                lights = {props.lights}    
             />
             <ConfigSchedule 
                 location = {props.location}
                 area = {props.area}
                 block = {props.block}
                 level = {props.level}
-                lights = {props.light}    
+                lights = {props.lights}    
             />
         </div>
     );
