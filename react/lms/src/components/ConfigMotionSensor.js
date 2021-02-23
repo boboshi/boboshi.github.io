@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 
 import GenericDropdown from "../components/GenericDropdown";
 
@@ -9,8 +9,6 @@ import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 function ConfigMotionSensor(props)
 {
     const msRef = useRef();
-
-    const [motionSensorStatus, setMotionSensorStatus] = useState("ON");
 
     useEffect(() =>
     {
@@ -28,14 +26,14 @@ function ConfigMotionSensor(props)
         {
             circle[0].style.transform = "translate(75%, 0%)";
             container[0].style.backgroundColor = "#005570";
-            setMotionSensorStatus("ON");
+            props.setMD("ON");
         }
         // turn off
         else
         {
             circle[0].style.transform = "translate(-10%, 0%)";
             container[0].style.backgroundColor = "#333132";
-            setMotionSensorStatus("OFF")
+            props.setMD("OFF");
         }
     }
 
@@ -73,9 +71,9 @@ function ConfigMotionSensor(props)
                 <GenericDropdown
                     ref = {msRef}
                     default = {"Medium-High"}
-                    options = {["Low", "Medium-Low", "Medium", "Medium-High", "High"]}
+                    options = {["High", "Medium-High", "Medium", "Medium-Low", "Low"]}
                     selectOption = {props.setMS}
-                    disabled = {motionSensorStatus === "ON" && props.lights ? false : true}
+                    disabled = {props.motionDetection === "ON" && props.lights ? false : true}
                 ></GenericDropdown>
             </div>
         </div>

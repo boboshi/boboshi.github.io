@@ -10,6 +10,7 @@ import ConfigSchedule from "../components/ConfigSchedule";
 
 function DashboardConfig(props)
 {
+    const [motionDetection, setMotionDetection] = useState("ON");
     const [motionSensitivity, setMotionSensitivity] = useState("");
     const [sync, setSync] = useState("ON");
     const [intensity, setIntensity] = useState("");
@@ -22,6 +23,15 @@ function DashboardConfig(props)
 
     }, []);
 
+    function handleSubmitButton()
+    {
+        console.log("motion detection: " + motionDetection);
+        console.log("motion sensitivity: " + motionSensitivity);
+        console.log("clock sync: " + sync);
+        console.log("light intensity: " + intensity);
+        console.log("hold time: " + holdTime + " " + holdTimeUnits);
+    }
+
     return(
         <div className = "dashboard-page-config">
             <ConfigMotionSensor 
@@ -30,6 +40,9 @@ function DashboardConfig(props)
                 block = {props.block}
                 level = {props.level}
                 lights = {props.lights}
+                motionDetection = {motionDetection}
+                motionSensitivity = {motionSensitivity}
+                setMD = {setMotionDetection}
                 setMS = {setMotionSensitivity}    
             />
             <ConfigSettings 
@@ -49,7 +62,7 @@ function DashboardConfig(props)
                 area = {props.area}
                 block = {props.block}
                 level = {props.level}
-                lights = {props.lights}    
+                lights = {props.lights}
             />
         </div>
     );

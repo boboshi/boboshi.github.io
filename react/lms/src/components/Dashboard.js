@@ -22,9 +22,6 @@ import UsersSelectedIcon from "../resources/dashboard/icon-users-selected.svg";
 import LibraryAddIcon from "../resources/dashboard/icon-add.svg";
 import LibraryAddSelectedIcon from "../resources/dashboard/icon-add-selected.svg";
 
-import DarkModeIconBase from "../resources/dashboard/md-switch-base.png";
-import DarkModeIconCircle from "../resources/dashboard/md-switch-circle.png";
-
 import AdminProfile from "../resources/dashboard/office-admin-profile.png";
 import DefaultUser from "../resources/dashboard/icon-userdropdown-default.svg";
 
@@ -264,9 +261,9 @@ function Dashboard(props)
         setDarkMode(!darkMode);
 
         var dm = document.getElementsByClassName("dashboard-page-sidebar-icon-darkmode-circle");
-        
+
         if (dm[0].style.transform === "translate(-25%, -35%)")
-            dm[0].style.transform = "translate(60%, -35%)";
+            dm[0].style.transform = "translate(70%, -35%)";
         else
             dm[0].style.transform = "translate(-25%, -35%)";
     }

@@ -10,8 +10,7 @@ import LoopIcon from "../resources/dashboard/loop-circular.svg";
 
 function EnergyConsumption(props)
 {
-    const selectFloorRef = useRef();
-    const selectLightsRef = useRef();
+    const ddRef = useRef();
 
     const [floorOptions, setFloorOptions] = useState([]);
     const [lightOptions, setLightOptions] = useState([]);
@@ -76,7 +75,7 @@ function EnergyConsumption(props)
                 <div>
                     <div className = "dashboard-page-view-selectfloor-ddcontainer" style = {{zIndex: 10}}>
                         <GenericDropdown
-                            ref = {selectFloorRef}
+                            ref = {ddRef}
                             default = {""}
                             options = {floorOptions}
                             selectOption = {setSelectedFloor}
@@ -85,7 +84,7 @@ function EnergyConsumption(props)
                     </div>
                     <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
                         <GenericDropdown
-                            ref = {selectLightsRef}
+                            ref = {ddRef}
                             default = {""}
                             options = {lightOptions}
                             selectOption = {setSelectedLights}

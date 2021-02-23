@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 
 import GenericDropdown from "../components/GenericDropdown";
 
@@ -12,9 +12,7 @@ let ddTime = Array.from({length: 60}, (_, i) => i + 1);
 
 function ConfigSettings(props)
 {
-    const intensityDDRef = useRef();
-    const holdDDRef0 = useRef();
-    const holdDDRef1 = useRef();
+    const ddRef = useRef();
 
     useEffect(() =>
     {
@@ -41,7 +39,7 @@ function ConfigSettings(props)
                 <h1 className = "dashboard-page-config-header-top-text">SETTINGS</h1>
                 <img alt = "" src = {Header} className = "dashboard-page-config-header-top-img"></img>
             </div>
-            {/* info iocns */}
+            {/* info icons */}
             <img title = "Sync device clock to PC clock." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-sync-info"></img>
             <img title = "Brightness transition speed." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-intensity-info"></img>
             <img title = "Amount of time to stay in triggered brightness." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-holdtime-info"></img>
@@ -62,16 +60,16 @@ function ConfigSettings(props)
             {/* dropdown lists */}
             <div className = "dashboard-page-config-settings-intensity-ddcontainer" style = {{zIndex: 11}}>
                 <GenericDropdown
-                    ref = {intensityDDRef}
+                    ref = {ddRef}
                     default = {"Fast"}
-                    options = {["Slow", "Medium", "Fast"]}
+                    options = {["Fast", "Medium", "Slow"]}
                     selectOption = {props.setIntensity}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
             </div>
             <div className = "dashboard-page-config-settings-holdtime-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
-                    ref = {holdDDRef0}
+                    ref = {ddRef}
                     default = {"15"}
                     options = {ddTime}
                     selectOption = {props.setHoldTime}
@@ -80,7 +78,7 @@ function ConfigSettings(props)
             </div>
             <div className = "dashboard-page-config-settings-holdtimeunits-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
-                    ref = {holdDDRef1}
+                    ref = {ddRef}
                     default = {"Seconds"}
                     options = {["Seconds", "Minutes"]}
                     selectOption = {props.setHoldTimeUnits}
