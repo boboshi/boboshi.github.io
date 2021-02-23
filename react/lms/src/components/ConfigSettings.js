@@ -8,6 +8,8 @@ import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 import RadioButtonOff from "../resources/dashboard/icon-radio-button-off.svg";
 import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 
+let ddTime = Array.from({length: 60}, (_, i) => i + 1);
+
 function ConfigSettings(props)
 {
     const intensityDDRef = useRef();
@@ -40,9 +42,9 @@ function ConfigSettings(props)
                 <img alt = "" src = {Header} className = "dashboard-page-config-header-top-img"></img>
             </div>
             {/* info iocns */}
-            <img title = "Enable/disable clock synchronization." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-sync-info"></img>
-            <img title = "Set light intensity." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-intensity-info"></img>
-            <img title = "Set hold time duration." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-holdtime-info"></img>
+            <img title = "Sync device clock to PC clock." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-sync-info"></img>
+            <img title = "Brightness transition speed." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-intensity-info"></img>
+            <img title = "Amount of time to stay in triggered brightness." alt = "" src = {InfoIcon} className = "dashboard-page-config-settings-holdtime-info"></img>
             {/* radio button header and description */}
             <div className = "dashboard-page-config-card-header0">SYNCHRONIZE</div>
             <div className = "dashboard-page-config-clocktext" style = {props.lights ? {opacity: 1.0} : {opacity: 0.5}}>Clock</div>
@@ -61,8 +63,8 @@ function ConfigSettings(props)
             <div className = "dashboard-page-config-settings-intensity-ddcontainer" style = {{zIndex: 11}}>
                 <GenericDropdown
                     ref = {intensityDDRef}
-                    default = {""}
-                    options = {["Low", "Medium", "High"]}
+                    default = {"Fast"}
+                    options = {["Slow", "Medium", "Fast"]}
                     selectOption = {props.setIntensity}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
@@ -70,8 +72,8 @@ function ConfigSettings(props)
             <div className = "dashboard-page-config-settings-holdtime-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {holdDDRef0}
-                    default = {""}
-                    options = {["Low", "Medium", "High"]}
+                    default = {"15"}
+                    options = {ddTime}
                     selectOption = {props.setHoldTime}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
@@ -80,7 +82,7 @@ function ConfigSettings(props)
                 <GenericDropdown
                     ref = {holdDDRef1}
                     default = {"Seconds"}
-                    options = {["Seconds", "Minutes", "Hours"]}
+                    options = {["Seconds", "Minutes"]}
                     selectOption = {props.setHoldTimeUnits}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
