@@ -371,3 +371,14 @@
 {
     filter: brightness(120%);
 }
+
+.dashboard-page-config-schedule-day-button-disabled
+{
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    margin-right: 7.1%;
+    opacity: 0.5;
+    cursor: default;
+}

@@ -97,13 +97,13 @@ function ConfigSchedule(props)
             </div>
             {/* day selector */}
             <div className = "dashboard-page-config-schedule-day-container">
-                <DaySelectorButton day = {"SUN"} onClick = {toggleDay} active = {dayActive[0]}></DaySelectorButton>
-                <DaySelectorButton day = {"MON"} onClick = {toggleDay} active = {dayActive[1]}></DaySelectorButton>
-                <DaySelectorButton day = {"TUE"} onClick = {toggleDay} active = {dayActive[2]}></DaySelectorButton>
-                <DaySelectorButton day = {"WED"} onClick = {toggleDay} active = {dayActive[3]}></DaySelectorButton>
-                <DaySelectorButton day = {"THU"} onClick = {toggleDay} active = {dayActive[4]}></DaySelectorButton>
-                <DaySelectorButton day = {"FRI"} onClick = {toggleDay} active = {dayActive[5]}></DaySelectorButton>
-                <DaySelectorButton day = {"SAT"} onClick = {toggleDay} active = {dayActive[6]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"SUN"} onClick = {toggleDay} active = {dayActive[0]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"MON"} onClick = {toggleDay} active = {dayActive[1]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"TUE"} onClick = {toggleDay} active = {dayActive[2]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"WED"} onClick = {toggleDay} active = {dayActive[3]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"THU"} onClick = {toggleDay} active = {dayActive[4]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"FRI"} onClick = {toggleDay} active = {dayActive[5]}></DaySelectorButton>
+                <DaySelectorButton disabled = {props.lights} day = {"SAT"} onClick = {toggleDay} active = {dayActive[6]}></DaySelectorButton>
             </div>
         </div>
     );

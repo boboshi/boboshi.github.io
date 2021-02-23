@@ -26,8 +26,6 @@ what in the fucks going on
 ====================================================
                      FRONT END
 ====================================================
-start getting proper assets in using adobe xd
-
 current task:
 
 scrollable dropdownbox:
@@ -44,6 +42,8 @@ notes for config page
 mini-tasks
 - generate array of times (for dropdown box)
 - 
+
+disable day selector when lights not selected
 
 missing assets:
 user dropdown hover icons
