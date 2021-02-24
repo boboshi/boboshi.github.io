@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 
-import GenericDropdown from "../components/GenericDropdown";
+import GenericDropdown from "./GenericDropdown";
 
 import Header from "../resources/dashboard/dashboard header.svg";
 import ControlIcon from "../resources/dashboard/settings_power-24px.svg";

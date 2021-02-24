@@ -6,13 +6,36 @@ import DaySelectorButton from "../components/DaySelectorButton";
 import Header from "../resources/dashboard/configheader-top.svg";
 import HeaderIcon from "../resources/dashboard/icon-schedule.svg";
 
+let ddTime = [];
+let hourcounter = -1;
+let hours = "00";
+let minutes = "00";
+
+for (var i = 0; i < 96; ++i)
+{
+    if (i % 4)
+        minutes = (i % 4 * 15).toString();
+    else
+        minutes = "00";
+
+    if (minutes === "00")
+        hourcounter++;
+
+    if (hourcounter < 10)
+        hours = "0" + hourcounter.toString();
+    else
+        hours = hourcounter.toString();
+
+    ddTime.push(hours + ":" + minutes + ":00");
+}
+
 function ConfigSchedule(props)
 {
     const ddRef = useRef();
 
     const [activity, setActivity] = useState("Photosensor Control");
-    const [start, setStart] = useState("07:00");
-    const [end, setEnd] = useState("18:59");
+    const [start, setStart] = useState("07:00:00");
+    const [end, setEnd] = useState("18:59:00");
     const [dayActive, setDayActive] = useState([false, true, true, true, true, true, false]);
 
     useEffect(() =>
@@ -23,7 +46,8 @@ function ConfigSchedule(props)
 
     function handleAddSchedule()
     {
-        
+        console.log("add schedule: activity: " + activity,
+                    " start: " + start + " end: " + end + " days: " + dayActive);
     }
 
     function toggleDay(day)
@@ -68,7 +92,7 @@ function ConfigSchedule(props)
             <div className = "dashboard-page-config-schedule-endtime-header">END TIME</div>
             <div className = "dashboard-page-config-card-header2">REPEAT</div>
             {/* dropdown lists */}
-            <div className = "dashboard-page-config-schedule-activities-ddcontainer" style = {{zIndex: 11}}>
+            <div className = "dashboard-page-config-schedule-activities-ddcontainer" style = {{zIndex: 2}}>
                 <GenericDropdown
                     ref = {ddRef}
                     default = {"Photosensor Control"}
@@ -77,21 +101,21 @@ function ConfigSchedule(props)
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
             </div>
-            <div className = "dashboard-page-config-schedule-start-ddcontainer" style = {{zIndex: 10}}>
+            <div className = "dashboard-page-config-schedule-start-ddcontainer" style = {{zIndex: 1}}>
                 <GenericDropdown
                     ref = {ddRef}
                     default = {start}
-                    options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
-                    selectOption = {setActivity}
+                    options = {ddTime}
+                    selectOption = {setStart}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
             </div>
-            <div className = "dashboard-page-config-schedule-end-ddcontainer" style = {{zIndex: 10}}>
+            <div className = "dashboard-page-config-schedule-end-ddcontainer" style = {{zIndex: 1}}>
                 <GenericDropdown
                     ref = {ddRef}
                     default = {end}
-                    options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
-                    selectOption = {setActivity}
+                    options = {ddTime}
+                    selectOption = {setEnd}
                     disabled = {props.lights ? false : true}
                 ></GenericDropdown>
             </div>

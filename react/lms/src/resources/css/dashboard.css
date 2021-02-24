@@ -11,7 +11,7 @@
 
 .dashboard-page-header
 {
-  z-index: 1;
+  z-index: 3;
   position: absolute;
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border-bottom: 1px solid #C6C6C6;
@@ -141,7 +141,7 @@
 
 .dashboard-page-sidebar
 {
-  z-index: 2;
+  z-index: 4;
   position: absolute;
   background: #FFFFFF 0% 0% no-repeat padding-box;
   border-right: 1px solid #C6C6C6;

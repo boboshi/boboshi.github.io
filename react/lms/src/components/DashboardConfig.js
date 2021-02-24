@@ -4,9 +4,10 @@ import "../resources/css/dashboardconfig.css";
 
 import React, {useState, useEffect} from "react";
 
-import ConfigMotionSensor from "../components/ConfigMotionSensor";
-import ConfigSettings from "../components/ConfigSettings";
-import ConfigSchedule from "../components/ConfigSchedule";
+import ConfigMotionSensor from "./ConfigMotionSensor";
+import ConfigSettings from "./ConfigSettings";
+import ConfigSchedule from ".//ConfigSchedule";
+import ConfigBrightness from "./ConfigBrightness";
 
 function DashboardConfig(props)
 {
@@ -16,6 +17,9 @@ function DashboardConfig(props)
     const [intensity, setIntensity] = useState("");
     const [holdTime, setHoldTime] = useState("");
     const [holdTimeUnits, setHoldTimeUnits] = useState("");
+    const [dimmedBrightness, setDimmedBrightness] = useState(70);
+    const [motionBrightness, setMotionBrightness] = useState(70);
+    const [maxBrightness, setMaxBrightness] = useState(70);
 
     useEffect(() =>
     {
@@ -63,6 +67,15 @@ function DashboardConfig(props)
                 block = {props.block}
                 level = {props.level}
                 lights = {props.lights}
+            />
+            <ConfigBrightness
+                lights = {props.lights}
+                dimmedBrightness = {dimmedBrightness}
+                motionBrightness = {motionBrightness}
+                maxBrightness = {maxBrightness}
+                setDimmed = {setDimmedBrightness}
+                setMotion = {setMotionBrightness}
+                setMax = {setMaxBrightness}
             />
         </div>
     );

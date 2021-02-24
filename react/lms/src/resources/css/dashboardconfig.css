@@ -44,7 +44,7 @@
 .dashboard-page-config-header-top-img
 {
     position: absolute;
-    top: -1%;
+    top: -1.1%;
     left: -1.2%;
     width: 102.4%;
     height: auto;
@@ -346,6 +346,7 @@
 
 .dashboard-page-config-schedule-day-container
 {
+    z-index: 0;
     position: absolute;
     border: 1px solid #C6C6C6;
     border-radius: 6px;
@@ -381,4 +382,74 @@
     margin-right: 7.1%;
     opacity: 0.5;
     cursor: default;
+}
+
+/* brightness */
+
+.dashboard-page-config-brightness-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    margin-top: 2%;
+    width: 65.8%;
+    height: 35%;
+    text-align: center;
+}
+
+.dashboard-page-config-header-brightness
+{
+    width: 100%;
+    height: auto;
+}
+
+.dashboard-page-config-header-brightness-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    top: -0.1%;
+    left: 5.5%;
+}
+
+.dashboard-page-config-header-brightness-img
+{
+    position: absolute;
+    top: -1.1%;
+    left: -0.6%;
+    width: 101.15%;
+    height: auto;
+}
+
+.dashboard-page-config-header-brightness-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 2%;
+    left: 1.8%;
+    width: 2%;
+    height: auto;
+}
+
+.dashboard-page-config-brightness-input-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #C6C6C6;
+    border-radius: 6px;
+    margin-top: 8%;
+    margin-left: 3.7%;
+    margin-right: 3.7%;
+    width: 24.43%;
+    height: 67.9%;
+}
+
+.dashboard-page-config-brightness-input-info
+{
+
 }

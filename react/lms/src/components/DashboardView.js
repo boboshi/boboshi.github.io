@@ -5,13 +5,13 @@ import React, {useEffect} from "react";
 import ExportButton from "../resources/dashboard/export button@2x.png";
 import Map from "../resources/dashboard/map@2x.png";
 
-import BlockLights from "../components/BlockLights";
-import ActiveLights from "../components/ActiveLights";
-import EnergyConsumption from "../components/EnergyConsumption";
-import LightControl from "../components/LightControl";
-import ActivityLog from "../components/ActivityLog";
-import GatewayInfo from "../components/GatewayInfo";
-import LightStatus from "../components/LightStatus";
+import BlockLights from "./BlockLights";
+import ActiveLights from "./ActiveLights";
+import EnergyConsumption from "./EnergyConsumption";
+import LightControl from "./LightControl";
+import ActivityLog from "./ActivityLog";
+import GatewayInfo from "./GatewayInfo";
+import LightStatus from "./LightStatus";
 
 function DashboardView(props)
 {

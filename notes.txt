@@ -39,12 +39,6 @@ notes for config page
   - circular dial input for brightness (POSSIBLE)
   - how does adding schedules even work lol
 
-mini-tasks
-- generate array of times (for dropdown box)
-- 
-
-disable day selector when lights not selected
-
 missing assets:
 user dropdown hover icons
 ====================================================
