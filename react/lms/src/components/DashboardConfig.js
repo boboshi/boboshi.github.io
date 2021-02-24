@@ -27,6 +27,11 @@ function DashboardConfig(props)
 
     }, []);
 
+    function handleCancelButton()
+    {
+        console.log("CANCELLED");
+    }
+
     function handleSubmitButton()
     {
         console.log("motion detection: " + motionDetection);

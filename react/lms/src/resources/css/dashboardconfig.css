@@ -451,5 +451,15 @@
 
 .dashboard-page-config-brightness-input-info
 {
+    position: absolute;
+    top: -2%;
+    left: 83%;
+    width: 17.805%;
+    height: auto;
+    cursor: pointer;
+}
 
+.dashboard-page-config-brightness-input-info:hover
+{
+    transform: scale(1.1);
 }
