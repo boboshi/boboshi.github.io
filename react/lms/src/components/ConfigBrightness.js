@@ -24,7 +24,7 @@ function ConfigBrightness(props)
             </div>
             {/* inputs */}
             <ConfigBrightnessInput
-                label = {"Dimmed"}
+                label = {"Dimmed"} 
                 info = {"Brightness when dimmed (idle)."}
                 level = {props.dimmedBrightness} 
                 set = {props.setDimmed}

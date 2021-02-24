@@ -17,9 +17,9 @@ function DashboardConfig(props)
     const [intensity, setIntensity] = useState("");
     const [holdTime, setHoldTime] = useState("");
     const [holdTimeUnits, setHoldTimeUnits] = useState("");
-    const [dimmedBrightness, setDimmedBrightness] = useState(70);
-    const [motionBrightness, setMotionBrightness] = useState(70);
-    const [maxBrightness, setMaxBrightness] = useState(70);
+    const [dimmedBrightness, setDimmedBrightness] = useState(0.7);
+    const [motionBrightness, setMotionBrightness] = useState(0.7);
+    const [maxBrightness, setMaxBrightness] = useState(0.7);
 
     useEffect(() =>
     {
