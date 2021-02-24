@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {CircularInput, CircularTrack, CircularProgress, CircularThumb} from "react-circular-input";
+import {CircularInput, CircularTrack, CircularProgress, CircularThumb, useCircularInputContext} from "react-circular-input";
 
 import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 
@@ -15,7 +15,7 @@ function ConfigBrightnessInput(props)
 
     useEffect(() => 
     {    
-        // simulate getting data
+        // really dirty
         window.addEventListener("resize", handleResize);
     
         return () => {window.removeEventListener("resize", handleResize);};
@@ -24,7 +24,6 @@ function ConfigBrightnessInput(props)
     function setValueHelper(value)
     {
         props.set(stepValue(value));
-        console.log(windowWidth);
     }
 
     function placeholder() {}
@@ -50,9 +49,14 @@ function ConfigBrightnessInput(props)
             >
 		        <CircularTrack strokeWidth = {15} stroke = {"#F5FBFF"} fill = {"#F5FBFF"}/>
 		        <CircularProgress  strokeWidth = {15} strokeLinecap = "butt" stroke = {"#00C2FF"}/>
-		        <CircularThumb cursor = {props.disabled ? "default" : "pointer"} r = {10} fill = {"#00C2FF"}/>
+		        <CircularThumb 
+                    cursor = {props.disabled ? "default" : "pointer"} 
+                    r = {10} 
+                    fill = {"#00C2FF"}
+                />
+                <InputHandleShadow />
 	        </CircularInput>
-            { /* ???? */}
+            { /* label and value display */}
             <div className = "dashboard-page-config-brightness-input-label">
                 {props.label}
             </div>
@@ -60,6 +64,21 @@ function ConfigBrightnessInput(props)
                 {Math.round(props.level * 100) + "%"}
             </div>
         </div>
+    );
+}
+
+function InputHandleShadow()
+{
+    const {getPointFromValue, value} = useCircularInputContext();
+    const point = getPointFromValue();
+    if (!point) return null;
+
+    return(
+        <text
+            {...point}
+        >
+            ?????
+        </text>
     );
 }
 
