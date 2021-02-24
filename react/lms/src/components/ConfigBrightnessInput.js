@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {CircularInput, CircularTrack, CircularProgress, CircularThumb} from "react-circular-input";
 
 import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
@@ -6,16 +6,25 @@ import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 function ConfigBrightnessInput(props)
 {
     const stepValue = v => Math.round(v * 20) / 20;
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    useEffect(() =>
+    const handleResize = (e) => 
     {
-        // simulate getting data
+        setWindowWidth(window.innerWidth);
+    };
 
+    useEffect(() => 
+    {    
+        // simulate getting data
+        window.addEventListener("resize", handleResize);
+    
+        return () => {window.removeEventListener("resize", handleResize);};
     }, []);
 
     function setValueHelper(value)
     {
         props.set(stepValue(value));
+        console.log(windowWidth);
     }
 
     function placeholder() {}
@@ -37,7 +46,7 @@ function ConfigBrightnessInput(props)
                 className = "dashboard-page-config-brightness-input-circle"
                 value = {stepValue(props.level)} 
                 onChange = {props.disabled ? placeholder :setValueHelper} 
-                radius = {65}
+                radius = {windowWidth > 1900 ? 80 : 65}
             >
 		        <CircularTrack strokeWidth = {15} stroke = {"#F5FBFF"} fill = {"#F5FBFF"}/>
 		        <CircularProgress  strokeWidth = {15} strokeLinecap = "butt" stroke = {"#00C2FF"}/>
