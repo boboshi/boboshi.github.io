@@ -30,6 +30,9 @@
   margin: 0;
   border: 0;
   outline: none;
+  padding: 0.75em 0.2em;
+  font-size: max(1.2vw, 15.84px);
+  font-weight: 600;
 }
 .react-calendar button:enabled:hover {
   cursor: pointer;

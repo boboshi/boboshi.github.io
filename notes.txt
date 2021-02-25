@@ -29,8 +29,8 @@ what in the fucks going on
 current task:
 - figure out how to reduce size of calendar
   highlight
-    - current idea: use circle-shaped png as 
-      background-image and manipulate that isntead
+    - possible to reduce size of tiles and add
+      padding/margin?
 
 scrollable dropdownbox:
 ul.dropdown-menu {
