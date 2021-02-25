@@ -87,9 +87,7 @@
   font-weight: 600;
   border-radius: 50%;
   color: #333132;
-  background: linear-gradient(#005570, #005570) no-repeat;
-  background-position:center;
-  background-size: 60% 60%;
+  background: none;
 }
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
