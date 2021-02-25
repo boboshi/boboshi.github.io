@@ -27,17 +27,16 @@ what in the fucks going on
                      FRONT END
 ====================================================
 current task:
+- figure out how to reduce size of calendar
+  highlight
+    - current idea: use circle-shaped png as 
+      background-image and manipulate that isntead
 
 scrollable dropdownbox:
 ul.dropdown-menu {
     max-height: 500px;
     overflow-y: scroll;
 }
-
-notes for config page
-  - lol what the fuck is going on
-  - circular dial input for brightness (POSSIBLE)
-  - how does adding schedules even work lol
 
 missing assets:
 user dropdown hover icons

@@ -13,11 +13,11 @@ import ConfigCalendar from "./ConfigCalendar";
 function DashboardConfig(props)
 {
     const [motionDetection, setMotionDetection] = useState("ON");
-    const [motionSensitivity, setMotionSensitivity] = useState("");
+    const [motionSensitivity, setMotionSensitivity] = useState("Medium-High");
     const [sync, setSync] = useState("ON");
-    const [intensity, setIntensity] = useState("");
-    const [holdTime, setHoldTime] = useState("");
-    const [holdTimeUnits, setHoldTimeUnits] = useState("");
+    const [intensity, setIntensity] = useState("Fast");
+    const [holdTime, setHoldTime] = useState("15");
+    const [holdTimeUnits, setHoldTimeUnits] = useState("Seconds");
     const [dimmedBrightness, setDimmedBrightness] = useState(0.7);
     const [motionBrightness, setMotionBrightness] = useState(0.7);
     const [maxBrightness, setMaxBrightness] = useState(0.7);
@@ -30,11 +30,16 @@ function DashboardConfig(props)
 
     function handleSubmitButton()
     {
+        console.log("selected light info: " + props.area + ", " + props.block + ", " + props.level +
+                    ", " + props.lights);
         console.log("motion detection: " + motionDetection);
         console.log("motion sensitivity: " + motionSensitivity);
         console.log("clock sync: " + sync);
         console.log("light intensity: " + intensity);
         console.log("hold time: " + holdTime + " " + holdTimeUnits);
+        console.log("dimmed brightness:" + dimmedBrightness);
+        console.log("motion brightness: " + motionBrightness);
+        console.log("max brightness: " + maxBrightness);
     }
 
     function placeholder()
