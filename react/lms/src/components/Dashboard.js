@@ -262,10 +262,10 @@ function Dashboard(props)
 
         var dm = document.getElementsByClassName("dashboard-page-sidebar-icon-darkmode-circle");
 
-        if (dm[0].style.transform === "translate(-25%, -35%)")
-            dm[0].style.transform = "translate(70%, -35%)";
-        else
+        if (dm[0].style.transform === "translate(70%, -35%)")
             dm[0].style.transform = "translate(-25%, -35%)";
+        else
+            dm[0].style.transform = "translate(70%, -35%)";
     }
 
     function handleConfigCancel()
