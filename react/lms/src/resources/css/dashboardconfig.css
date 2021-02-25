@@ -305,6 +305,20 @@
     filter: brightness(120%);
 }
 
+.dashboard-page-config-schedule-add-disabled
+{
+    z-index: 1;
+    position: absolute;
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.8vw, 11.52px);
+    top: 4.3%;
+    left: 75%;
+    opacity: 0.5;
+    cursor: default;
+}
+
 .dashboard-page-config-schedule-endtime-header
 {
     z-index: -2;
@@ -498,10 +512,4 @@
     top: -58%;
     margin-left: 24%;
     margin-right: 24%;
-}
-
-.FUCK
-{
-    width: 500px;
-    height: 500px;
 }

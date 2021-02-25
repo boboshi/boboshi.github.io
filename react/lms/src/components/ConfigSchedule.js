@@ -50,6 +50,8 @@ function ConfigSchedule(props)
                     " start: " + start + " end: " + end + " days: " + dayActive);
     }
 
+	function placeholder() {}
+
     function toggleDay(day)
     {
         let days = [...dayActive];
@@ -70,7 +72,6 @@ function ConfigSchedule(props)
             days[6] = !days[6];
 
         setDayActive(days);
-        console.log(days);
     }
 
     return(
@@ -78,7 +79,11 @@ function ConfigSchedule(props)
             {/* header icon */}
             <img alt = "" src = {HeaderIcon} className = "dashboard-page-config-header-top-icon"></img>
             {/* header button */}
-            <div className = "dashboard-page-config-schedule-add" onClick = {handleAddSchedule}>
+            <div 
+				className = {props.lights ? "dashboard-page-config-schedule-add" :
+							 "dashboard-page-config-schedule-add-disabled"}
+				onClick = {props.lights ? handleAddSchedule : placeholder}
+			>
                 Add Schedule
             </div>
             {/* header */}

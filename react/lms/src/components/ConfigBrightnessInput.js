@@ -48,7 +48,7 @@ function ConfigBrightnessInput(props)
                 radius = {windowWidth > 1900 ? 80 : 65}
             >
 		        <CircularTrack strokeWidth = {15} stroke = {"#F5FBFF"} fill = {"#F5FBFF"}/>
-		        <CircularProgress  strokeWidth = {15} strokeLinecap = "butt" stroke = {"#00C2FF"}/>
+		        <CircularProgress strokeWidth = {15} strokeLinecap = "butt" stroke = {"#00C2FF"}/>
 		        <CircularThumb 
                     cursor = {props.disabled ? "default" : "pointer"} 
                     r = {10} 
@@ -69,16 +69,28 @@ function ConfigBrightnessInput(props)
 
 function InputHandleShadow()
 {
-    const {getPointFromValue, value} = useCircularInputContext();
+    const {getPointFromValue} = useCircularInputContext();
     const point = getPointFromValue();
     if (!point) return null;
 
     return(
-        <text
-            {...point}
-        >
-            ?????
-        </text>
+        <svg {...point} style = {{overflow: "visible"}} pointerEvents = {"none"}>
+            <defs>
+                <filter id = "shadow">
+                    <feDropShadow 
+                        dx = "0" 
+                        dy = "1" 
+                        stdDeviation = "1.0" 
+                        floodColor = "#00000029"
+                    />
+                </filter>
+            </defs>
+            <circle 
+                cx = "0" cy= "0 " r = "7.8%"
+                style = {{fill: "#00C2FF", filter: "url(#shadow)"}}
+            >
+            </circle>
+        </svg>
     );
 }
 
