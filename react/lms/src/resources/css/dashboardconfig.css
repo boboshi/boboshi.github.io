@@ -17,7 +17,7 @@
     opacity: 1;
     width: 100%;
     height: 4%;
-    bottom: -27%;
+    bottom: -38%;
 }
 
 /* top row headers */
@@ -512,4 +512,73 @@
     top: -58%;
     margin-left: 24%;
     margin-right: 24%;
+}
+
+/* calendar */
+
+.dashboard-page-config-calendar-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    margin-top: 2%;
+    margin-left: 2%;
+    width: 31.8%;
+    height: 66%;
+    vertical-align: top;
+}
+
+/* config page cancel and submit buttons */
+
+.dashboard-page-config-cancel
+{
+    position: absolute;
+    background-color: #C6C6C6;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 110%;
+    left: 37.5%;
+    width: 12%;
+    height: 3%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-config-cancel:hover
+{
+    filter: brightness(120%);
+}
+
+.dashboard-page-config-submit
+{
+    position: absolute;
+    background-color: #005570;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 110%;
+    left: 51.5%;
+    width: 12%;
+    height: 3%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-config-submit:hover
+{
+    filter: brightness(120%);
 }

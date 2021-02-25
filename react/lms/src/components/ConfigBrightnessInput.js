@@ -40,7 +40,7 @@ function ConfigBrightnessInput(props)
                 src = {InfoIcon} 
                 className = "dashboard-page-config-brightness-input-info"
             ></img>
-            { /* circle */}
+            { /* circlular input */}
             <CircularInput 
                 className = "dashboard-page-config-brightness-input-circle"
                 value = {stepValue(props.level)} 
@@ -67,6 +67,7 @@ function ConfigBrightnessInput(props)
     );
 }
 
+// custom component for circular input shadow
 function InputHandleShadow()
 {
     const {getPointFromValue} = useCircularInputContext();

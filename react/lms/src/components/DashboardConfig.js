@@ -8,6 +8,7 @@ import ConfigMotionSensor from "./ConfigMotionSensor";
 import ConfigSettings from "./ConfigSettings";
 import ConfigSchedule from ".//ConfigSchedule";
 import ConfigBrightness from "./ConfigBrightness";
+import ConfigCalendar from "./ConfigCalendar";
 
 function DashboardConfig(props)
 {
@@ -27,11 +28,6 @@ function DashboardConfig(props)
 
     }, []);
 
-    function handleCancelButton()
-    {
-        console.log("CANCELLED");
-    }
-
     function handleSubmitButton()
     {
         console.log("motion detection: " + motionDetection);
@@ -39,6 +35,11 @@ function DashboardConfig(props)
         console.log("clock sync: " + sync);
         console.log("light intensity: " + intensity);
         console.log("hold time: " + holdTime + " " + holdTimeUnits);
+    }
+
+    function placeholder()
+    {
+        console.log("Lights not selected");
     }
 
     return(
@@ -82,6 +83,22 @@ function DashboardConfig(props)
                 setMotion = {setMotionBrightness}
                 setMax = {setMaxBrightness}
             />
+            <ConfigCalendar
+
+            />
+            {/* buttons */}
+            <div 
+                className = "dashboard-page-config-cancel" 
+                onClick = {props.cancel}
+            >
+                CANCEL
+            </div>
+            <div
+                className = "dashboard-page-config-submit" 
+                onClick = {props.lights ? handleSubmitButton : placeholder}
+            >
+                SUBMIT
+            </div>
         </div>
     );
 }

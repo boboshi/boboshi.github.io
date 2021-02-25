@@ -268,6 +268,11 @@ function Dashboard(props)
             dm[0].style.transform = "translate(-25%, -35%)";
     }
 
+    function handleConfigCancel()
+    {
+        goToPath("/dashboard/view");
+    }
+
     const defaultPaths =
     (
         <div className = "dashboard-page-header-paths">
@@ -574,6 +579,7 @@ function Dashboard(props)
                                                 block = {selectedBlock}
                                                 level = {selectedLevel}
                                                 lights = {selectedLight}
+                                                cancel = {handleConfigCancel}
                                                 {...props} />}
                                             >
                     </Route>
