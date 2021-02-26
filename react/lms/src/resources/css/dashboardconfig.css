@@ -535,6 +535,82 @@
     height: auto;
 }
 
+.dashboard-page-config-photosensor-legend
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.7vw, 10.08px);
+    top: 63.65%;
+    left: 10%;
+}
+
+.dashboard-page-config-fullbrightness-legend
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.7vw, 10.08px);
+    top: 63.65%;
+    left: 46%;
+}
+
+.dashboard-page-config-motion-legend
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.7vw, 10.08px);
+    top: 63.65%;
+    left: 75%;
+}
+
+.dashboard-page-config-photosensor-icon
+{
+    position: absolute;
+    background-color: #FF8900;
+    border-radius: 50%;
+    top: 64.3%;
+    left: 7%;
+    width: 1.4%;
+    padding-top: 1.4%;
+}
+
+.dashboard-page-config-fullbrightness-icon
+{
+    position: absolute;
+    background-color: #00C2FF;
+    border-radius: 50%;
+    top: 64.3%;
+    left: 43.5%;
+    width: 1.4%;
+    padding-top: 1.4%;
+}
+
+.dashboard-page-config-motion-icon
+{
+    position: absolute;
+    background-color: #58C315;
+    border-radius: 50%;
+    top: 64.3%;
+    left: 72.5%;
+    width: 1.4%;
+    padding-top: 1.4%;
+}
+
+.dashboard-page-config-calendar-divider
+{
+    position: absolute;
+    border: 1px solid #C6C6C6;
+    top: 68%;
+    left: 4.8%;
+    width: 90.4%;
+    height: 0%;
+}
+
 /* config page cancel and submit buttons */
 
 .dashboard-page-config-cancel

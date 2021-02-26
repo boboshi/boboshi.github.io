@@ -5,11 +5,11 @@ import Calendar from 'react-calendar';
 
 import PrevIcon from "../resources/dashboard/calendar-prev.svg";
 import NextIcon from "../resources/dashboard/calendar-next.svg";
+import RadioButtonOff from "../resources/dashboard/icon-radio-button-off.svg";
+import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 
 function ConfigCalendar(props)
 {
-    const [date, setDate] = useState(new Date());
-
     useEffect(() =>
     {
         // simulate getting data
@@ -25,31 +25,23 @@ function ConfigCalendar(props)
         return months[month] + ", " + year;
     }
 
-    function onDateSelect(date)
-    {
-        setDate(date);
-    }
-
     const prevButton =
     (
-        <div>
-            <img alt = "" src = {PrevIcon} className = "dashboard-page-config-calendar-prevnext"></img>
-        </div>
+        <img alt = "" src = {PrevIcon} className = "dashboard-page-config-calendar-prevnext"></img>
     );
 
     const nextButton =
     (
-        <div>
-            <img alt = "" src = {NextIcon} className = "dashboard-page-config-calendar-prevnext"></img>
-        </div>
+        <img alt = "" src = {NextIcon} className = "dashboard-page-config-calendar-prevnext"></img>
     );
 
     return(
         <div className = "dashboard-page-config-calendar-container">
+            {/* calendar itself */}
             <Calendar
                 className = {props.lights ? "react-calendar" : "react-calendar-disabled"}
-                onChange = {onDateSelect} 
-                value = {date}
+                onChange = {props.setDate} 
+                value = {props.date}
                 calendarType = {"US"}
                 minDetail = "month"
                 maxDetail = "month"
@@ -58,6 +50,26 @@ function ConfigCalendar(props)
                 prevLabel = {prevButton}
                 formatMonthYear = {MonthYearFormatter}
             />
+            {/* legends */}
+            <div className = "dashboard-page-config-photosensor-legend">
+                Photosensor Control
+            </div>
+            <div className = "dashboard-page-config-fullbrightness-legend">
+                Full Brightness
+            </div>
+            <div className = "dashboard-page-config-motion-legend">
+                Motion Trigger
+            </div>
+            {/* legend icons */}
+            <div className = "dashboard-page-config-photosensor-icon"></div>
+            <div className = "dashboard-page-config-fullbrightness-icon"></div>
+            <div className = "dashboard-page-config-motion-icon"></div>
+            {/* divider */}
+            <div className = "dashboard-page-config-calendar-divider"></div>
+            {/* bottom header */}
+
+            {/* radio buttons */}
+
         </div>
     );
 }

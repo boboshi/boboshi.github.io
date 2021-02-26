@@ -12,6 +12,8 @@ import ConfigCalendar from "./ConfigCalendar";
 
 function DashboardConfig(props)
 {
+    const [date, setDate] = useState(new Date());
+
     const [motionDetection, setMotionDetection] = useState("ON");
     const [motionSensitivity, setMotionSensitivity] = useState("Medium-High");
     const [sync, setSync] = useState("ON");
@@ -89,6 +91,8 @@ function DashboardConfig(props)
                 setMax = {setMaxBrightness}
             />
             <ConfigCalendar
+                date = {date}
+                setDate = {setDate}
                 location = {props.location}
                 area = {props.area}
                 block = {props.block}
