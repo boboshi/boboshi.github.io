@@ -7,6 +7,9 @@ import PrevIcon from "../resources/dashboard/calendar-prev.svg";
 import NextIcon from "../resources/dashboard/calendar-next.svg";
 import RadioButtonOff from "../resources/dashboard/icon-radio-button-off.svg";
 import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
+import PhotosensorDivider from "../resources/dashboard/calendar-photosensor-radio-divider.svg";
+import FullBrightnessDivider from "../resources/dashboard/calendar-fullbrightness-radio-divider.svg";
+import MotionDivider from "../resources/dashboard/calendar-motion-radio-divider.svg";
 
 function ConfigCalendar(props)
 {
@@ -89,11 +92,34 @@ function ConfigCalendar(props)
             {/* divider */}
             <div className = "dashboard-page-config-calendar-divider"></div>
             {/* bottom header */}
-            <div className = "dashboard-page-config-bottom-header" >
+            <div className = "dashboard-page-config-calendar-bottom-header" >
                 {DayOfWeek(date) + ", " + MonthYearFormatterBottom(date)}
             </div>
             {/* radio buttons */}
+            <div className = "dashboard-page-config-calendar-radio-container0">
+                <img 
+                    alt = "" 
+                    src = {PhotosensorDivider} 
+                    className = "dashboard-page-config-calendar-radio-divider"
+                ></img>
+                
+            </div>
+            <div className = "dashboard-page-config-calendar-radio-container1">
+                <img 
+                    alt = "" 
+                    src = {FullBrightnessDivider} 
+                    className = "dashboard-page-config-calendar-radio-divider"
+                ></img>
 
+            </div>
+            <div className = "dashboard-page-config-calendar-radio-container2">
+                <img 
+                    alt = "" 
+                    src = {MotionDivider} 
+                    className = "dashboard-page-config-calendar-radio-divider"
+                ></img>
+                
+            </div>
         </div>
     );
 }

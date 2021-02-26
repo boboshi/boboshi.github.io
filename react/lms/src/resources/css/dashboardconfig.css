@@ -611,7 +611,7 @@
     height: 0%;
 }
 
-.dashboard-page-config-bottom-header
+.dashboard-page-config-calendar-bottom-header
 {
     position: absolute;
     color: #333132;
@@ -620,6 +620,48 @@
     font-size: max(1.24vw, 17.33px);
     top: 68.5%;
     left: 8%;
+}
+
+.dashboard-page-config-calendar-radio-container0
+{
+    z-index: -1;
+    position: absolute;
+    background-color: #FCFCFC;
+    top: 75%;
+    left: 2%;
+    width: 96%;
+    height: 6%;
+}
+
+.dashboard-page-config-calendar-radio-container1
+{
+    z-index: -1;
+    position: absolute;
+    background-color: #FCFCFC;
+    top: 83%;
+    left: 2%;
+    width: 96%;
+    height: 6%;
+}
+
+.dashboard-page-config-calendar-radio-container2
+{
+    z-index: -1;
+    position: absolute;
+    background-color: #FCFCFC;
+    top: 91%;
+    left: 2%;
+    width: 96%;
+    height: 6%;
+}
+
+.dashboard-page-config-calendar-radio-divider
+{
+    position: absolute;
+    top: 5.55%;
+    left: 14.5%;
+    width: auto;
+    height: 88.9%;
 }
 
 /* config page cancel and submit buttons */
