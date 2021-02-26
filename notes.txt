@@ -31,7 +31,9 @@ current task:
   highlight
     - possible to reduce size of tiles and add
       padding/margin?
-- why the fuck are the prev/next buttons bouncing
+- how does schedule data (calendar) work?
+- what to get from backend?
+  - 
 
 scrollable dropdownbox:
 ul.dropdown-menu {

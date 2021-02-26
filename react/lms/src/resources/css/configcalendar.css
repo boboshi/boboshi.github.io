@@ -8,7 +8,6 @@
   line-height: 1.125em;
   pointer-events: none;
   opacity: 0.5;
-  max-width: 0%;
 }
 .react-calendar {
   position: absolute;
@@ -74,8 +73,6 @@
 }
 .react-calendar button:enabled:hover {
   cursor: pointer;
-}
-.react-calendar__navigation {
 }
 .react-calendar__navigation button {
   background: none;
