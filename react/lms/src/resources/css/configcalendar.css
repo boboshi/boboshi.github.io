@@ -1,14 +1,3 @@
-.react-calendar-disabled{
-  position: absolute;
-  top: 2.5%;
-  left: 5%;
-  width: 90%;
-  background: white;
-  font-family: "work sans", sans-serif;
-  line-height: 1.125em;
-  pointer-events: none;
-  opacity: 0.5;
-}
 .react-calendar {
   position: absolute;
   top: 2%;
@@ -41,7 +30,7 @@
   color: #333132;
   position: absolute;
   top: 1.5%;
-  left: 2%;
+  left: 0%;
 }
 /* prev/next month buttons */
 .react-calendar__navigation__prev-button:enabled{

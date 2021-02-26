@@ -10,6 +10,8 @@ import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 
 function ConfigCalendar(props)
 {
+    const [date, setDate] = useState(new Date());
+
     useEffect(() =>
     {
         // simulate getting data
@@ -17,12 +19,30 @@ function ConfigCalendar(props)
     }, []);
 
     let months = ["Jan", "Feb", "Mar", "Apr", "May" , "Jun" ,"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    function DayOfWeek(d)
+    {
+        return days[d.getDay()];
+    }
+
+    function MonthYearFormatterBottom(d)
+    {
+        let year = d.getFullYear();
+        let month = d.getMonth();
+        return months[month] + " " + year;
+    }
 
     function MonthYearFormatter(locale, d)
     {
         let year = d.getFullYear();
         let month = d.getMonth();
         return months[month] + ", " + year;
+    }
+
+    function onDateSelect(date)
+    {
+        setDate(date);
     }
 
     const prevButton =
@@ -36,12 +56,14 @@ function ConfigCalendar(props)
     );
 
     return(
-        <div className = "dashboard-page-config-calendar-container">
+        <div 
+            className = "dashboard-page-config-calendar-container" 
+            style = {props.lights ? {opacity: 1.0} : {opacity: 0.5, pointerEvents: "none"}}
+        >
             {/* calendar itself */}
             <Calendar
-                className = {props.lights ? "react-calendar" : "react-calendar-disabled"}
-                onChange = {props.setDate} 
-                value = {props.date}
+                onChange = {onDateSelect} 
+                value = {date}
                 calendarType = {"US"}
                 minDetail = "month"
                 maxDetail = "month"
@@ -67,7 +89,9 @@ function ConfigCalendar(props)
             {/* divider */}
             <div className = "dashboard-page-config-calendar-divider"></div>
             {/* bottom header */}
-
+            <div className = "dashboard-page-config-bottom-header" >
+                {DayOfWeek(date) + ", " + MonthYearFormatterBottom(date)}
+            </div>
             {/* radio buttons */}
 
         </div>
