@@ -89,7 +89,11 @@ function DashboardConfig(props)
                 setMax = {setMaxBrightness}
             />
             <ConfigCalendar
-
+                location = {props.location}
+                area = {props.area}
+                block = {props.block}
+                level = {props.level}
+                lights = {props.lights}
             />
             {/* buttons */}
             <div 

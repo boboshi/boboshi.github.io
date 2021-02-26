@@ -529,6 +529,12 @@
     vertical-align: top;
 }
 
+.dashboard-page-config-calendar-prevnext
+{
+    width: 150%;
+    height: auto;
+}
+
 /* config page cancel and submit buttons */
 
 .dashboard-page-config-cancel

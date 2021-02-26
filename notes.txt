@@ -31,6 +31,7 @@ current task:
   highlight
     - possible to reduce size of tiles and add
       padding/margin?
+- why the fuck are the prev/next buttons bouncing
 
 scrollable dropdownbox:
 ul.dropdown-menu {
