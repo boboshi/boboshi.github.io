@@ -22,10 +22,16 @@ function DashboardConfig(props)
     const [motionBrightness, setMotionBrightness] = useState(0.7);
     const [maxBrightness, setMaxBrightness] = useState(0.7);
 
+    // schedule and calendar related stuff
+    const [currentSelectedDate, setCurrentSelectedDate] = useState(new Date());
+    const [schedule, setSchedule] = useState([]);
+
     useEffect(() =>
     {
         // simulate getting data
-
+        setSchedule(["07:00", "18:59", [false, true, true, true, true, true, false], true, 
+                     "19:00", "23:59", [false, true, true, true, true, true, false], true,
+                     "00:00", "06:59", [false, true, true, true, true, true, false], true]);
     }, []);
 
     function handleSubmitButton()
@@ -72,7 +78,9 @@ function DashboardConfig(props)
                 setHoldTime = {setHoldTime}
                 setHoldTimeUnits = {setHoldTimeUnits}  
             />
-            <ConfigSchedule 
+            <ConfigSchedule
+                schedule = {schedule}
+                setSchedule = {setSchedule}
                 location = {props.location}
                 area = {props.area}
                 block = {props.block}
@@ -89,6 +97,9 @@ function DashboardConfig(props)
                 setMax = {setMaxBrightness}
             />
             <ConfigCalendar
+                currDate = {currentSelectedDate}
+                setDate = {setCurrentSelectedDate}
+                schedule = {schedule}
                 location = {props.location}
                 area = {props.area}
                 block = {props.block}

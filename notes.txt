@@ -31,10 +31,26 @@ current task:
   highlight
     - possible to reduce size of tiles and add
       padding/margin?
-- how does schedule data (calendar) work?
-- what to get from backend?
-  - 
-- finish up radio button containers on calendar
+
+- don't let calendar card make any changes for now
+  - radio buttons will do nothing
+- schedule data format (for each light)
+  - array of size 12 (4 for each schedule type)
+      photosensor
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
+      full brightness
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
+      motion
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
 
 scrollable dropdownbox:
 ul.dropdown-menu {

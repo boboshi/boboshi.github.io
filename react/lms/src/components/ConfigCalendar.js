@@ -10,16 +10,61 @@ import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 import PhotosensorDivider from "../resources/dashboard/calendar-photosensor-radio-divider.svg";
 import FullBrightnessDivider from "../resources/dashboard/calendar-fullbrightness-radio-divider.svg";
 import MotionDivider from "../resources/dashboard/calendar-motion-radio-divider.svg";
+import PhotosensorIcon from "../resources/dashboard/calendar-photosensor-icon.svg";
+import FullBrightnessIcon from "../resources/dashboard/Icon material-lightbulb-outline.svg";
+import MotionIcon from "../resources/dashboard/MotionSensor-icon-GY (black).svg";
+
+function RadioButtonGroup(props)
+{
+    return(
+        <div className = {"dashboard-page-config-calendar-radio-container" + props.containerOrder}>
+            <img 
+                alt = "" 
+                src = {props.enabled ? RadioButtonOn : RadioButtonOff} 
+                className = "dashboard-page-config-calendar-radio"
+                onClick = {props.onClick}
+            ></img>
+            <img 
+                alt = "" 
+                src = {props.containerOrder === "0" ? PhotosensorDivider : 
+                        props.containerOrder === "1" ? FullBrightnessDivider : MotionDivider} 
+                className = "dashboard-page-config-calendar-radio-divider"
+            ></img>
+            <img 
+                alt = ""
+                src = {props.containerOrder === "0" ? PhotosensorIcon : 
+                        props.containerOrder === "1" ? FullBrightnessIcon : MotionIcon} 
+                className = {"dashboard-page-config-calendar-radio-icon" + props.containerOrder}
+            ></img>
+            <div className = "dashboard-page-config-calendar-radio-text">
+                {props.containerOrder === "0" ? "Photosensor Control" :
+                    props.containerOrder === "1" ? "Full Brightness" : "Motion Trigger"}
+            </div>
+            <div className = "dashboard-page-config-calendar-radio-time">
+                {props.data && 
+                (props.containerOrder === "0" ? props.data[0] + " - " + props.data[1] :
+                    props.containerOrder === "1" ? props.data[4] + " - " + props.data[5] :
+                        props.data[8] + " - " + props.data[9])}
+            </div>
+        </div>
+    );
+}
 
 function ConfigCalendar(props)
 {
-    const [date, setDate] = useState(new Date());
+    const [photoRadio, setPhotoRadio] = useState(false);
+    const [fullBrightnessRadio, setFullBrightnessRadio] = useState(false);
+    const [motionRadio, setMotionRadio] = useState(false);
 
     useEffect(() =>
     {
         // simulate getting data
+        var dayOfWeek = props.currDate.getDay();
         
-    }, []);
+        setPhotoRadio(props.schedule[3] && props.schedule[2][dayOfWeek]);
+        setFullBrightnessRadio(props.schedule[7] && props.schedule[6][dayOfWeek])
+        setMotionRadio(props.schedule[11] && props.schedule[10][dayOfWeek]);
+    }, [props.schedule, props.currDate]);
 
     let months = ["Jan", "Feb", "Mar", "Apr", "May" , "Jun" ,"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -45,7 +90,29 @@ function ConfigCalendar(props)
 
     function onDateSelect(date)
     {
-        setDate(date);
+        // change date
+        props.setDate(date);
+        // set radio button states
+        var dayOfWeek = date.getDay();
+        
+        setPhotoRadio(props.schedule[3] && props.schedule[2][dayOfWeek]);
+        setFullBrightnessRadio(props.schedule[7] && props.schedule[6][dayOfWeek])
+        setMotionRadio(props.schedule[11] && props.schedule[10][dayOfWeek]);
+    }
+
+    function handlePhotosensorRadioButton()
+    {
+        setPhotoRadio(!photoRadio);
+    }
+
+    function handleFullBrightnessRadioButton()
+    {
+        setFullBrightnessRadio(!fullBrightnessRadio);
+    }
+
+    function handleMotionRadioButton()
+    {
+        setMotionRadio(!motionRadio);
     }
 
     const prevButton =
@@ -66,7 +133,7 @@ function ConfigCalendar(props)
             {/* calendar itself */}
             <Calendar
                 onChange = {onDateSelect} 
-                value = {date}
+                value = {props.currDate}
                 calendarType = {"US"}
                 minDetail = "month"
                 maxDetail = "month"
@@ -93,33 +160,28 @@ function ConfigCalendar(props)
             <div className = "dashboard-page-config-calendar-divider"></div>
             {/* bottom header */}
             <div className = "dashboard-page-config-calendar-bottom-header" >
-                {DayOfWeek(date) + ", " + MonthYearFormatterBottom(date)}
+                {DayOfWeek(props.currDate) + ", " + props.currDate.getDate() + " " + 
+                 MonthYearFormatterBottom(props.currDate)}
             </div>
             {/* radio buttons */}
-            <div className = "dashboard-page-config-calendar-radio-container0">
-                <img 
-                    alt = "" 
-                    src = {PhotosensorDivider} 
-                    className = "dashboard-page-config-calendar-radio-divider"
-                ></img>
-                
-            </div>
-            <div className = "dashboard-page-config-calendar-radio-container1">
-                <img 
-                    alt = "" 
-                    src = {FullBrightnessDivider} 
-                    className = "dashboard-page-config-calendar-radio-divider"
-                ></img>
-
-            </div>
-            <div className = "dashboard-page-config-calendar-radio-container2">
-                <img 
-                    alt = "" 
-                    src = {MotionDivider} 
-                    className = "dashboard-page-config-calendar-radio-divider"
-                ></img>
-                
-            </div>
+            <RadioButtonGroup
+                data = {props.schedule}
+                enabled = {photoRadio}
+                containerOrder = {"0"}
+                onClick = {handlePhotosensorRadioButton}
+            ></RadioButtonGroup>
+            <RadioButtonGroup
+                data = {props.schedule}
+                enabled = {fullBrightnessRadio}
+                containerOrder = {"1"}
+                onClick = {handleFullBrightnessRadioButton}
+            ></RadioButtonGroup>
+            <RadioButtonGroup
+                data = {props.schedule}
+                enabled = {motionRadio}
+                containerOrder = {"2"}
+                onClick = {handleMotionRadioButton}
+            ></RadioButtonGroup>
         </div>
     );
 }

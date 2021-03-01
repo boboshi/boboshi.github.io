@@ -239,9 +239,9 @@
 .dashboard-page-config-radio
 {
     position: absolute;
-    top: 29%;
+    top: 29.5%;
     left: 9%;
-    width: 5%;
+    width: 4.6%;
     height: auto;
     cursor: pointer;
 }
@@ -624,7 +624,6 @@
 
 .dashboard-page-config-calendar-radio-container0
 {
-    z-index: -1;
     position: absolute;
     background-color: #FCFCFC;
     top: 75%;
@@ -635,7 +634,6 @@
 
 .dashboard-page-config-calendar-radio-container1
 {
-    z-index: -1;
     position: absolute;
     background-color: #FCFCFC;
     top: 83%;
@@ -646,13 +644,22 @@
 
 .dashboard-page-config-calendar-radio-container2
 {
-    z-index: -1;
     position: absolute;
     background-color: #FCFCFC;
     top: 91%;
     left: 2%;
     width: 96%;
     height: 6%;
+}
+
+.dashboard-page-config-calendar-radio
+{
+    position: absolute;
+    top: 22.6%;
+    left: 6%;
+    width: 4.8%;
+    height: auto;
+    cursor: pointer;
 }
 
 .dashboard-page-config-calendar-radio-divider
@@ -662,6 +669,55 @@
     left: 14.5%;
     width: auto;
     height: 88.9%;
+}
+
+.dashboard-page-config-calendar-radio-icon0
+{
+    position: absolute;
+    top: 3%;
+    left: 17.2%;
+    width: 8%;
+    height: auto;
+}
+
+.dashboard-page-config-calendar-radio-icon1
+{
+    position: absolute;
+    top: 22%;
+    left: 19.5%;
+    width: 3.4%;
+    height: auto;
+}
+
+.dashboard-page-config-calendar-radio-icon2
+{
+    position: absolute;
+    top: 24%;
+    left: 18.7%;
+    width: 4.6%;
+    height: auto;
+}
+
+.dashboard-page-config-calendar-radio-text
+{
+    position: absolute;
+    color: #272D3B;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.85vw, 12.24px);
+    font-weight: 700;
+    top: 25%;
+    left: 28%;
+}
+
+.dashboard-page-config-calendar-radio-time
+{
+    color: #272D3B;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.85vw, 12.24px);
+    font-weight: 300;
+    margin-top: 2%;
+    margin-right: 3%;
+    text-align: right;
 }
 
 /* config page cancel and submit buttons */
