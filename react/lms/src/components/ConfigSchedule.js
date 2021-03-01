@@ -50,6 +50,29 @@ function ConfigSchedule(props)
 
     }, [props.schedule]);
 
+    function setActivityHelper(activity)
+    {
+        setActivity(activity);
+        if (activity === "Photosensor Control")
+        {
+            setStart(props.schedule[0] + ":00");
+            setEnd(props.schedule[1] + ":00");
+            setDayActive(props.schedule[2]);    
+        }
+        else if (activity === "Full Brightness")
+        {
+            setStart(props.schedule[4] + ":00");
+            setEnd(props.schedule[5] + ":00");
+            setDayActive(props.schedule[6]);   
+        }
+        else
+        {
+            setStart(props.schedule[8] + ":00");
+            setEnd(props.schedule[9] + ":00");
+            setDayActive(props.schedule[10]);  
+        }
+    }
+
     function handleAddSchedule()
     {
         //var str = '1437203995000';
@@ -136,7 +159,7 @@ function ConfigSchedule(props)
                             ref = {ddRef}
                             default = {"Photosensor Control"}
                             options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
-                            selectOption = {setActivity}
+                            selectOption = {setActivityHelper}
                             disabled = {props.lights ? false : true}
                         ></GenericDropdown>
                     </div>

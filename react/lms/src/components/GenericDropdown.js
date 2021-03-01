@@ -65,7 +65,7 @@ const GenericDropdown = forwardRef((props, ref) =>
             {!props.disabled ? 
                 <div ref = {node} className = "dashboard-page-view-dropdown" onClick = {handleDropdownClick}>
                     <h1 className = "dashboard-page-view-dropdown-choicetext">
-                        {choice}
+                        {props.default}
                     </h1>
                     {isOpen ?             
                         <img 
