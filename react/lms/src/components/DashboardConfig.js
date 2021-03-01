@@ -21,7 +21,6 @@ function DashboardConfig(props)
     const [dimmedBrightness, setDimmedBrightness] = useState(0.7);
     const [motionBrightness, setMotionBrightness] = useState(0.7);
     const [maxBrightness, setMaxBrightness] = useState(0.7);
-
     // schedule and calendar related stuff
     const [currentSelectedDate, setCurrentSelectedDate] = useState(new Date());
     const [schedule, setSchedule] = useState([]);
@@ -46,6 +45,7 @@ function DashboardConfig(props)
         console.log("dimmed brightness:" + dimmedBrightness);
         console.log("motion brightness: " + motionBrightness);
         console.log("max brightness: " + maxBrightness);
+        console.log("schedule data: " + schedule);
     }
 
     function placeholder()

@@ -29,25 +29,57 @@ for (var i = 0; i < 96; ++i)
     ddTime.push(hours + ":" + minutes + ":00");
 }
 
+ddTime.push("23:59:00");
+
 function ConfigSchedule(props)
 {
     const ddRef = useRef();
 
-    const [activity, setActivity] = useState("Photosensor Control");
-    const [start, setStart] = useState("07:00:00");
-    const [end, setEnd] = useState("18:59:00");
-    const [dayActive, setDayActive] = useState([false, true, true, true, true, true, false]);
+    const [activity, setActivity] = useState("");
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
+    const [dayActive, setDayActive] = useState([]);
 
     useEffect(() =>
     {
         // simulate getting data
+        setActivity("Photosensor Control");
+        setStart(props.schedule[0] + ":00");
+        setEnd(props.schedule[1] + ":00");
+        setDayActive(props.schedule[2]);
 
-    }, []);
+    }, [props.schedule]);
 
     function handleAddSchedule()
     {
-        console.log("add schedule: activity: " + activity,
-                    " start: " + start + " end: " + end + " days: " + dayActive);
+        //var str = '1437203995000';
+        //str = str.substring(0, str.length-3);
+        var s = start;
+        var e = end;
+        s = s.substring(0, s.length - 3);
+        e = e.substring(0, e.length - 3);
+
+        var result = props.schedule.slice();
+        if (activity === "Photosensor Control")
+        {
+            result[0] = s;
+            result[1] = e;
+            result[2] = dayActive;
+        }
+        else if (activity === "Full Brightness")
+        {
+            result[4] = s;
+            result[5] = e;
+            result[6] = dayActive;
+        }
+        else
+        {
+            result[8] = s;
+            result[9] = e;
+            result[10] = dayActive;
+        }
+
+        props.setSchedule(result);
     }
 
 	function placeholder() {}
@@ -97,43 +129,49 @@ function ConfigSchedule(props)
             <div className = "dashboard-page-config-schedule-endtime-header">END TIME</div>
             <div className = "dashboard-page-config-card-header2">REPEAT</div>
             {/* dropdown lists */}
-            <div className = "dashboard-page-config-schedule-activities-ddcontainer" style = {{zIndex: 2}}>
-                <GenericDropdown
-                    ref = {ddRef}
-                    default = {"Photosensor Control"}
-                    options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
-                    selectOption = {setActivity}
-                    disabled = {props.lights ? false : true}
-                ></GenericDropdown>
-            </div>
-            <div className = "dashboard-page-config-schedule-start-ddcontainer" style = {{zIndex: 1}}>
-                <GenericDropdown
-                    ref = {ddRef}
-                    default = {start}
-                    options = {ddTime}
-                    selectOption = {setStart}
-                    disabled = {props.lights ? false : true}
-                ></GenericDropdown>
-            </div>
-            <div className = "dashboard-page-config-schedule-end-ddcontainer" style = {{zIndex: 1}}>
-                <GenericDropdown
-                    ref = {ddRef}
-                    default = {end}
-                    options = {ddTime}
-                    selectOption = {setEnd}
-                    disabled = {props.lights ? false : true}
-                ></GenericDropdown>
-            </div>
+            {dayActive &&
+                <div>
+                    <div className = "dashboard-page-config-schedule-activities-ddcontainer" style = {{zIndex: 2}}>
+                        <GenericDropdown
+                            ref = {ddRef}
+                            default = {"Photosensor Control"}
+                            options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
+                            selectOption = {setActivity}
+                            disabled = {props.lights ? false : true}
+                        ></GenericDropdown>
+                    </div>
+                    <div className = "dashboard-page-config-schedule-start-ddcontainer" style = {{zIndex: 1}}>
+                        <GenericDropdown
+                            ref = {ddRef}
+                            default = {start}
+                            options = {ddTime}
+                            selectOption = {setStart}
+                            disabled = {props.lights ? false : true}
+                        ></GenericDropdown>
+                    </div>
+                    <div className = "dashboard-page-config-schedule-end-ddcontainer" style = {{zIndex: 1}}>
+                        <GenericDropdown
+                            ref = {ddRef}
+                            default = {end}
+                            options = {ddTime}
+                            selectOption = {setEnd}
+                            disabled = {props.lights ? false : true}
+                        ></GenericDropdown>
+                    </div>
+                </div>
+            }
             {/* day selector */}
-            <div className = "dashboard-page-config-schedule-day-container">
-                <DaySelectorButton disabled = {props.lights} day = {"SUN"} onClick = {toggleDay} active = {dayActive[0]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"MON"} onClick = {toggleDay} active = {dayActive[1]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"TUE"} onClick = {toggleDay} active = {dayActive[2]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"WED"} onClick = {toggleDay} active = {dayActive[3]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"THU"} onClick = {toggleDay} active = {dayActive[4]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"FRI"} onClick = {toggleDay} active = {dayActive[5]}></DaySelectorButton>
-                <DaySelectorButton disabled = {props.lights} day = {"SAT"} onClick = {toggleDay} active = {dayActive[6]}></DaySelectorButton>
-            </div>
+            {dayActive &&
+                <div className = "dashboard-page-config-schedule-day-container">
+                    <DaySelectorButton disabled = {props.lights} day = {"SUN"} onClick = {toggleDay} active = {dayActive[0]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"MON"} onClick = {toggleDay} active = {dayActive[1]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"TUE"} onClick = {toggleDay} active = {dayActive[2]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"WED"} onClick = {toggleDay} active = {dayActive[3]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"THU"} onClick = {toggleDay} active = {dayActive[4]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"FRI"} onClick = {toggleDay} active = {dayActive[5]}></DaySelectorButton>
+                    <DaySelectorButton disabled = {props.lights} day = {"SAT"} onClick = {toggleDay} active = {dayActive[6]}></DaySelectorButton>
+                </div>
+            }
         </div>
     );
 }

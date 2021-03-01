@@ -52,6 +52,10 @@ current task:
     - days active (array of bools)
     - active/inactive (bool)
 
+TODO:
+  - make calendar update when schedule is added
+  - get coloured circles to appear on calendar
+
 scrollable dropdownbox:
 ul.dropdown-menu {
     max-height: 500px;
