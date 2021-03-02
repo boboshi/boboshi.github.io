@@ -1,10 +1,9 @@
-import "../resources/css/usermanagementrightbox.css";
-
 import React, {useState} from "react";
 
+import AddUserIcon from "../resources/dashboard/usermanagement-adduser.svg";
 import ButtonIcon from "../resources/dashboard/usermanagement-rightbox-button.svg";
 
-function UserManagementRightBox(props)
+function UserManagementAddUser(props)
 {
     const [open, setOpen] = useState(false);
 
@@ -14,21 +13,21 @@ function UserManagementRightBox(props)
     }
 
     return(
-        <div>
+        <div className = "dashboard-page-usermanagement-adduser-container">
             {/* main card */}
             <div 
                 className = "dashboard-usermanagement-rightbox-box" 
                 style = {open ? {borderRadius: "6px 6px 0px 0px"} : {borderRadius: "6px 6px 6px 6px"}}
             >
                 {/* icon */}
-                <img alt = "" src = {props.icon} className = "dashboard-usermanagement-rightbox-icon"></img>
+                <img alt = "" src = {AddUserIcon} className = "dashboard-usermanagement-rightbox-icon"></img>
                 {/* title */}
                 <div className = "dashboard-usermanagement-rightbox-title">
-                    {props.title}
+                    Register New User
                 </div>
                 {/* text */}
                 <div className = "dashboard-usermanagement-rightbox-text">
-                    {props.text}
+                    Register new user to control the smart system light for your estate.
                 </div>
                 {/* button */}
                 <div 
@@ -38,18 +37,18 @@ function UserManagementRightBox(props)
                 >
                     <img alt = "" src = {ButtonIcon} className = "dashboard-usermanagement-rightbox-button-icon"></img>
                     <div className = "dashboard-usermanagement-rightbox-button-text">
-                        {props.addText}
+                        Register New User
                     </div>
                 </div>
             </div>
             {/* dropdown menu */}
             {open &&
                 <div className = "dashboard-usermanagement-rightbox-dropdown-container">
-                    
+                    FUCK
                 </div>
             }
         </div>
     );
 }
 
-export default UserManagementRightBox;
+export default UserManagementAddUser;

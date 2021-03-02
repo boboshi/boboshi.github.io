@@ -54,6 +54,8 @@ current task:
 
 TODO:
   - finish dropdown menu for user management
+    - create separate components for registering
+      group and user
 
 scrollable dropdownbox:
 ul.dropdown-menu {
