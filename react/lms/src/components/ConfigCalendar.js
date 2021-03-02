@@ -158,8 +158,14 @@ function ConfigCalendar(props)
             {
                 return(
                     <div className = "dashboard-page-config-calendar-indicators">
-                        <div className = "dashboard-page-config-calendar-photosensor-event"></div>
-                        <div className = "dashboard-page-config-calendar-fullbrightness-event"></div> 
+                        <div 
+                            className = "dashboard-page-config-calendar-photosensor-event" 
+                            style = {{left: "33%"}}
+                        ></div>
+                        <div 
+                            className = "dashboard-page-config-calendar-fullbrightness-event" 
+                            style = {{left: "55%"}}
+                        ></div> 
                     </div>
                 );
             }
@@ -167,8 +173,8 @@ function ConfigCalendar(props)
             {
                 return(
                     <div className = "dashboard-page-config-calendar-indicators">
-                        <div className = "dashboard-page-config-calendar-photosensor-event"></div> 
-                        <div className = "dashboard-page-config-calendar-motion-event"></div> 
+                        <div className = "dashboard-page-config-calendar-photosensor-event" style = {{left: "33%"}}></div> 
+                        <div className = "dashboard-page-config-calendar-motion-event" style = {{left: "55%"}}></div> 
                     </div>
                 );
 
@@ -177,8 +183,8 @@ function ConfigCalendar(props)
             {
                 return(
                     <div className = "dashboard-page-config-calendar-indicators">
-                        <div className = "dashboard-page-config-calendar-fullbrightness-event"></div> 
-                        <div className = "dashboard-page-config-calendar-motion-event"></div> 
+                        <div className = "dashboard-page-config-calendar-fullbrightness-event" style = {{left: "33%"}}></div> 
+                        <div className = "dashboard-page-config-calendar-motion-event" style = {{left: "55%"}}></div> 
                     </div>
                 );
             }
