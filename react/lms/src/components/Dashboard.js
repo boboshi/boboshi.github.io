@@ -25,19 +25,19 @@ import LibraryAddSelectedIcon from "../resources/dashboard/icon-add-selected.svg
 import AdminProfile from "../resources/dashboard/office-admin-profile.png";
 import DefaultUser from "../resources/dashboard/icon-userdropdown-default.svg";
 
-import Timestamp from "../components/Timestamp";
-import Dropdown from "../components/Dropdown";
-import SearchBar from "../components/SearchBar";
-import Notification from "../components/Notification";
-import UserDropdown from "../components/UserDropdown";
-import SidebarIcon from "../components/SidebarIcon";
-import DashboardView from "../components/DashboardView";
-import DashboardConfig from "../components/DashboardConfig";
-import DashboardLight from "../components/DashboardLight";
-import DashboardPower from "../components/DashboardPower";
-import DashboardLightCycle from "../components/DashboardLightCycle";
-import DashboardUserManagement from "../components/DashboardUserManagement";
-import DashboardAdd from "../components/DashboardAdd";
+import Timestamp from "./Timestamp";
+import Dropdown from "./Dropdown";
+import SearchBar from "./SearchBar";
+import Notification from "./Notification";
+import UserDropdown from "./UserDropdown";
+import SidebarIcon from "./SidebarIcon";
+import DashboardView from "./DashboardView";
+import DashboardConfig from "./DashboardConfig";
+import DashboardLight from "./DashboardLight";
+import DashboardPower from "./DashboardPower";
+import DashboardLightCycle from "./DashboardLightCycle";
+import DashboardUserManagement from "./DashboardUserManagement";
+import DashboardAdd from "./DashboardAdd";
 
 class NotificationObject
 {
@@ -243,7 +243,7 @@ function Dashboard(props)
 
     function userSettings(str)
     {
-        goToPath("/dashboard/usermanagement");
+        console.log("DO SOME USER SETTINGS STUFF");
     }
 
     function logout()
@@ -597,7 +597,11 @@ function Dashboard(props)
                     </Route>
                     <Route 
                         path = "/dashboard/usermanagement" 
-                        render = {(props) => <DashboardUserManagement {...props} />}>
+                        render = {(props) => <DashboardUserManagement 
+                                                location = {selectedLocation}
+                                                area = {selectedArea}
+                                                block = {selectedBlock}
+                                              {...props} />}>
                     </Route>
                     <Route 
                         path = "/dashboard/add" 

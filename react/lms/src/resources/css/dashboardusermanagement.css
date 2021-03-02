@@ -1,9 +1,91 @@
 .dashboard-page-usermanagement
 {
-  position: absolute;
-  border: 1px solid #000000;
-  top: 17%;
-  left: 12%;
-  width: 81%;
-  height: 75%;
+    position: absolute;
+    border: 1px solid #000000;
+    top: 17%;
+    left: 12%;
+    width: 81%;
+    height: 75%;
+}
+
+/* add cards */
+
+.dashboard-page-usermanagement-add-container
+{
+    position: absolute;
+    top: -11.5%;
+    left: 80%;
+    width: 24%;
+    height: 110%;
+}
+
+/* add group card */
+
+.dashboard-page-usermanagement-addgroup-container
+{
+    position: inline-block;
+    width: 100%;
+}
+
+/* add user card */
+
+.dashboard-page-usermanagement-adduser-container
+{
+    position: inline-block;
+    margin-top: 5%;
+    width: 100%;
+}
+
+/* user management bottom buttons */
+
+.dashboard-page-usermanagement-revoke
+{
+    position: absolute;
+    background-color: #C6C6C6;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 97%;
+    left: 35.5%;
+    width: 14%;
+    height: 3.75%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-usermanagement-revoke:hover
+{
+    filter: brightness(105%);
+}
+
+.dashboard-page-usermanagement-update
+{
+    position: absolute;
+    background-color: #005570;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 97%;
+    left: 51.5%;
+    width: 14%;
+    height: 3.75%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-usermanagement-update:hover
+{
+    filter: brightness(120%);
 }

@@ -53,7 +53,7 @@ current task:
     - active/inactive (bool)
 
 TODO:
-  - get coloured circles to appear on calendar
+  - finish dropdown menu for user management
 
 scrollable dropdownbox:
 ul.dropdown-menu {
