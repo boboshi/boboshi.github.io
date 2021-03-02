@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef} from "react";
 
 import GenericDropdown from "../components/GenericDropdown";
 
@@ -9,6 +9,8 @@ import InfoIcon from "../resources/dashboard/icon-question-mark.svg";
 function ConfigMotionSensor(props)
 {
     const msRef = useRef();
+
+    const [option, setOption] = useState("Medium-High");
 
     useEffect(() =>
     {
@@ -35,6 +37,12 @@ function ConfigMotionSensor(props)
             container[0].style.backgroundColor = "#333132";
             props.setMD("OFF");
         }
+    }
+
+    function selectOptionHelper(ms)
+    {
+        props.setMS(ms);
+        setOption(ms);
     }
 
     return(
@@ -70,9 +78,9 @@ function ConfigMotionSensor(props)
             <div className = "dashboard-page-config-ms-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {msRef}
-                    default = {"Medium-High"}
+                    default = {option}
                     options = {["High", "Medium-High", "Medium", "Medium-Low", "Low"]}
-                    selectOption = {props.setMS}
+                    selectOption = {selectOptionHelper}
                     disabled = {props.motionDetection === "ON" && props.lights ? false : true}
                 ></GenericDropdown>
             </div>

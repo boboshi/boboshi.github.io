@@ -45,6 +45,7 @@ function LightStatus(props)
 
     const entriesRef = useRef();
 
+    const [selectedOption, setSelectedOption] = useState("10");
     const [sortingMode, setSortingMode] = useState("name_descending");
     const [currentPage, setCurrentPage] = useState(0);
     const [lastPage, setLastPage] = useState(0);
@@ -146,6 +147,7 @@ function LightStatus(props)
         setLastPage(last);
         if (currentPage > last)
             setCurrentPage(last);
+        setSelectedOption(option);
     }
 
     function handleNameClick()
@@ -207,7 +209,7 @@ function LightStatus(props)
             <div className = "dashboard-page-view-status-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {entriesRef}
-                    default = {"10"}
+                    default = {selectedOption}
                     options = {["10", "20", "30", "ALL"]}
                     selectOption = {handleSelectOption}
                     disabled = {false}

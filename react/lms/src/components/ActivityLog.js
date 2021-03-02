@@ -38,7 +38,7 @@ function ActivityLog(props)
     };
 
     const entriesRef = useRef();
-
+    const [selectedOption, setSelectedOption] = useState("10");
     // user_descending, user_ascending, action_descending, action_ascending
     const [sortingMode, setSortingMode] = useState("user_descending");
     const [currentPage, setCurrentPage] = useState(0);
@@ -139,6 +139,7 @@ function ActivityLog(props)
         setLastPage(last);
         if (currentPage > last)
             setCurrentPage(last);
+        setSelectedOption(option);
     }
 
     function handleUserClick()
@@ -190,7 +191,7 @@ function ActivityLog(props)
             <div className = "dashboard-page-view-activity-ddcontainer" style = {{zIndex: 10}}>
                 <GenericDropdown
                     ref = {entriesRef}
-                    default = {"10"}
+                    default = {selectedOption}
                     options = {["10", "20", "30", "ALL"]}
                     selectOption = {handleSelectOption}
                     disabled = {false}

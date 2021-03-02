@@ -76,7 +76,7 @@ function EnergyConsumption(props)
                     <div className = "dashboard-page-view-selectfloor-ddcontainer" style = {{zIndex: 10}}>
                         <GenericDropdown
                             ref = {ddRef}
-                            default = {""}
+                            default = {selectedFloor}
                             options = {floorOptions}
                             selectOption = {setSelectedFloor}
                             disabled = {false}
@@ -85,7 +85,7 @@ function EnergyConsumption(props)
                     <div className = "dashboard-page-view-selectlight-ddcontainer"  style = {{zIndex: 9}}>
                         <GenericDropdown
                             ref = {ddRef}
-                            default = {""}
+                            default = {selectedLights}
                             options = {lightOptions}
                             selectOption = {setSelectedLights}
                             disabled = {selectedFloor === ""}
