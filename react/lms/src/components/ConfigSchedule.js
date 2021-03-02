@@ -43,12 +43,29 @@ function ConfigSchedule(props)
     useEffect(() =>
     {
         // simulate getting data
-        setActivity("Photosensor Control");
-        setStart(props.schedule[0] + ":00");
-        setEnd(props.schedule[1] + ":00");
-        setDayActive(props.schedule[2]);
+        if (activity === "Full Brightness")
+        {
+            setActivity("Full Brightness");
+            setStart(props.schedule[0] + ":00");
+            setEnd(props.schedule[1] + ":00");
+            setDayActive(props.schedule[6]);
+        }
+        else if (activity === "Motion Trigger")
+        {
+            setActivity("Motion Trigger");
+            setStart(props.schedule[4] + ":00");
+            setEnd(props.schedule[5] + ":00");
+            setDayActive(props.schedule[10]);
+        }
+        else
+        {
+            setActivity("Photosensor Control");
+            setStart(props.schedule[8] + ":00");
+            setEnd(props.schedule[9] + ":00");
+            setDayActive(props.schedule[2]);
+        }
 
-    }, [props.schedule]);
+    }, [props.schedule, activity]);
 
     function setActivityHelper(activity)
     {
@@ -157,7 +174,7 @@ function ConfigSchedule(props)
                     <div className = "dashboard-page-config-schedule-activities-ddcontainer" style = {{zIndex: 2}}>
                         <GenericDropdown
                             ref = {ddRef}
-                            default = {"Photosensor Control"}
+                            default = {activity}
                             options = {["Photosensor Control", "Full Brightness", "Motion Trigger"]}
                             selectOption = {setActivityHelper}
                             disabled = {props.lights ? false : true}
