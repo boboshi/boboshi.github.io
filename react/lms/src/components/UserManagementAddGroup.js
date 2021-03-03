@@ -5,9 +5,22 @@ import ButtonIcon from "../resources/dashboard/usermanagement-addbox-button.svg"
 
 function UserManagementAddGroup(props)
 {
+    const [groupname, setGroupname] = useState("");
+
     function handleOpenMenu()
     {
         props.setOpen(!props.open);
+    }
+
+    function handleChangeGroupName(e)
+    {
+        setGroupname(e.target.value);
+    }
+
+    function handleSubmit(e)
+    {
+        e.preventDefault();
+        console.log("create group");
     }
 
     return(
@@ -42,7 +55,21 @@ function UserManagementAddGroup(props)
             {/* dropdown menu */}
             {props.open &&
                 <div className = "dashboard-usermanagement-addbox-dropdown-container">
-                    PUT THE INPUTS HERE
+                    <form onSubmit = {handleSubmit}>
+                        <input
+                            type = "text"
+                            id = "usermanagement-input-groupname"
+                            className = "dashboard-usermanagement-addbox-input"
+                            name = "groupname"
+                            value = {groupname}
+                            placeholder = "GROUP NAME"
+                            onChange = {handleChangeGroupName}
+                        ></input>
+                        {/* register button */}
+                        <button className = "dashboard-usermanagement-addbox-submit" type = "submit">
+                            CREATE GROUP
+                        </button>
+                    </form>
                 </div>
             }
         </div>
