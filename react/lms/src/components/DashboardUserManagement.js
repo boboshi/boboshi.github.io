@@ -1,15 +1,87 @@
 import "../resources/css/dashboardusermanagement.css";
 import "../resources/css/usermanagementaddbox.css";
+import "../resources/css/usermanagementgroup.css";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+
+import DefaultUser from "../resources/dashboard/usermanagement-default-user.svg";
+import HDBIcon from "../resources/dashboard/hdb.png";
 
 import UserManagementAddGroup from "./UserManagementAddGroup";
 import UserManagementAddUser from "./UserManagementAddUser";
+import UserManagementGroup from "./UserManagementGroup";
+
+const colours = ["#65B4C1", "#6A59E6"];
+
+class User
+{
+    constructor(name, type, lastLoginDate, lastLoginTime, active, userIcon)
+    {
+        this.name = name;
+        this.type = type;
+        this.lastLoginDate = lastLoginDate;
+        this.lastLoginTime = lastLoginTime;
+        this.active = active;
+        this.userIcon = userIcon;
+    }
+}
+
+class Group
+{
+    constructor(name, description, blocks, users, headerIcon, headerColour)
+    {
+        this.name = name;
+        this.description = description;
+        this.blocks = blocks;
+        this.users = users;
+        this.headerIcon = headerIcon;
+        this.headerColour = headerColour;
+    }
+};
 
 function DashboardUserManagement(props)
 {
     const [addGroupOpen, setAddGroupOpen] = useState(false);
     const [addUserOpen, setAddUserOpen] = useState(false);
+
+    const [userArray, setUserArray] = useState([]);
+    const [groupArray, setGroupArray] = useState([]);
+
+    const groupList = groupArray.map(group =>
+        <UserManagementGroup
+            key = {group.name}
+            name = {group.name}
+            description = {group.description}
+            blocks = {group.blocks}
+            users = {group.users}
+            headerIcon = {group.headerIcon}
+            headerColour = {group.headerColour}
+        />
+    );
+
+    // simulate getting data
+    useEffect(() =>
+    {
+        var user0 = new User("Viola Chan", "Operator", "03-09-20", "15:15:30", true, {DefaultUser});
+        var user1 = new User("Manmo Wong", "Operator", "03-09-20", "15:15:30", false, {DefaultUser});
+        var user2 = new User("Nora Bravo", "Operator", "03-09-20", "15:15:30", true, {DefaultUser});
+
+        var group0 = new Group("Geylang, Dakota", 
+                               "HDB 60 Dakota Crescent", 
+                               ["Office_lights", "Home_Lights"],
+                               [user0, user1, user2],
+                               HDBIcon,
+                               colours[0]);
+        var group1 = new Group("Jurong East, Pandan", 
+                               "AZ Marine", 
+                               ["Pandan_AzMarine"],
+                               [user0, user1],
+                               HDBIcon,
+                               colours[1]);
+        
+        setUserArray([user0, user1, user2]);
+        setGroupArray([group0, group1]);
+    }, []);
 
     function toggleAddGroupOpen(open)
     {
@@ -53,6 +125,8 @@ function DashboardUserManagement(props)
                     userTypes = {["Operator", "Area Admin"]}
                 />
             </div>
+            {/* group cards */}
+            {props.location0 && groupList}
             {/* buttons */}
             <div 
                 className = "dashboard-page-usermanagement-revoke" 

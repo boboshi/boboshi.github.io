@@ -350,6 +350,24 @@ function Dashboard(props)
         </div>
     );
 
+    const umPaths =
+    (        
+        <div className = "dashboard-page-header-paths">
+            <div className = "dashboard-page-header-dashboardtext"
+                 onClick = {handleDashboardButton}>
+                DASHBOARD
+            </div>
+            <span>
+                <span className = "dashboard-page-header-patharrows">
+                    {arrowVar}
+                </span>
+                <div className = "dashboard-page-header-buttontext-selected">
+                     USER MANAGEMENT
+                </div>
+            </span>
+        </div>
+    );
+
     const defaultTemplate =
     (
         <div className = "dashboard-page-selector">
@@ -468,7 +486,8 @@ function Dashboard(props)
             </div>
             <div className = "dashboard-page-sidebar">
                 {/* path buttons */}
-                {location.pathname === "/dashboard/config" ? configPaths : defaultPaths}
+                {location.pathname === "/dashboard/config" ? configPaths : location.pathname === "/dashboard/usermanagement" 
+                                                                    ? umPaths : defaultPaths}
                 {/* sidebar toggle button */}
                 <button 
                     onClick = {sidebarToggle} 
@@ -598,10 +617,10 @@ function Dashboard(props)
                     <Route 
                         path = "/dashboard/usermanagement" 
                         render = {(props) => <DashboardUserManagement 
-                                                location = {selectedLocation}
+                                                location0 = {selectedLocation}
                                                 area = {selectedArea}
                                                 block = {selectedBlock}
-                                              {...props} />}>
+                                                {...props} />}>
                     </Route>
                     <Route 
                         path = "/dashboard/add" 
