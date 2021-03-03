@@ -40,11 +40,6 @@ function DashboardUserManagement(props)
     return(
         <div className = "dashboard-page-usermanagement">
             {/* add group and add user cards */}
-            {/* 
-                types - text, list, password 
-                for list, first element in array is placeholder name, subsequent
-                elements are options
-            */}
             <div className = "dashboard-page-usermanagement-add-container">
                 <UserManagementAddGroup
                     enabled = {props.block}
@@ -55,6 +50,7 @@ function DashboardUserManagement(props)
                     enabled = {props.block}
                     open = {addUserOpen}
                     setOpen = {toggleAddUserOpen}
+                    userTypes = {["Operator", "Area Admin"]}
                 />
             </div>
             {/* buttons */}

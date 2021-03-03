@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import AddUserIcon from "../resources/dashboard/usermanagement-adduser.svg";
 import ButtonIcon from "../resources/dashboard/usermanagement-addbox-button.svg";
+import UpArrowIcon from "../resources/dashboard/Icon ionic-md-arrow-dropup.svg";
+import DownArrowIcon from "../resources/dashboard/Icon ionic-md-arrow-dropdown.svg";
 import EyeIcon from "../resources/dashboard/icon-eye.svg";
 import EyeOffIcon from "../resources/dashboard/icon-eye-off.svg";
 
@@ -13,8 +15,19 @@ function UserManagementAddUser(props)
     const [contactNumber, setContactNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [currTypeIndex, setCurrTypeIndex] = useState(0);
+    const [lastTypeIndex, setLastTypeIndex] = useState(0);
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    // simulate getting data
+    useEffect(() =>
+    {
+        setCurrTypeIndex(0);
+        setLastTypeIndex(props.userTypes.length - 1);
+    }, [props.userTypes]);
 
     function handleOpenMenu()
     {
@@ -44,6 +57,34 @@ function UserManagementAddUser(props)
     function handleChangeConfirmPassword(e)
     {
         setConfirmPassword(e.target.value);
+    }
+
+    function handleUpArrow()
+    {
+        if (usertype === "" || currTypeIndex === lastTypeIndex)
+        {
+            setCurrTypeIndex(0);
+            setUsertype(props.userTypes[0]);
+        }
+        else
+        {
+            setCurrTypeIndex(currTypeIndex + 1);
+            setUsertype(props.userTypes[currTypeIndex + 1]);
+        }
+    }
+
+    function handleDownArrow()
+    {
+        if (usertype === "" || currTypeIndex === 0)
+        {
+            setCurrTypeIndex(lastTypeIndex);
+            setUsertype(props.userTypes[lastTypeIndex]);
+        }
+        else
+        {
+            setCurrTypeIndex(currTypeIndex - 1);
+            setUsertype(props.userTypes[currTypeIndex - 1]);
+        }
     }
 
     function handleTogglePasswordHide()
@@ -106,18 +147,31 @@ function UserManagementAddUser(props)
                             placeholder = "USER NAME"
                             onChange = {handleChangeUsername}
                         ></input>
-                        <input
-                            style = {{pointerEvents: "none"}}
-                            type = "text"
-                            id = "usermanagement-input-usertype"
-                            className = "dashboard-usermanagement-addbox-input"
-                            name = "usertype"
-                            value = {usertype}
-                            placeholder = "USER TYPE"
-                            onChange = {placeholder}
-                        ></input>
-                        {/* user type select buttons */}
-
+                        <div style = {{position: "relative"}}>
+                            <input
+                                style = {{pointerEvents: "none"}}
+                                type = "text"
+                                id = "usermanagement-input-usertype"
+                                className = "dashboard-usermanagement-addbox-input"
+                                name = "usertype"
+                                value = {usertype}
+                                placeholder = "USER TYPE"
+                                onChange = {placeholder}
+                            ></input>
+                            {/* user type select buttons */}
+                            <img
+                                alt = ""
+                                src = {UpArrowIcon}
+                                className = "dashboard-usermanagement-addbox-up"
+                                onClick = {handleUpArrow}
+                            ></img>
+                            <img
+                                alt = ""
+                                src = {DownArrowIcon}
+                                className = "dashboard-usermanagement-addbox-down"
+                                onClick = {handleDownArrow}
+                            ></img>
+                        </div>
                         <input
                             type = "text"
                             id = "usermanagement-input-email"

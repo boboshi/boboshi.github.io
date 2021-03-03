@@ -96,6 +96,36 @@
     height: 2.5em;
 }
 
+.dashboard-usermanagement-addbox-up
+{
+    position: absolute;
+    top: 23%;
+    left: 86%;
+    width: 4.5%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-usermanagement-addbox-up:hover
+{
+    transform: scale(1.2);
+}
+
+.dashboard-usermanagement-addbox-down
+{
+    position: absolute;
+    top: 48%;
+    left: 86%;
+    width: 4.5%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-usermanagement-addbox-down:hover
+{
+    transform: scale(1.2);
+}
+
 .dashboard-usermanagement-addbox-hide
 {
     position: absolute;
