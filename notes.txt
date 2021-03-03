@@ -53,8 +53,9 @@ current task:
     - active/inactive (bool)
 
 TODO:
-  - finish dropdown menu for user management
-    - rendering of list of group cards
+  - figure out solution for showing blocks
+    - radio buttons?
+    - fuck filtering the view for now
 
 scrollable dropdownbox:
 ul.dropdown-menu {

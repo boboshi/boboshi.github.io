@@ -27,6 +27,9 @@ function UserManagementGroup(props)
                     className = "dashboard-usermanagement-group-header-delete"
                     onClick = {handleDelete}
                 ></img>
+                <div className = "dashboard-usermanagement-group-header-blocks-container">
+                    
+                </div>
             </div>
             AISAOUSHAUOSHAOS
         </div>
