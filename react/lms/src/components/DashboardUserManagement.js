@@ -1,13 +1,30 @@
 import "../resources/css/dashboardusermanagement.css";
-import "../resources/css/usermanagementrightbox.css";
+import "../resources/css/usermanagementaddbox.css";
 
-import React from "react";
+import React, {useState} from "react";
 
 import UserManagementAddGroup from "./UserManagementAddGroup";
 import UserManagementAddUser from "./UserManagementAddUser";
 
 function DashboardUserManagement(props)
 {
+    const [addGroupOpen, setAddGroupOpen] = useState(false);
+    const [addUserOpen, setAddUserOpen] = useState(false);
+
+    function toggleAddGroupOpen(open)
+    {
+        setAddGroupOpen(open);
+        if (open)
+            setAddUserOpen(false);
+    }
+
+    function toggleAddUserOpen(open)
+    {
+        setAddUserOpen(open);
+        if (open)
+            setAddGroupOpen(false);
+    }
+
     function handleRevoke()
     {
         console.log("AJISASKAS");
@@ -31,9 +48,13 @@ function DashboardUserManagement(props)
             <div className = "dashboard-page-usermanagement-add-container">
                 <UserManagementAddGroup
                     enabled = {props.block}
+                    open = {addGroupOpen}
+                    setOpen = {toggleAddGroupOpen}
                 />
                 <UserManagementAddUser
                     enabled = {props.block}
+                    open = {addUserOpen}
+                    setOpen = {toggleAddUserOpen}
                 />
             </div>
             {/* buttons */}

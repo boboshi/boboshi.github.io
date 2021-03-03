@@ -1,50 +1,183 @@
 import React, {useState} from "react";
 
 import AddUserIcon from "../resources/dashboard/usermanagement-adduser.svg";
-import ButtonIcon from "../resources/dashboard/usermanagement-rightbox-button.svg";
+import ButtonIcon from "../resources/dashboard/usermanagement-addbox-button.svg";
+import EyeIcon from "../resources/dashboard/icon-eye.svg";
+import EyeOffIcon from "../resources/dashboard/icon-eye-off.svg";
 
 function UserManagementAddUser(props)
 {
-    const [open, setOpen] = useState(false);
+    const [username, setUserName] = useState("");
+    const [usertype, setUsertype] = useState("");
+    const [email, setEmail] = useState("");
+    const [contactNumber, setContactNumber] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     function handleOpenMenu()
     {
-        setOpen(!open);
+        props.setOpen(!props.open);
+    }
+
+    function handleChangeUsername(e)
+    {
+        setUserName(e.target.value);
+    }
+
+    function handleChangeEmail(e)
+    {
+        setEmail(e.target.value);
+    }
+
+    function handleChangeContactNumber(e)
+    {
+        setContactNumber(e.target.value);
+    }
+
+    function handleChangePassword(e)
+    {
+        setPassword(e.target.value);
+    }
+
+    function handleChangeConfirmPassword(e)
+    {
+        setConfirmPassword(e.target.value);
+    }
+
+    function handleTogglePasswordHide()
+    {
+        setShowPassword(!showPassword);
+    }
+
+    function handleToggleConfirmPasswordHide()
+    {
+        setShowConfirmPassword(!showConfirmPassword);
+    }
+
+    function placeholder() {}
+
+    function handleSubmit(e)
+    {
+        e.preventDefault();
+        console.log("register user");
     }
 
     return(
         <div className = "dashboard-page-usermanagement-adduser-container">
             {/* main card */}
             <div 
-                className = "dashboard-usermanagement-rightbox-box" 
-                style = {open ? {borderRadius: "6px 6px 0px 0px"} : {borderRadius: "6px 6px 6px 6px"}}
+                className = "dashboard-usermanagement-addbox-box" 
+                style = {props.open ? {borderRadius: "6px 6px 0px 0px"} : {borderRadius: "6px 6px 6px 6px"}}
             >
                 {/* icon */}
-                <img alt = "" src = {AddUserIcon} className = "dashboard-usermanagement-rightbox-icon"></img>
+                <img alt = "" src = {AddUserIcon} className = "dashboard-usermanagement-addbox-icon"></img>
                 {/* title */}
-                <div className = "dashboard-usermanagement-rightbox-title">
+                <div className = "dashboard-usermanagement-addbox-title">
                     Register New User
                 </div>
                 {/* text */}
-                <div className = "dashboard-usermanagement-rightbox-text">
+                <div className = "dashboard-usermanagement-addbox-text">
                     Register new user to control the smart system light for your estate.
                 </div>
                 {/* button */}
                 <div 
-                    className = "dashboard-usermanagement-rightbox-button"
+                    className = "dashboard-usermanagement-addbox-button"
                     style = {props.enabled ? {opacity: 1.0} : {opacity: 0.5, pointerEvents: "none"}}
                     onClick = {handleOpenMenu}
                 >
-                    <img alt = "" src = {ButtonIcon} className = "dashboard-usermanagement-rightbox-button-icon"></img>
-                    <div className = "dashboard-usermanagement-rightbox-button-text">
+                    <img alt = "" src = {ButtonIcon} className = "dashboard-usermanagement-addbox-button-icon"></img>
+                    <div className = "dashboard-usermanagement-addbox-button-text">
                         Register New User
                     </div>
                 </div>
             </div>
             {/* dropdown menu */}
-            {open &&
-                <div className = "dashboard-usermanagement-rightbox-dropdown-container">
-                    FUCK
+            {props.open &&
+                <div className = "dashboard-usermanagement-addbox-dropdown-container">
+                    <form onSubmit = {handleSubmit}>
+                        <input
+                            type = "text"
+                            id = "usermanagement-input-username"
+                            className = "dashboard-usermanagement-addbox-input"
+                            name = "username"
+                            value = {username}
+                            placeholder = "USER NAME"
+                            onChange = {handleChangeUsername}
+                        ></input>
+                        <input
+                            style = {{pointerEvents: "none"}}
+                            type = "text"
+                            id = "usermanagement-input-usertype"
+                            className = "dashboard-usermanagement-addbox-input"
+                            name = "usertype"
+                            value = {usertype}
+                            placeholder = "USER TYPE"
+                            onChange = {placeholder}
+                        ></input>
+                        {/* user type select buttons */}
+
+                        <input
+                            type = "text"
+                            id = "usermanagement-input-email"
+                            className = "dashboard-usermanagement-addbox-input"
+                            name = "email"
+                            value = {email}
+                            placeholder = "EMAIL"
+                            onChange = {handleChangeEmail}
+                        ></input>
+                        <input
+                            type = "text"
+                            id = "usermanagement-input-contactnumber"
+                            className = "dashboard-usermanagement-addbox-input"
+                            name = "contactnumber"
+                            value = {contactNumber}
+                            placeholder = "CONTACT NUMBER"
+                            onChange = {handleChangeContactNumber}
+                        ></input>
+                        <div style = {{position: "relative"}}>
+                            <input
+                                type = {showPassword ? "text" : "password"}
+                                id = "usermanagement-input-password"
+                                className = "dashboard-usermanagement-addbox-input"
+                                name = "password"
+                                value = {password}
+                                placeholder = "PASSWORD"
+                                onChange = {handleChangePassword}
+                            ></input>
+                            {/* show/hide password button */}
+                            <img 
+                                alt = "" 
+                                src = {showPassword ? EyeOffIcon : EyeIcon} 
+                                className = "dashboard-usermanagement-addbox-hide"
+                                onClick = {handleTogglePasswordHide}
+                            ></img>
+                        </div>
+                        <div style = {{position: "relative"}}>
+                            <input
+                                type = {showConfirmPassword ? "text" : "password"}
+                                id = "usermanagement-input-confirmpassword"
+                                className = "dashboard-usermanagement-addbox-input"
+                                name = "confirmpassword"
+                                value = {confirmPassword}
+                                placeholder = "CONFIRM PASSWORD"
+                                onChange = {handleChangeConfirmPassword}
+                            >
+                            </input>
+                            {/* show/hide password button */}
+                            <img 
+                                alt = "" 
+                                src = {showConfirmPassword ? EyeOffIcon : EyeIcon} 
+                                className = "dashboard-usermanagement-addbox-hide"
+                                onClick = {handleToggleConfirmPasswordHide}
+                            ></img>
+                        </div>
+                        {/* register button */}
+                        <button className = "dashboard-usermanagement-addbox-submit" type = "submit">
+                            REGISTER
+                        </button>
+                    </form>
                 </div>
             }
         </div>
