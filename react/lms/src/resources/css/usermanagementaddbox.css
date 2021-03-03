@@ -87,13 +87,18 @@
 
 .dashboard-usermanagement-addbox-input
 {
+    color: #005570;
+    font-family: "work sans", sans-serif;
+    font-size: max(0.64vw, 10px);
+    font-weight: 500;
+    text-align: center;
     border: 1px solid #E0E0E0;
     border-radius: 6px;
     padding-left: 5%;
     padding-right: 5%;
     margin-bottom: 2%;
     width: 77.76%;
-    height: 2.5em;
+    height: 3.5em;
 }
 
 .dashboard-usermanagement-addbox-up
