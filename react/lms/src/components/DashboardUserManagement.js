@@ -56,6 +56,7 @@ function DashboardUserManagement(props)
             users = {group.users}
             headerIcon = {group.headerIcon}
             headerColour = {group.headerColour}
+            delete = {deleteGroup}
         />
     );
 
@@ -95,6 +96,14 @@ function DashboardUserManagement(props)
         setAddUserOpen(open);
         if (open)
             setAddGroupOpen(false);
+    }
+
+    function deleteGroup(name)
+    {
+        let groups = [...groupArray];
+
+        groups = groups.filter(item => item.name !== name);
+        setGroupArray(groups);
     }
 
     function handleRevoke()

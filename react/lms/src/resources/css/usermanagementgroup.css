@@ -61,3 +61,40 @@
 {
     transform: scale(1.2);
 }
+
+.dashboard-usermanagement-group-header-blocks-container
+{
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    text-align: bottom;
+    bottom: 22%;
+    left: 25%;
+    width: 60%;
+    height: 38%;
+}
+
+.dashboard-usermanagement-group-header-block
+{
+    position: relative;
+    margin-top: 5%;
+}
+
+.dashboard-usermanagement-group-header-block-text
+{
+    margin-left: 8%;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.75vw, 10.85px);
+}
+
+.dashboard-usermanagement-group-header-block-radio
+{
+    position: absolute;
+    top: 15%;
+    width: 5%;
+    height: auto;
+    cursor: pointer;
+}
