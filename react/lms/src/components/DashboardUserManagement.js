@@ -63,9 +63,9 @@ function DashboardUserManagement(props)
     // simulate getting data
     useEffect(() =>
     {
-        var user0 = new User("Viola Chan", "Operator", "03-09-20", "15:15:30", true, {DefaultUser});
-        var user1 = new User("Manmo Wong", "Operator", "03-09-20", "15:15:30", false, {DefaultUser});
-        var user2 = new User("Nora Bravo", "Operator", "03-09-20", "15:15:30", true, {DefaultUser});
+        var user0 = new User("Viola Chan", "Operator", "03-09-20", "15:15:30", true, DefaultUser);
+        var user1 = new User("Manmo Wong", "Operator", "03-09-20", "15:15:30", false, DefaultUser);
+        var user2 = new User("Nora Bravo", "Operator", "03-09-20", "15:15:30", true, DefaultUser);
 
         var group0 = new Group("Geylang, Dakota", 
                                "HDB 60 Dakota Crescent", 

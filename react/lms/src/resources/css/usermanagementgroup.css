@@ -2,14 +2,14 @@
 {
     position: relative;
     display: inline-block;
-    background-color: #F7F7F7;
-    border-radius: 6px;
     margin-right: 2%;
     width: 25%;
+    height: 20%;
 }
 
 .dashboard-usermanagement-group-header
 {
+    position: relative;
     border-radius: 6px 6px 0px 0px;
     padding-top: 30%;
     width: 100%;
@@ -69,7 +69,7 @@
     justify-content: flex-end;
     flex-direction: column;
     text-align: bottom;
-    bottom: 22%;
+    bottom: 10%;
     left: 25%;
     width: 60%;
     height: 38%;
@@ -97,4 +97,89 @@
     width: 5%;
     height: auto;
     cursor: pointer;
+}
+
+.dashboard-usermanagement-group-user-container
+{
+    position: absolute;
+    background-color: #F7F7F7;
+    border-radius: 0px 0px 6px 6px;
+    width: 100%;
+}
+
+.dashboard-usermanagement-group-user
+{
+    position: relative;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 6px #00000029;
+    border-radius: 7px;
+    margin-top: 5%;
+    left: 4.95%;
+    width: 90.1%;
+    height: 3.5em;
+}
+
+.dashboard-usermanagement-group-user-icon
+{
+    position: absolute;
+    top: 14.8%;
+    left: 4%;
+    width: 15%;
+    height: auto;
+}
+
+.dashboard-usermanagement-group-user-name
+{
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 500;
+    font-size: max(0.91vw, 13.175px);
+    top: 25%;
+    left: 24%;
+}
+
+.dashboard-usermanagement-group-user-type
+{
+    position: absolute;
+    color: #6D6E71;
+    font-family: "work sans", sans-serif;
+    font-weight: 400;
+    font-size: max(0.7vw, 10.08px);
+    top: 57%;
+    left: 24%;
+}
+
+.dashboard-usermanagement-group-user-date
+{
+    position: absolute;
+    color: #6D6E71;
+    font-family: "work sans", sans-serif;
+    font-weight: 400;
+    font-size: max(0.7vw, 10.08px);
+    top: 30%;
+    left: 77%;
+}
+
+.dashboard-usermanagement-group-user-time
+{
+    position: absolute;
+    color: #6D6E71;
+    font-family: "work sans", sans-serif;
+    font-weight: 400;
+    font-size: max(0.7vw, 10.08px);
+    top: 55%;
+    left: 77%;
+    width: 17.6%;
+    text-align: right;
+}
+
+.dashboard-usermanagement-group-user-active
+{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 1.5%;
+    height: 7.1%;
+    border-radius : 50%;
 }
