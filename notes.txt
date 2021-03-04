@@ -56,8 +56,8 @@ TODO:
   - figure out solution for showing blocks
     - radio buttons?
     - fuck filtering the view for now
-  - after user management is done, update all
-    path buttons accoridng to xd
+  - update path buttons
+  - work on photosensor page
 scrollable dropdownbox:
 ul.dropdown-menu {
     max-height: 500px;
