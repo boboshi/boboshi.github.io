@@ -111,6 +111,11 @@ function DashboardUserManagement(props)
         setGroupArray(groups);
     }
 
+    function addUser(username)
+    {
+        console.log(username + " registered")
+    }
+
     function deleteGroup(name)
     {
         let groups = [...groupArray];
@@ -146,6 +151,7 @@ function DashboardUserManagement(props)
                     open = {addUserOpen}
                     setOpen = {toggleAddUserOpen}
                     userTypes = {["Operator", "Area Admin"]}
+                    add = {addUser}
                 />
             </div>
             {/* group cards */}

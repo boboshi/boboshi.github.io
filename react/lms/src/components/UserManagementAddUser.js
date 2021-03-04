@@ -102,7 +102,7 @@ function UserManagementAddUser(props)
     function handleSubmit(e)
     {
         e.preventDefault();
-        console.log("register user");
+        props.add(username);
     }
 
     return(
