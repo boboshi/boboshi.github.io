@@ -1,0 +1,73 @@
+TODO:
+
+aws login:
+sanjay.das@aztech.com
+P@ss2020
+
+putty:
+cd ../..etc/mosquitto
+mosquitto -d -v -c mosquittows.conf
+
+change format for payloads and test with broker
+
+do GET for configs
+So web will send a get request, server will respond with 
+get_ack, with the values requested
+
+highlight technical document by end of month
+cpu overheating issue??????
+
+====================================================
+                   PAYLOAD STUFF
+====================================================
+what in the fucks going on
+====================================================
+
+====================================================
+                     FRONT END
+====================================================
+current task:
+- figure out how to reduce size of calendar
+  highlight
+    - possible to reduce size of tiles and add
+      padding/margin?
+
+- don't let calendar card make any changes for now
+  - radio buttons will do nothing
+- schedule data format (for each light)
+  - array of size 12 (4 for each schedule type)
+      photosensor
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
+      full brightness
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
+      motion
+    - start time (string)
+    - end time (string)
+    - days active (array of bools)
+    - active/inactive (bool)
+
+TODO:
+  - figure out solution for showing blocks
+    - radio buttons?
+    - fuck filtering the view for now
+  - after user management is done, update all
+    path buttons accoridng to xd
+scrollable dropdownbox:
+ul.dropdown-menu {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+missing assets:
+user dropdown hover icons
+====================================================
+
+running steps:
+npm start in lms/react/lms
+http-server -p 8080 --cors -c10 in http-server folder
