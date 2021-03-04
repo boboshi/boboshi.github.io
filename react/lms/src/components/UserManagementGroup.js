@@ -4,6 +4,7 @@ import DeleteIconBlack from "../resources/dashboard/usermanagement-delete-black.
 import DeleteIconOrange from "../resources/dashboard/usermanagement-delete-orange.svg";
 import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 import RadioButtonOff from "../resources/dashboard/icon-radio-button-off.svg";
+import NewMemberIcon from "../resources/dashboard/usermanagement-newmember-icon.svg";
 
 function UserCard(props)
 {
@@ -95,6 +96,10 @@ function UserManagementGroup(props)
             </div>
             <div className = "dashboard-usermanagement-group-user-container">
                 {userList}
+                <div className = "dashboard-usermanagement-group-newmember">
+                    <img alt = "" src = {NewMemberIcon} className = "dashboard-usermanagement-group-user-icon"></img>
+                    <div className = "dashboard-usermanagement-group-newmember-text">Add New Member</div>
+                </div>
             </div>
         </div>
     );
