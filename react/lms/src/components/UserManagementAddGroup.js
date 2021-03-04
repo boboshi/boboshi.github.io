@@ -20,7 +20,7 @@ function UserManagementAddGroup(props)
     function handleSubmit(e)
     {
         e.preventDefault();
-        console.log("create group");
+        props.add(groupname);
     }
 
     return(

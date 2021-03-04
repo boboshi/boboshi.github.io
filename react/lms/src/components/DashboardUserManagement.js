@@ -98,6 +98,19 @@ function DashboardUserManagement(props)
             setAddGroupOpen(false);
     }
 
+    function createGroup(name)
+    {
+        let groups = [...groupArray];
+        var tmp = new Group(name, 
+                            "AZ Test", 
+                            [],
+                            [],
+                            HDBIcon,
+                            colours[1]);
+        groups.push(tmp);
+        setGroupArray(groups);
+    }
+
     function deleteGroup(name)
     {
         let groups = [...groupArray];
@@ -126,6 +139,7 @@ function DashboardUserManagement(props)
                     enabled = {props.block}
                     open = {addGroupOpen}
                     setOpen = {toggleAddGroupOpen}
+                    add = {createGroup}
                 />
                 <UserManagementAddUser
                     enabled = {props.block}
