@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 
-import GenericDropdown from "../components/GenericDropdown";
+import GenericDropdown from ".//GenericDropdown";
 
 import Header from "../resources/dashboard/configheader-top.svg";
 import HeaderIcon from "../resources/dashboard/MotionSensor-icon-GY (black).svg";

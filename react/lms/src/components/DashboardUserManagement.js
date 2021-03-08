@@ -155,7 +155,7 @@ function DashboardUserManagement(props)
                 />
             </div>
             {/* group cards */}
-            {props.location0 && groupList}
+            {props.location && groupList}
             {/* buttons */}
             <div 
                 className = "dashboard-page-usermanagement-revoke" 

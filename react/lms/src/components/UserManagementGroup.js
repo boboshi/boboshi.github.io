@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 import DeleteIconBlack from "../resources/dashboard/usermanagement-delete-black.svg";
-import DeleteIconOrange from "../resources/dashboard/usermanagement-delete-orange.svg";
+//import DeleteIconOrange from "../resources/dashboard/usermanagement-delete-orange.svg";
 import RadioButtonOn from "../resources/dashboard/icon-radio-button-on.svg";
 import RadioButtonOff from "../resources/dashboard/icon-radio-button-off.svg";
 import NewMemberIcon from "../resources/dashboard/usermanagement-newmember-icon.svg";

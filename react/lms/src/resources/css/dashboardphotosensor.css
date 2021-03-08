@@ -1,9 +1,331 @@
 .dashboard-page-photosensor
 {
-  position: absolute;
-  border: 1px solid #000000;
-  top: 17%;
-  left: 12%;
-  width: 81%;
-  height: 75%;
+    position: absolute;
+    top: 17%;
+    left: 12%;
+    width: 81%;
+    height: 75%;
+}
+
+.dashboard-page-photosensor-darkness-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    width: 31.8%;
+    height: 46.67%;
+    vertical-align: top;
+}
+
+.dashboard-page-photosensor-darkness-button-container
+{
+    z-index: 1;
+    position: absolute;
+    border-radius: 14px;
+    background-color: #005570;
+    top: 1.4%;
+    left: 85%;
+    width: 9.3%;
+    height: 7.875%;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-darkness-button-circle
+{
+    z-index: 1;
+    position: absolute;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 2px #00000029;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    width: 56%;
+    height: 91%;
+
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+    transition-duration: .1s;
+    /* -10%, 75% */
+    transform: translate(75%, 0%);
+}
+
+.dashboard-page-photosensor-brightness-container
+{
+    position: relative;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    margin-left: 2%;
+    width: 31.8%;
+    height: 46.67%;
+    vertical-align: top;
+}
+
+.dashboard-page-photosensor-brightness-button-container
+{
+    z-index: 1;
+    position: absolute;
+    border-radius: 14px;
+    background-color: #005570;
+    top: 1.4%;
+    left: 85%;
+    width: 9.3%;
+    height: 7.875%;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-brightness-button-circle
+{
+    z-index: 1;
+    position: absolute;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 2px #00000029;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    width: 56%;
+    height: 91%;
+
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+    transition-duration: .1s;
+    /* -10%, 75% */
+    transform: translate(75%, 0%);
+}
+
+.dashboard-page-photosensor-header
+{
+    width: 100%;
+    height: auto;
+}
+
+.dashboard-page-photosensor-header-text
+{
+    z-index: 1;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    background: none;
+    font-size: max(1vw, 14.4px);
+    font-weight: 500;
+    top: -0.1%;
+    left: 11.3%;
+}
+
+.dashboard-page-photosensor-header-img
+{
+    position: absolute;
+    top: -1.1%;
+    left: -1.2%;
+    width: 102.4%;
+    height: auto;
+}
+
+.dashboard-page-photosensor-darkness-header-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    width: 5.5%;
+    height: auto;
+}
+
+.dashboard-page-photosensor-brightness-header-icon
+{
+    z-index: 1;
+    position: absolute;
+    top: 0.7%;
+    left: 2%;
+    width: 8%;
+    height: auto;
+}
+
+.dashboard-page-photosensor-card-header0
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 20%;
+    left: 9%;
+}
+
+.dashboard-page-photosensor-card-header1
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 47%;
+    left: 9%;
+}
+
+.dashboard-page-photosensor-card-header2
+{
+    z-index: -2;
+    position: absolute;
+    color: #333132;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.8vw, 11.52px);
+    top: 74%;
+    left: 9%;
+}
+
+.dashboard-page-photosensor-darkness-info0
+{
+    position: absolute;
+    top: 16.25%;
+    left: 50%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-darkness-info0:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-photosensor-darkness-info1
+{
+    position: absolute;
+    top: 43.25%;
+    left: 50%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-darkness-info1:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-photosensor-darkness-info2
+{
+    position: absolute;
+    top: 70.25%;
+    left: 39%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-darkness-info2:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-photosensor-brightness-info0
+{
+    position: absolute;
+    top: 16.25%;
+    left: 49%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-brightness-info0:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-photosensor-brightness-info2
+{
+    position: absolute;
+    top: 70.25%;
+    left: 42%;
+    width: 9%;
+    height: auto;
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-brightness-info2:hover
+{
+    transform: scale(1.1);
+}
+
+.dashboard-page-photosensor-ddcontainer0
+{
+    position: absolute;
+    top: 28%;
+    left: 8%;
+    width: 70%;
+    height: 8%;
+}
+
+.dashboard-page-photosensor-ddcontainer1
+{
+    position: absolute;
+    top: 55%;
+    left: 8%;
+    width: 70%;
+    height: 8%;
+}
+
+.dashboard-page-photosensor-ddcontainer2
+{
+    position: absolute;
+    top: 82%;
+    left: 8%;
+    width: 70%;
+    height: 8%;
+}
+
+.dashboard-page-photosensor-cancel
+{
+    position: absolute;
+    background-color: #C6C6C6;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 98.5%;
+    left: 35.5%;
+    width: 14%;
+    height: 4%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-cancel:hover
+{
+    filter: brightness(105%);
+}
+
+.dashboard-page-photosensor-submit
+{
+    position: absolute;
+    background-color: #005570;
+    border-radius: 6px;
+
+    color: #FFFFFF;
+    font-family: "work sans", sans-serif;
+    font-weight: 600;
+    font-size: max(0.9vw, 12.96px);
+    text-align: center;
+
+    top: 98.5%;
+    left: 51.5%;
+    width: 14%;
+    height: 4%;
+    line-height: 185%;
+
+    cursor: pointer;
+}
+
+.dashboard-page-photosensor-submit:hover
+{
+    filter: brightness(120%);
 }

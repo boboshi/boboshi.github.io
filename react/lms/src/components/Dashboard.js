@@ -683,7 +683,15 @@ function Dashboard(props)
                     </Route>
                     <Route 
                         path = "/dashboard/photosensor" 
-                        render = {(props) => <DashboardPhotosensor {...props} />}>
+                        render = {(props) => <DashboardPhotosensor 
+                                                location = {selectedLocation}
+                                                area = {selectedArea}
+                                                block = {selectedBlock}
+                                                level = {selectedLevel}
+                                                lights = {selectedLight}
+                                                cancel = {handleConfigCancel}
+                                                {...props} />}
+                                            >
                     </Route>
                     <Route 
                         path = "/dashboard/datacharts" 
@@ -696,7 +704,7 @@ function Dashboard(props)
                     <Route 
                         path = "/dashboard/usermanagement" 
                         render = {(props) => <DashboardUserManagement 
-                                                location0 = {selectedLocation}
+                                                location = {selectedLocation}
                                                 area = {selectedArea}
                                                 block = {selectedBlock}
                                                 {...props} />}>
