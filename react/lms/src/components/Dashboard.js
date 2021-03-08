@@ -11,10 +11,10 @@ import DashboardIcon from "../resources/dashboard/icon-dashboard.svg";
 import DashboardSelectedIcon from "../resources/dashboard/icon-dashboard-selected.svg";
 import ConfigIcon from "../resources/dashboard/icon-config.svg";
 import ConfigSelectedIcon from "../resources/dashboard/icon-config-selected.svg";
-import LightIcon from "../resources/dashboard/icon-light.svg";
-import LightSelectedIcon from "../resources/dashboard/icon-light-selected.svg";
-import PowerIcon from "../resources/dashboard/icon-power.svg";
-import PowerSelectedIcon from "../resources/dashboard/icon-power-selected.svg";
+import PhotosensorIcon from "../resources/dashboard/icon-photosensor.svg";
+import PhotosensorSelectedIcon from "../resources/dashboard/icon-photosensor-selected.svg";
+import DatachartsIcon from "../resources/dashboard/icon-datacharts.svg";
+import DatachartsSelectedIcon from "../resources/dashboard/icon-datacharts-selected.svg";
 import LightCycleIcon from "../resources/dashboard/icon-lightcycle.svg";
 import LightCycleSelectedIcon from "../resources/dashboard/icon-lightcycle-selected.svg";
 import UsersIcon from "../resources/dashboard/icon-users.svg";
@@ -33,8 +33,8 @@ import UserDropdown from "./UserDropdown";
 import SidebarIcon from "./SidebarIcon";
 import DashboardView from "./DashboardView";
 import DashboardConfig from "./DashboardConfig";
-import DashboardLight from "./DashboardLight";
-import DashboardPower from "./DashboardPower";
+import DashboardPhotosensor from "./DashboardPhotosensor";
+import DashboardDatacharts from "./DashboardDatacharts";
 import DashboardLightCycle from "./DashboardLightCycle";
 import DashboardUserManagement from "./DashboardUserManagement";
 import DashboardAdd from "./DashboardAdd";
@@ -321,34 +321,96 @@ function Dashboard(props)
     const configPaths =
     (
         <div className = "dashboard-page-header-paths">
-            <div className = "dashboard-page-header-dashboardtext"
-                 onClick = {handleDashboardButton}>
-                DASHBOARD
+            <div className = "dashboard-page-header-dashboardtext">
+                CONFIGURATIONS
             </div>
-            <span>
-                <span className = "dashboard-page-header-patharrows">
-                    {arrowVar}
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
+                                        "dashboard-page-header-buttontext"}>
+                         {selectedArea}
+                    </div>
                 </span>
-                <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
-                                    "dashboard-page-header-buttontext"}
-                     onClick = {handleLocationButton}>
-                     CONFIGURE
-                </div>
-            </span>
+            }
             {selectedArea &&
                 <span>
                     <span className = "dashboard-page-header-patharrows">
                         {arrowVar}
                     </span>
                     <div className = {!selectedArea ? "dashboard-page-header-buttontext" : 
-                                        "dashboard-page-header-buttontext-selected"}
-                         onClick = {handleAreaButton}>
-                         {selectedArea}
+                                        "dashboard-page-header-buttontext-selected"}>
+                         GENERAL
                     </div>
                 </span>
             }
         </div>
     );
+
+    const photosensorPaths =
+    (
+        <div className = "dashboard-page-header-paths">
+            <div className = "dashboard-page-header-dashboardtext">
+                CONFIGURATIONS
+            </div>
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
+                                        "dashboard-page-header-buttontext"}>
+                         {selectedArea}
+                    </div>
+                </span>
+            }
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext" : 
+                                        "dashboard-page-header-buttontext-selected"}>
+                         PHOTOSENSOR
+                    </div>
+                </span>
+            }
+        </div>
+    );
+
+    const datachartsPaths =
+    (
+        <div className = "dashboard-page-header-paths">
+            <div className = "dashboard-page-header-dashboardtext">
+                DATA CHARTS
+            </div>
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext-selected" :
+                                        "dashboard-page-header-buttontext"}>
+                         ENERGY CONSUMPTION
+                    </div>
+                </span>
+            }
+            {selectedArea &&
+                <span>
+                    <span className = "dashboard-page-header-patharrows">
+                        {arrowVar}
+                    </span>
+                    <div className = {!selectedArea ? "dashboard-page-header-buttontext" : 
+                                        "dashboard-page-header-buttontext-selected"}>
+                         MOTION DETECTION
+                    </div>
+                </span>
+            }
+        </div>
+    );
+
 
     const umPaths =
     (        
@@ -468,6 +530,23 @@ function Dashboard(props)
         </div>
     );
 
+    function pathHelper()
+    {
+        switch(location.pathname)
+        {
+            case("/dashboard/usermanagement"):
+                return umPaths;
+            case("/dashboard/config"):
+                return configPaths;
+            case("/dashboard/photosensor"):
+                return photosensorPaths;
+            case("/dashboard/datacharts"):
+                return datachartsPaths;
+            default:
+                return defaultPaths;
+        }
+    }
+
     return(
         <div className = "dashboard-page">
             <div className = "dashboard-page-header">
@@ -486,8 +565,7 @@ function Dashboard(props)
             </div>
             <div className = "dashboard-page-sidebar">
                 {/* path buttons */}
-                {location.pathname === "/dashboard/config" ? configPaths : location.pathname === "/dashboard/usermanagement" 
-                                                                    ? umPaths : defaultPaths}
+                {pathHelper()}
                 {/* sidebar toggle button */}
                 <button 
                     onClick = {sidebarToggle} 
@@ -518,17 +596,17 @@ function Dashboard(props)
                     ></SidebarIcon>
                     <SidebarIcon 
                         onClick = {handleSidebarButton} 
-                        path = "/dashboard/light" 
-                        icon = {LightIcon}
-                        selectedicon = {LightSelectedIcon}
-                        tooltip = "Light"
+                        path = "/dashboard/photosensor" 
+                        icon = {PhotosensorIcon}
+                        selectedicon = {PhotosensorSelectedIcon}
+                        tooltip = "Photosensor"
                     ></SidebarIcon>
                     <SidebarIcon 
                         onClick = {handleSidebarButton} 
-                        path = "/dashboard/power" 
-                        icon = {PowerIcon}
-                        selectedicon = {PowerSelectedIcon} 
-                        tooltip = "Power"
+                        path = "/dashboard/datacharts" 
+                        icon = {DatachartsIcon}
+                        selectedicon = {DatachartsSelectedIcon} 
+                        tooltip = "Data charts"
                     ></SidebarIcon>
                     <SidebarIcon 
                         onClick = {handleSidebarButton} 
@@ -569,8 +647,9 @@ function Dashboard(props)
             </div>
             {/* default, non-config page */}
             {location.pathname !== "/dashboard/config" && defaultTemplate}
-            {/* config */}
-            {location.pathname === "/dashboard/config" && configTemplate}
+            {/* config or photosensor */}
+            {(location.pathname === "/dashboard/config" || location.pathname === "/dashboard/photosensor")
+             && configTemplate}
             {/* footer */}
             <div className = {location.pathname !== "/dashboard/view" ? 
                                 (location.pathname !== "/dashboard/config" ? 
@@ -603,12 +682,12 @@ function Dashboard(props)
                                             >
                     </Route>
                     <Route 
-                        path = "/dashboard/light" 
-                        render = {(props) => <DashboardLight {...props} />}>
+                        path = "/dashboard/photosensor" 
+                        render = {(props) => <DashboardPhotosensor {...props} />}>
                     </Route>
                     <Route 
-                        path = "/dashboard/power" 
-                        render = {(props) => <DashboardPower {...props} />}>
+                        path = "/dashboard/datacharts" 
+                        render = {(props) => <DashboardDatacharts {...props} />}>
                     </Route>
                     <Route 
                         path = "/dashboard/lightcycle" 
